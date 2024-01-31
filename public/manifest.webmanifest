@@ -1,0 +1,13 @@
+{
+  "short_name": "xxx",
+  "name": "xxx",
+  "description": "xxx",
+  "theme_color": "#334155",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "256x256"
+    }
+  ]
+}
