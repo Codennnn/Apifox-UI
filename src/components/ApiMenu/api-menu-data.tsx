@@ -8,7 +8,7 @@ import { FileIcon } from '@/components/icons/FileIcon'
 import { FolderIcon } from '@/components/icons/FolderIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
 import { useGlobalContext } from '@/contexts/global'
-import { CatalogType, MenuType } from '@/enums'
+import { CatalogType, MenuItemType, MenuType } from '@/enums'
 import { useStyles } from '@/hooks/useStyle'
 
 import type { CatalogDataNode } from './ApiMenu.type'
@@ -28,7 +28,20 @@ const groupMenuByType = (menuData: CatalogDataNode[]) => {
   return menuData.reduce<GroupedMenu>(
     (res, catalogDataNode) => {
       const catalog = catalogDataNode.customData.catalog
-      res[catalog.catalogType].push(catalogDataNode)
+
+      switch (catalog.type) {
+        case MenuItemType.ApiDetail:
+        case MenuItemType.ApiDetailFolder:
+        case MenuItemType.Doc:
+          res[CatalogType.Http].push(catalogDataNode)
+          break
+
+        case MenuItemType.ApiSchema:
+        case MenuItemType.ApiSchemaFolder:
+          res[CatalogType.Schema].push(catalogDataNode)
+          break
+      }
+
       return res
     },
     {
@@ -87,7 +100,7 @@ export const useMenuData: UseMenuData = () => {
     () =>
       menus?.map<CatalogDataNode>((item) => {
         const catalog = item.customData.catalog
-        const isHttp = catalog.catalogType === CatalogType.Http
+        const isHttp = catalog.type === MenuItemType.ApiDetail
 
         return {
           ...item,
@@ -103,7 +116,7 @@ export const useMenuData: UseMenuData = () => {
 
               return (
                 <span className="inline-flex size-full items-center justify-center">
-                  <FileIcon size={15} type={catalog.catalogType} />
+                  <FileIcon size={15} type={catalog.type} />
                 </span>
               )
             }

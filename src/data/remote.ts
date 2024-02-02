@@ -1,8 +1,7 @@
 import type { ApiMenuData } from '@/components/ApiMenu'
-import { MenuItemType } from '@/components/ApiMenu/ApiMenu.type'
 import type { ApiTabItem } from '@/components/ApiTab'
 import { SchemaType } from '@/components/JsonSchema'
-import { ApiStatus, CatalogType, HttpMethod, MenuId, MenuType } from '@/enums'
+import { ApiStatus, CatalogType, HttpMethod, MenuId, MenuItemType, MenuType } from '@/enums'
 
 /** 菜单原始数据，通常从服务端中获取，然后在客户端中需要被组装为树状结构。 */
 export const apiDirectoryData: ApiMenuData[] = [
@@ -192,7 +191,7 @@ export const initialTabItems: ApiTabItem[] = [
   },
   {
     key: 'newCatalog',
-    label: '新建目录',
+    label: '新建...',
     contentType: 'blank',
   },
 ]

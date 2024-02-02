@@ -3,19 +3,23 @@ import useEvent from 'react-use-event-hook'
 
 import { ConfigProvider, Popconfirm, Tabs, type TabsProps } from 'antd'
 import { BadgeInfoIcon, XIcon } from 'lucide-react'
+import { nanoid } from 'nanoid'
 
 import type { CatalogId } from '@/components/ApiMenu'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
 import { useGlobalContext } from '@/contexts/global'
+import { useStyles } from '@/hooks/useStyle'
 
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
-import { CatalogType } from '../../enums'
+import { MenuItemType } from '../../enums'
 import { FileIcon } from '../icons/FileIcon'
 
 import type { Tab } from './ApiTab.type'
 import { ApiTabAction } from './ApiTabAction'
 import { ApiTabContent } from './ApiTabContent'
 import { TabContentProvider } from './TabContentContext'
+
+import { css } from '@emotion/css'
 
 /**
  * 菜单内容页签。
@@ -26,13 +30,12 @@ import { TabContentProvider } from './TabContentContext'
  * - 当激活中的页签被移除后，应该激活上一次被激活的页签（如果此页签也被移除了，则应该继续往前找）。
  * - 当前激活的是“新建”页时，点击任意菜单会覆盖此“新建”页，而不是新增一个页签。
  */
-
 export function ApiTab(props: TabsProps) {
   const [confirmKey, setConfirmKey] = useState<CatalogId>()
 
   const { menuRawList } = useGlobalContext()
   const { tabItems, activeTabKey } = useMenuTabContext()
-  const { activeTabItem, getTabItem, removeTabItem } = useMenuTabHelpers()
+  const { activeTabItem, addTabItem, getTabItem, removeTabItem } = useMenuTabHelpers()
 
   const handleItemRemove = useEvent((key: CatalogId, forceClose?: boolean) => {
     const item = getTabItem({ key })
@@ -51,7 +54,7 @@ export function ApiTab(props: TabsProps) {
 
       const label = (
         <span className="flex items-center gap-1">
-          {menuData?.catalogType === CatalogType.Http ? (
+          {menuData?.type === MenuItemType.ApiDetail ? (
             <span className="mr-1 font-medium">
               <HttpMethodText method={menuData.data?.method} />
             </span>
@@ -108,20 +111,37 @@ export function ApiTab(props: TabsProps) {
   }, [tabItems, menuRawList, confirmKey, handleItemRemove])
 
   const renderTabBar: TabsProps['renderTabBar'] = (props, DefaultTabBar) => (
-    <div className="flex select-none items-center">
+    <div className="app-tabs-wrap flex select-none items-center">
       <DefaultTabBar {...props} />
     </div>
   )
+
+  const { styles } = useStyles(({ token }) => {
+    return {
+      appTabs: css({
+        '&.ant-tabs': {
+          '.app-tabs-wrap': {
+            '.ant-tabs-nav': {
+              backgroundColor: token.colorFillAlter,
+            },
+          },
+
+          '.ant-tabs-nav': {
+            '.ant-tabs-nav-add': {
+              borderRadius: token.borderRadiusSM,
+            },
+          },
+        },
+      }),
+    }
+  })
 
   return (
     <ConfigProvider
       theme={{
         components: {
           Tabs: {
-            colorPrimary: 'currentColor',
-            colorPrimaryHover: 'currentColor',
-            colorPrimaryActive: 'currentColor',
-            colorFillAlter: 'transparent',
+            cardBg: 'transparent',
             horizontalMargin: '0',
           },
         },
@@ -130,15 +150,25 @@ export function ApiTab(props: TabsProps) {
       <Tabs
         hideAdd
         activeKey={activeTabKey}
-        className="app-tabs"
+        className={`app-tabs ${styles.appTabs}`}
+        hidden={false}
         items={items}
         renderTabBar={renderTabBar}
         tabBarExtraContent={<ApiTabAction />}
         tabBarStyle={{ width: '100%', marginBottom: 0 }}
         type="editable-card"
         onEdit={(key, action) => {
-          if (typeof key === 'string') {
-            if (action === 'remove') {
+          if (action === 'add') {
+            addTabItem({
+              key: nanoid(4),
+              label: '新建...',
+              contentType: 'blank',
+            })
+          } else if (
+            /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
+            action === 'remove'
+          ) {
+            if (typeof key === 'string') {
               handleItemRemove(key)
             }
           }

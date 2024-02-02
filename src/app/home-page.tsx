@@ -52,6 +52,7 @@ function HomeContent() {
           className="flex h-full flex-col overflow-hidden py-2"
           defaultSize={15}
           minSize={15}
+          style={{ backgroundColor: token.colorFillAlter }}
           onCollapse={() => {
             setIsSideMenuCollapsed(true)
           }}

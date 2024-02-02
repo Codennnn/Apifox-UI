@@ -26,7 +26,7 @@ export function ThemeColorPicker(props: ThemeColorPickerProps) {
         return (
           <span
             key={color}
-            className={`inline-block size-5 items-center rounded-full${
+            className={`inline-block size-5 items-center rounded-full ${
               matched ? 'cursor-default' : 'cursor-pointer'
             }`}
             style={{

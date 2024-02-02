@@ -18,7 +18,7 @@ export function Api() {
         key: 'doc',
         label: '文档',
         children: (
-          <ContentWrapper>
+          <ContentWrapper className="p-tabContent">
             <ApiDoc />
           </ContentWrapper>
         ),
@@ -48,8 +48,9 @@ export function Api() {
       <ConfigProvider
         theme={{
           components: {
-            Tabs: {
-              colorPrimary: token.colorPrimary,
+            Form: {
+              labelColor: token.colorTextSecondary,
+              verticalLabelPadding: 0,
             },
           },
         }}
@@ -57,7 +58,7 @@ export function Api() {
         <Tabs
           animated={false}
           className="api-details-tabs"
-          defaultActiveKey="doc"
+          defaultActiveKey="docEdit"
           items={apiTabItems}
           tabBarExtraContent={
             <>

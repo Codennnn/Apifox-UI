@@ -46,6 +46,16 @@ export const enum MenuType {
   File,
 }
 
+export const enum MenuItemType {
+  ApiDetail = 'apiDetail',
+  ApiDetailFolder = 'apiDetailFolder',
+  ApiSchema = 'apiSchema',
+  ApiSchemaFolder = 'apiSchemaFolder',
+  HttpResponse = 'httpResponse',
+  HttpRequest = 'httpRequest',
+  Doc = 'doc',
+}
+
 export const enum MenuId {
   宠物店 = '.1',
   查询宠物详情 = '.1.2',

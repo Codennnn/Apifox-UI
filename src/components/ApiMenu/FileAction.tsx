@@ -1,7 +1,7 @@
 import { Dropdown } from 'antd'
 import { MoreHorizontalIcon, TrashIcon } from 'lucide-react'
 
-import { CatalogType } from '../../enums'
+import { MenuItemType } from '../../enums'
 
 import type { ApiMenuData } from './ApiMenu.type'
 import { MenuActionButton } from './MenuActionButton'
@@ -19,11 +19,12 @@ export function FileAction(props: { catalog: ApiMenuData }) {
             icon: <TrashIcon size={14} />,
             onClick: (ev) => {
               ev.domEvent.stopPropagation()
-              switch (catalog.catalogType) {
-                case CatalogType.Http:
+
+              switch (catalog.type) {
+                case MenuItemType.ApiDetail:
                   break
 
-                case CatalogType.Schema:
+                case MenuItemType.ApiSchema:
                   break
 
                 default:

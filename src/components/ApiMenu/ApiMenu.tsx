@@ -5,7 +5,6 @@ import { ConfigProvider, theme, Tree, type TreeProps } from 'antd'
 import { useStyles } from '@/hooks/useStyle'
 
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
-import { MenuType } from '../../enums'
 import { PageTabStatus } from '../ApiTab/ApiTab.enum'
 
 import type { CatalogDataNode } from './ApiMenu.type'
@@ -62,8 +61,7 @@ export function ApiMenu() {
           addTabItem({
             key: menuId,
             label: catalog.name,
-            contentType:
-              catalog.menuType === MenuType.Folder ? MenuType.Folder : catalog.catalogType,
+            contentType: catalog.type,
             data: {
               tabStatus: PageTabStatus.Update,
             },
@@ -95,6 +93,7 @@ export function ApiMenu() {
         components: {
           Tree: {
             motionDurationMid: '0',
+            motionDurationSlow: '0',
             colorBgTextHover: 'transparent',
             colorBgContainer: 'transparent',
             colorPrimary: token.colorFillTertiary,

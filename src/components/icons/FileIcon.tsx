@@ -1,5 +1,6 @@
 import {
   FileDownIcon,
+  FileText,
   FolderOpenIcon,
   type LucideProps,
   PackageIcon,
@@ -7,7 +8,7 @@ import {
   ZapIcon,
 } from 'lucide-react'
 
-import { CatalogType, MenuType } from '@/enums'
+import { CatalogType, MenuItemType, MenuType } from '@/enums'
 import type { TabContentType } from '@/types'
 
 interface FileIconProps extends Pick<LucideProps, 'size'> {
@@ -25,6 +26,7 @@ export function FileIcon(props: FileIconProps) {
       return <UnplugIcon size={size} />
 
     case CatalogType.Schema:
+    case MenuItemType.ApiSchema:
       return <PackageIcon size={size} />
 
     case CatalogType.Request:
@@ -32,6 +34,9 @@ export function FileIcon(props: FileIconProps) {
 
     case CatalogType.Markdown:
       return <FileDownIcon size={size} />
+
+    case MenuItemType.Doc:
+      return <FileText size={size} />
 
     case MenuType.Folder:
       return <FolderOpenIcon size={size} />

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --p-tab-content: 16px;
+}
+
 :root[theme='lightDefault'] {
   --color-green-6: #4caf50;
   --color-orange-6: #fa8c16;
@@ -77,8 +85,22 @@
   &.ant-tabs {
     @apply h-full;
 
+    .app-tabs-wrap {
+      .ant-tabs-nav-wrap {
+        flex: none;
+      }
+
+      .ant-tabs-nav-list {
+        @apply ml-2;
+      }
+    }
+
     .ant-tabs-nav {
       @apply mt-1 pr-3;
+    }
+
+    .api-details-tabs {
+      @apply h-full;
     }
 
     .ant-tabs-content-holder {
@@ -90,13 +112,29 @@
         }
       }
     }
-
-    .ant-tabs-nav-list {
-      @apply ml-2;
-    }
   }
 }
 
-.api-details-tabs {
-  @apply h-full;
+.ant-tabs.ant-tabs-card {
+  > .ant-tabs-nav .ant-tabs-tab {
+    &:hover,
+    &.ant-tabs-tab-active {
+      color: currentcolor;
+
+      .ant-tabs-tab-btn {
+        color: currentcolor;
+      }
+    }
+  }
+
+  > .app-tabs-wrap .ant-tabs-nav .ant-tabs-tab {
+    &:hover,
+    &.ant-tabs-tab-active {
+      color: currentcolor;
+
+      .ant-tabs-tab-btn {
+        color: currentcolor;
+      }
+    }
+  }
 }

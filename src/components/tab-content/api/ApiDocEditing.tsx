@@ -1,16 +1,32 @@
 import { useEffect } from 'react'
 
 import Link from 'next/link'
-import { Button, Col, Form, Input, Row, Select, type SelectProps, Space, Tabs } from 'antd'
+import {
+  Button,
+  Col,
+  ConfigProvider,
+  Form,
+  Input,
+  Row,
+  Select,
+  type SelectProps,
+  Space,
+  Tabs,
+  theme,
+} from 'antd'
 
+import { GroupTitle } from '@/components/ApiTab/GroupTitle'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { JsonSchemaEditor } from '@/components/JsonSchema'
 import { JsonViewer } from '@/components/JsonViewer'
 import { API_STATUS_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
+import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
 import { ParamsTab } from './ParamsTab'
+
+import { css } from '@emotion/css'
 
 const methodOptions: SelectProps['options'] = Object.entries(HTTP_METHOD_CONFIG).map(
   ([method, { color }]) => {
@@ -97,6 +113,8 @@ const contentTypeOptions: SelectProps['options'] = [
 ]
 
 export function ApiDocEditing() {
+  const { token } = theme.useToken()
+
   const [form] = Form.useForm<ApiDetails>()
 
   const { menuRawList } = useGlobalContext()
@@ -108,12 +126,29 @@ export function ApiDocEditing() {
     }
   }, [form, menuRawList, tabData.key])
 
+  const { styles } = useStyles(({ token }) => {
+    return {
+      nameInput: css({
+        borderBottom: '1px solid transparent',
+
+        '&:hover': {
+          borderColor: token.colorBorder,
+        },
+
+        '&:focus': {
+          borderColor: token.colorPrimary,
+        },
+      }),
+    }
+  })
+
   return (
-    <Form form={form}>
-      <div className="flex items-center">
+    <Form className="flex h-full flex-col" form={form}>
+      <div className="flex items-center px-tabContent py-3">
         <Space.Compact className="flex-1">
           <Form.Item noStyle name="method">
             <Select
+              showSearch
               className="min-w-[110px]"
               options={methodOptions}
               popupClassName="!min-w-[120px]"
@@ -133,17 +168,25 @@ export function ApiDocEditing() {
         </Space>
       </div>
 
-      <div className="overflow-y-auto">
-        <Form.Item noStyle name="name">
-          <Input
-            className="font-medium"
-            placeholder="未命名接口"
-            size="large"
-            variant="borderless"
-          />
-        </Form.Item>
+      <div className="flex-1 overflow-y-auto p-tabContent pt-0">
+        <ConfigProvider
+          theme={{
+            components: {
+              Input: { borderRadiusLG: 0, paddingInlineLG: 0, paddingBlockLG: token.paddingXXS },
+            },
+          }}
+        >
+          <Form.Item noStyle name="name">
+            <Input
+              className={`font-medium ${styles.nameInput}`}
+              placeholder="未命名接口"
+              size="large"
+              variant="borderless"
+            />
+          </Form.Item>
+        </ConfigProvider>
 
-        <div className="overflow-x-hidden">
+        <div className="pt-2">
           <Row gutter={16}>
             <Col lg={12} xl={6}>
               <Form.Item
@@ -192,13 +235,15 @@ export function ApiDocEditing() {
           </Row>
         </div>
 
+        <GroupTitle>请求参数</GroupTitle>
         <ParamsTab />
 
+        <GroupTitle>返回响应</GroupTitle>
         <Tabs
           items={[
             {
               key: '1',
-              label: '成功响应',
+              label: '成功(200)',
               children: (
                 <div>
                   <Row>

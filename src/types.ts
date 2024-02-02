@@ -1,8 +1,8 @@
 import type { JsonSchema, SchemaType } from '@/components/JsonSchema'
 
-import type { ApiStatus, CatalogType, HttpMethod, MenuType } from './enums'
+import type { ApiStatus, CatalogType, HttpMethod, MenuItemType, MenuType } from './enums'
 
-export type TabContentType = CatalogType | MenuType.Folder | 'blank'
+export type TabContentType = CatalogType | MenuType | MenuItemType | 'blank'
 
 /** 请求参数信息。 */
 interface Parameter {
