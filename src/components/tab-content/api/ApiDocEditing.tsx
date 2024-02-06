@@ -139,6 +139,15 @@ export function ApiDocEditing() {
           borderColor: token.colorPrimary,
         },
       }),
+
+      tabWithBorder: css({
+        '.ant-tabs-content-holder': {
+          border: `1px solid ${token.colorBorderSecondary}`,
+          borderTop: 'none',
+          borderBottomLeftRadius: token.borderRadius,
+          borderBottomRightRadius: token.borderRadius,
+        },
+      }),
     }
   })
 
@@ -240,12 +249,13 @@ export function ApiDocEditing() {
 
         <GroupTitle>返回响应</GroupTitle>
         <Tabs
+          className={styles.tabWithBorder}
           items={[
             {
               key: '1',
               label: '成功(200)',
               children: (
-                <div>
+                <div className="p-tabContent">
                   <Row>
                     <Col className="px-8" lg={8} md={6}>
                       <Form.Item label="HTTP 状态码" name={['responses', 0, 'code']}>
@@ -264,8 +274,62 @@ export function ApiDocEditing() {
                     </Col>
                   </Row>
 
-                  <Form.Item noStyle name={['responses', 0, 'jsonSchema']}>
-                    <JsonSchemaEditor />
+                  <div
+                    style={{
+                      border: `1px solid ${token.colorBorderSecondary}`,
+                      borderRadius: token.borderRadius,
+                      marginBottom: token.marginSM,
+                    }}
+                  >
+                    <div
+                      className="flex justify-end"
+                      style={{
+                        padding: token.paddingSM,
+                        borderBottom: `1px solid ${token.colorBorderSecondary}`,
+                      }}
+                    >
+                      <Space size={token.paddingXXS}>
+                        <Button size="small" type="text">
+                          生成代码
+                        </Button>
+                        <Button size="small" type="text">
+                          JSON Schema
+                        </Button>
+                      </Space>
+                    </div>
+
+                    <div style={{ padding: token.paddingSM }}>
+                      <Form.Item noStyle name={['responses', 0, 'jsonSchema']}>
+                        <JsonSchemaEditor />
+                      </Form.Item>
+                    </div>
+                  </div>
+
+                  <Form.Item dependencies={['responseExamples']}>
+                    {({ getFieldValue }) => {
+                      const examples = getFieldValue([
+                        'responseExamples',
+                      ]) as ApiDetails['responseExamples']
+                      return (
+                        <Tabs
+                          className={styles.tabWithBorder}
+                          items={examples?.map((it, idx) => {
+                            return {
+                              key: it.id,
+                              label: it.name,
+                              children: (
+                                <div className="p-tabContent">
+                                  <Form.Item noStyle name={['responseExamples', idx, 'data']}>
+                                    <JsonViewer />
+                                  </Form.Item>
+                                </div>
+                              ),
+                            }
+                          })}
+                          type="card"
+                        />
+                      )
+                    }}
                   </Form.Item>
                 </div>
               ),
@@ -277,28 +341,6 @@ export function ApiDocEditing() {
           ]}
           type="card"
         />
-
-        <Form.Item dependencies={['responseExamples']}>
-          {({ getFieldValue }) => {
-            const examples = getFieldValue(['responseExamples']) as ApiDetails['responseExamples']
-            return (
-              <Tabs
-                items={examples?.map((it, idx) => {
-                  return {
-                    key: it.id,
-                    label: it.name,
-                    children: (
-                      <Form.Item noStyle name={['responseExamples', idx, 'data']}>
-                        <JsonViewer />
-                      </Form.Item>
-                    ),
-                  }
-                })}
-                type="card"
-              />
-            )
-          }}
-        </Form.Item>
       </div>
     </Form>
   )

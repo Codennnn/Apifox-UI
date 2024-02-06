@@ -101,6 +101,10 @@
 
     .api-details-tabs {
       @apply h-full;
+
+      > .ant-tabs-nav {
+        @apply px-tabContent;
+      }
     }
 
     .ant-tabs-content-holder {

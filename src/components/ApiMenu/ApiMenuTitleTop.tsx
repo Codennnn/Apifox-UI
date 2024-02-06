@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { CaretRightFilled } from '@ant-design/icons'
 import { Dropdown, type DropdownProps, Tooltip } from 'antd'
 import {
   CheckIcon,
@@ -53,7 +54,17 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
 
   return (
     <span className="flex h-7 items-center">
-      <span>{menuConfig.title}</span>
+      <span className="inline-flex items-center">
+        <span>{menuConfig.title}</span>
+
+        {!noActions && (
+          <span
+            className={`ml-1 scale-50 ${expandedMenuKeys.includes(topMenuType) ? 'rotate-90' : ''}`}
+          >
+            <CaretRightFilled />
+          </span>
+        )}
+      </span>
 
       {!noActions && (
         <AppMenuControls>

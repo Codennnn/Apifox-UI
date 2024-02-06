@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 
 import { apiMenuConfig } from '@/configs/static'
+import { getCatalogType } from '@/utils'
 
 import type { ApiMenuData } from './ApiMenu.type'
 import { MenuActionButton } from './MenuActionButton'
@@ -15,7 +16,8 @@ import { MenuActionButton } from './MenuActionButton'
 export function FolderAction(props: { catalog: ApiMenuData }) {
   const { catalog } = props
 
-  const { tipTitle } = apiMenuConfig[catalog.catalogType]
+  const catalogType = getCatalogType(catalog.type)
+  const { tipTitle } = apiMenuConfig[catalogType]
 
   return (
     <>

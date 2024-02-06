@@ -44,7 +44,7 @@ export function ApiMenuTitle(props: ApiMenuTitleProps) {
         {name}
 
         {isFolder && count! > 0 && (
-          <span className="ml-2 text-xs" style={{ color: token.colorTextTertiary }}>
+          <span className="ml-1 text-xs" style={{ color: token.colorTextTertiary }}>
             ({count})
           </span>
         )}

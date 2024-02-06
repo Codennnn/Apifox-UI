@@ -11,7 +11,7 @@ import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType, MenuType } from '@/enums'
 import { useStyles } from '@/hooks/useStyle'
 
-import type { CatalogDataNode } from './ApiMenu.type'
+import type { CatalogDataNode, TreeDataNode } from './ApiMenu.type'
 import { ApiMenuTitle } from './ApiMenuTitle'
 import { ApiMenuTitleTop } from './ApiMenuTitleTop'
 import { FileAction } from './FileAction'
@@ -159,7 +159,7 @@ export const useMenuData: UseMenuData = () => {
       return
     }
 
-    return topMenus.map((menuType) => {
+    return topMenus.map<TreeDataNode>((menuType) => {
       const treeData = arrayToTree(groupedMenus[menuType], {
         customID: 'key',
         parentProperty: 'customData.catalog.parentId',

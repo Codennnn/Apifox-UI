@@ -1,6 +1,6 @@
 import { show } from '@ebay/nice-modal-react'
 import { Button, type ButtonProps, Space } from 'antd'
-import { ChevronsLeftIcon, ChevronsRightIcon, HelpCircle, ShirtIcon } from 'lucide-react'
+import { ChevronsLeftIcon, ChevronsRightIcon, GithubIcon, ShirtIcon } from 'lucide-react'
 
 import { IconText } from '@/components/IconText'
 import { SettingsModal } from '@/components/modals/SettingsModal'
@@ -46,8 +46,8 @@ export function FooterBar() {
           <IconText icon={<ShirtIcon size={14} />} />
         </SmallButton>
 
-        <SmallButton>
-          <IconText icon={<HelpCircle size={14} />} />
+        <SmallButton href="https://github.com/Codennnn/Apifox-UI" target="_blank">
+          <IconText icon={<GithubIcon size={14} />} />
         </SmallButton>
       </Space>
     </div>

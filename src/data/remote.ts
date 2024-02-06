@@ -8,7 +8,6 @@ export const apiDirectoryData: ApiMenuData[] = [
   {
     id: MenuId.宠物店,
     name: '宠物店',
-    catalogType: CatalogType.Http,
     menuType: MenuType.Folder,
     type: MenuItemType.ApiDetailFolder,
   },
@@ -16,7 +15,6 @@ export const apiDirectoryData: ApiMenuData[] = [
     id: MenuId.查询宠物详情,
     parentId: MenuId.宠物店,
     name: '查询宠物详情',
-    catalogType: CatalogType.Http,
     menuType: MenuType.File,
     type: MenuItemType.ApiDetail,
     data: {
@@ -90,7 +88,6 @@ export const apiDirectoryData: ApiMenuData[] = [
     id: MenuId.新建宠物信息,
     parentId: MenuId.宠物店,
     name: '新建宠物信息',
-    catalogType: CatalogType.Http,
     menuType: MenuType.File,
     type: MenuItemType.ApiDetail,
     data: {
@@ -131,14 +128,12 @@ export const apiDirectoryData: ApiMenuData[] = [
   {
     id: MenuId.文档,
     name: '文档',
-    catalogType: CatalogType.Http,
     menuType: MenuType.File,
     type: MenuItemType.Doc,
   },
   {
     id: 'schema.1',
     name: '宠物店',
-    catalogType: CatalogType.Schema,
     menuType: MenuType.Folder,
     type: MenuItemType.ApiSchemaFolder,
     data: {
@@ -151,7 +146,6 @@ export const apiDirectoryData: ApiMenuData[] = [
     id: 'schema.2',
     parentId: 'schema.1',
     name: 'Pet',
-    catalogType: CatalogType.Schema,
     menuType: MenuType.File,
     type: MenuItemType.ApiSchema,
   },
@@ -159,7 +153,6 @@ export const apiDirectoryData: ApiMenuData[] = [
     id: 'schema.3',
     parentId: 'schema.1',
     name: 'Category',
-    catalogType: CatalogType.Schema,
     menuType: MenuType.File,
     type: MenuItemType.ApiSchema,
   },
@@ -167,14 +160,12 @@ export const apiDirectoryData: ApiMenuData[] = [
     id: 'schema.4',
     parentId: 'schema.1',
     name: 'Tag',
-    catalogType: CatalogType.Schema,
     menuType: MenuType.File,
     type: MenuItemType.ApiSchema,
   },
   {
     id: 'schema.5',
     name: '引用模型',
-    catalogType: CatalogType.Schema,
     menuType: MenuType.File,
     type: MenuItemType.ApiSchema,
   },
