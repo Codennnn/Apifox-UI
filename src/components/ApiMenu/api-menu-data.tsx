@@ -71,7 +71,7 @@ export interface MenuState {
 type UseMenuData = () => MenuState
 
 export const useMenuData: UseMenuData = () => {
-  const { menuRawList } = useGlobalContext()
+  const { menuRawList, apiDetailDisplay } = useGlobalContext()
 
   /**
    * 简单的菜单数据，可以被序列化存储。
@@ -115,7 +115,9 @@ export const useMenuData: UseMenuData = () => {
               }
 
               return (
-                <span className="inline-flex size-full items-center justify-center">
+                <span
+                  className={`inline-flex size-full items-center justify-center ${item.customData.catalog.type === MenuItemType.ApiSchema ? 'text-blue-500' : ''}`}
+                >
                   <FileIcon size={15} type={catalog.type} />
                 </span>
               )
@@ -132,14 +134,20 @@ export const useMenuData: UseMenuData = () => {
               actions={
                 item.isLeaf ? <FileAction catalog={catalog} /> : <FolderAction catalog={catalog} />
               }
-              name={catalog.name}
+              name={
+                catalog.type === MenuItemType.ApiDetail
+                  ? apiDetailDisplay === 'name'
+                    ? catalog.name
+                    : catalog.data?.path || catalog.name
+                  : catalog.name
+              }
               node={node as CatalogDataNode}
             />
           ),
           className: item.isLeaf ? 'leaf-node' : undefined,
         }
       }),
-    [menus]
+    [menus, apiDetailDisplay]
   )
 
   const groupedMenus: GroupedMenu | undefined = useMemo(() => {

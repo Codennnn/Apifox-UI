@@ -1,7 +1,7 @@
 import type { ApiMenuData } from '@/components/ApiMenu'
 import type { ApiTabItem } from '@/components/ApiTab'
 import { SchemaType } from '@/components/JsonSchema'
-import { ApiStatus, CatalogType, HttpMethod, MenuId, MenuItemType, MenuType } from '@/enums'
+import { ApiStatus, HttpMethod, MenuId, MenuItemType, MenuType } from '@/enums'
 
 /** 菜单原始数据，通常从服务端中获取，然后在客户端中需要被组装为树状结构。 */
 export const apiDirectoryData: ApiMenuData[] = [
@@ -178,7 +178,7 @@ export const initialTabItems: ApiTabItem[] = [
   {
     key: MenuId.查询宠物详情,
     label: '查询宠物详情',
-    contentType: CatalogType.Http,
+    contentType: MenuItemType.ApiDetail,
   },
   {
     key: 'newCatalog',

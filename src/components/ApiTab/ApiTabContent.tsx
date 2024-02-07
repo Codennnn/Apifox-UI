@@ -1,7 +1,7 @@
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { Api } from '@/components/tab-content/api/Api'
 import { Blank } from '@/components/tab-content/Blank'
-import { CatalogType } from '@/enums'
+import { MenuItemType } from '@/enums'
 
 /**
  * 渲染页签内容。
@@ -13,10 +13,10 @@ export function ApiTabContent() {
   const { tabData } = useTabContentContext()
 
   switch (tabData.contentType) {
-    case CatalogType.Http:
+    case MenuItemType.ApiDetail:
       return <Api />
 
-    case CatalogType.Schema:
+    case MenuItemType.ApiSchema:
       return null
 
     case 'blank':

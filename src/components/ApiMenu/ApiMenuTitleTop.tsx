@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { CaretRightFilled } from '@ant-design/icons'
-import { Dropdown, type DropdownProps, Tooltip } from 'antd'
+import { Dropdown, type DropdownProps, theme, Tooltip } from 'antd'
 import {
   CheckIcon,
   ChevronsDownUpIcon,
@@ -14,6 +14,7 @@ import {
 import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
 import { FolderIcon } from '@/components/icons/FolderIcon'
 import { apiMenuConfig } from '@/configs/static'
+import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuType } from '@/enums'
 
 import { useApiMenuContext } from './ApiMenuContext'
@@ -30,10 +31,19 @@ interface ApiMenuTopTitleProps {
  * 菜单目录的顶级标题，用于归类不同类型的目录，如项目概览、接口、数据模型、快捷请求、回收站等。
  */
 export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
+  const { token } = theme.useToken()
+
   const { topMenuType, extraDropdownMenuItems = [] } = props
 
-  const { groupedMenus, expandedMenuKeys, addExpandedMenuKeys, removeExpandedMenuKeys } =
-    useApiMenuContext()
+  const { apiDetailDisplay, setApiDetailDisplay } = useGlobalContext()
+
+  const {
+    groupedMenus,
+    expandedMenuKeys,
+
+    addExpandedMenuKeys,
+    removeExpandedMenuKeys,
+  } = useApiMenuContext()
 
   const menuFolderKeys = useMemo(() => {
     const folders = groupedMenus?.[topMenuType].filter(
@@ -129,17 +139,35 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
                   {
                     key: 'displayName',
                     label: '接口显示为名称',
-                    icon: <CheckIcon size={14} />,
+                    icon: (
+                      <CheckIcon
+                        size={14}
+                        style={{
+                          color: token.colorPrimary,
+                          opacity: apiDetailDisplay === 'name' ? undefined : 0,
+                        }}
+                      />
+                    ),
                     onClick: (ev) => {
                       ev.domEvent.stopPropagation()
+                      setApiDetailDisplay('name')
                     },
                   },
                   {
-                    key: 'displayURL',
+                    key: 'displayPath',
                     label: '接口显示为 URL',
-                    icon: <CheckIcon className="opacity-0" size={14} />,
+                    icon: (
+                      <CheckIcon
+                        size={14}
+                        style={{
+                          color: token.colorPrimary,
+                          opacity: apiDetailDisplay === 'path' ? undefined : 0,
+                        }}
+                      />
+                    ),
                     onClick: (ev) => {
                       ev.domEvent.stopPropagation()
+                      setApiDetailDisplay('path')
                     },
                   },
                 ],

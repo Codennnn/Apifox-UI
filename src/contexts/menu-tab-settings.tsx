@@ -136,7 +136,7 @@ export function useMenuTabHelpers(): MenuTabHelpers {
 
   const removeOtherTabItems = useEvent<MenuTabHelpers['removeOtherTabItems']>(() => {
     if (activeTabKey) {
-      setTabItems((items) => items.filter((item) => item.key !== activeTabKey))
+      setTabItems((items) => items.filter((item) => item.key === activeTabKey))
     }
   })
 

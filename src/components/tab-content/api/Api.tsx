@@ -32,14 +32,6 @@ export function Api() {
           </ContentWrapper>
         ),
       },
-      {
-        key: 'run',
-        label: '运行',
-      },
-      {
-        key: 'mock',
-        label: '高级 Mock',
-      },
     ]
   }, [])
 

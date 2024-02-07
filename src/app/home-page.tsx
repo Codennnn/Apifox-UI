@@ -32,9 +32,10 @@ function HomeContent() {
 
     return {
       resizeHandle: css({
-        [`&:hover > .${resizeHandleInner}, &[data-resize-handle-active] > .${resizeHandleInner}`]: {
-          backgroundColor: token.colorPrimary,
-        },
+        [`&:hover > .${resizeHandleInner}, &[data-resize-handle-state="hover"] > .${resizeHandleInner}, &[data-resize-handle-state="drag"] > .${resizeHandleInner}`]:
+          {
+            backgroundColor: token.colorPrimary,
+          },
       }),
 
       resizeHandleInner,
