@@ -1,6 +1,8 @@
 import { Dropdown } from 'antd'
 import { MoreHorizontalIcon, TrashIcon } from 'lucide-react'
 
+import { useGlobalContext } from '@/contexts/global'
+
 import { MenuItemType } from '../../enums'
 
 import type { ApiMenuData } from './ApiMenu.type'
@@ -8,6 +10,8 @@ import { MenuActionButton } from './MenuActionButton'
 
 export function FileAction(props: { catalog: ApiMenuData }) {
   const { catalog } = props
+
+  const { removeMenuItem } = useGlobalContext()
 
   return (
     <Dropdown
@@ -22,13 +26,10 @@ export function FileAction(props: { catalog: ApiMenuData }) {
 
               switch (catalog.type) {
                 case MenuItemType.ApiDetail:
-                  break
-
                 case MenuItemType.ApiSchema:
+                case MenuItemType.Doc:
+                  removeMenuItem({ id: catalog.id })
                   break
-
-                default:
-                  throw new Error()
               }
             },
           },

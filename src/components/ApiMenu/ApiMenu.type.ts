@@ -1,14 +1,13 @@
 import type { TreeProps } from 'antd'
 
 import type { JsonSchema } from '@/components/JsonSchema'
-import type { MenuItemType, MenuType } from '@/enums'
+import type { MenuItemType } from '@/enums'
 import type { ApiDetails } from '@/types'
 
 interface ApiMenuBase {
   id: CatalogId
   parentId?: CatalogId
   name: string
-  menuType: MenuType
   type: MenuItemType
 }
 
@@ -29,9 +28,16 @@ interface ApiMenuSchema extends ApiMenuBase {
   }
 }
 
+interface ApiMenuRequest extends ApiMenuBase {
+  type: MenuItemType.HttpRequest | MenuItemType.RequestFolder
+  data?: {
+    jsonSchema: JsonSchema
+  }
+}
+
 export type CatalogId = string
 
-export type ApiMenuData = ApiMenuInterface | ApiMenuSchema | ApiMenuDoc
+export type ApiMenuData = ApiMenuInterface | ApiMenuSchema | ApiMenuDoc | ApiMenuRequest
 
 export type TreeDataNode = NonNullable<TreeProps['treeData']>[0]
 

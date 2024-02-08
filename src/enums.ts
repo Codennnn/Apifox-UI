@@ -40,17 +40,12 @@ export const enum CatalogType {
   Markdown = 'markdown',
 }
 
-/** 接口菜单目录层级类型。 */
-export const enum MenuType {
-  Folder,
-  File,
-}
-
 export const enum MenuItemType {
   ApiDetail = 'apiDetail',
   ApiDetailFolder = 'apiDetailFolder',
   ApiSchema = 'apiSchema',
   ApiSchemaFolder = 'apiSchemaFolder',
+  RequestFolder = 'requestFolder',
   HttpResponse = 'httpResponse',
   HttpRequest = 'httpRequest',
   Doc = 'doc',

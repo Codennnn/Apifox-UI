@@ -1,7 +1,7 @@
 import { theme } from 'antd'
 
 import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
-import { MenuType } from '@/enums'
+import { isMenuFolder } from '@/utils'
 
 import type { CatalogDataNode } from './ApiMenu.type'
 
@@ -34,7 +34,7 @@ export function ApiMenuTitle(props: ApiMenuTitleProps) {
 
   const { node, name, actions } = props
 
-  const isFolder = node.customData.catalog.menuType === MenuType.Folder
+  const isFolder = isMenuFolder(node.customData.catalog.type)
 
   const count = isFolder ? countLeaf(node) : null
 

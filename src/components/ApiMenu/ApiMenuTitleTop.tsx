@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { CaretRightFilled } from '@ant-design/icons'
+import { show } from '@ebay/nice-modal-react'
 import { Dropdown, type DropdownProps, theme, Tooltip } from 'antd'
 import {
   CheckIcon,
@@ -13,9 +14,11 @@ import {
 
 import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
 import { FolderIcon } from '@/components/icons/FolderIcon'
+import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
 import { apiMenuConfig } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
-import { CatalogType, MenuType } from '@/enums'
+import { CatalogType, MenuItemType } from '@/enums'
+import { isMenuFolder } from '@/utils'
 
 import { useApiMenuContext } from './ApiMenuContext'
 import { MenuActionButton } from './MenuActionButton'
@@ -46,8 +49,8 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
   } = useApiMenuContext()
 
   const menuFolderKeys = useMemo(() => {
-    const folders = groupedMenus?.[topMenuType].filter(
-      (it) => it.customData.catalog.menuType === MenuType.Folder
+    const folders = groupedMenus?.[topMenuType].filter((it) =>
+      isMenuFolder(it.customData.catalog.type)
     )
     const menuKeys = folders?.map((it) => it.key) || []
 
@@ -99,6 +102,17 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
                   icon: <FolderPlusIcon size={14} />,
                   onClick: (ev) => {
                     ev.domEvent.stopPropagation()
+                    void show(NewCatalogModal, {
+                      formData: {
+                        parentId: undefined,
+                        type:
+                          topMenuType === CatalogType.Http
+                            ? MenuItemType.ApiDetailFolder
+                            : topMenuType === CatalogType.Schema
+                              ? MenuItemType.ApiSchemaFolder
+                              : MenuItemType.RequestFolder,
+                      },
+                    })
                   },
                 },
                 ...extraDropdownMenuItems,

@@ -35,3 +35,8 @@ export function getCatalogType(type: MenuItemType): CatalogType {
       return CatalogType.Request
   }
 }
+
+/** 判断是否为菜单文件夹类型。 */
+export function isMenuFolder(type: MenuItemType): boolean {
+  return type === MenuItemType.ApiDetailFolder || type === MenuItemType.ApiSchemaFolder
+}

@@ -118,13 +118,13 @@ function HomeContent() {
 export function HomePage() {
   return (
     <LayoutProvider>
-      <NiceModalProvider>
-        <GlobalContextProvider>
+      <GlobalContextProvider>
+        <NiceModalProvider>
           <MenuTabProvider>
             <HomeContent />
           </MenuTabProvider>
-        </GlobalContextProvider>
-      </NiceModalProvider>
+        </NiceModalProvider>
+      </GlobalContextProvider>
     </LayoutProvider>
   )
 }

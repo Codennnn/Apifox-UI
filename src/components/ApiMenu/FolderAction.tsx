@@ -1,3 +1,4 @@
+import { show } from '@ebay/nice-modal-react'
 import { Dropdown, Tooltip } from 'antd'
 import {
   FolderEditIcon,
@@ -7,7 +8,9 @@ import {
   TrashIcon,
 } from 'lucide-react'
 
+import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
 import { apiMenuConfig } from '@/configs/static'
+import { useGlobalContext } from '@/contexts/global'
 import { getCatalogType } from '@/utils'
 
 import type { ApiMenuData } from './ApiMenu.type'
@@ -18,6 +21,8 @@ export function FolderAction(props: { catalog: ApiMenuData }) {
 
   const catalogType = getCatalogType(catalog.type)
   const { tipTitle } = apiMenuConfig[catalogType]
+
+  const { removeMenuItem } = useGlobalContext()
 
   return (
     <>
@@ -47,6 +52,9 @@ export function FolderAction(props: { catalog: ApiMenuData }) {
               icon: <FolderPlusIcon size={14} />,
               onClick: (ev) => {
                 ev.domEvent.stopPropagation()
+                void show(NewCatalogModal, {
+                  formData: { parentId: catalog.id, type: catalog.type },
+                })
               },
             },
             { type: 'divider' },
@@ -56,6 +64,7 @@ export function FolderAction(props: { catalog: ApiMenuData }) {
               icon: <TrashIcon size={14} />,
               onClick: (ev) => {
                 ev.domEvent.stopPropagation()
+                removeMenuItem({ id: catalog.id })
               },
             },
           ],

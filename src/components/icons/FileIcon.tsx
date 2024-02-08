@@ -8,7 +8,7 @@ import {
   ZapIcon,
 } from 'lucide-react'
 
-import { CatalogType, MenuItemType, MenuType } from '@/enums'
+import { CatalogType, MenuItemType } from '@/enums'
 import type { TabContentType } from '@/types'
 
 interface FileIconProps extends Pick<LucideProps, 'size'> {
@@ -38,7 +38,8 @@ export function FileIcon(props: FileIconProps) {
     case MenuItemType.Doc:
       return <FileText size={size} />
 
-    case MenuType.Folder:
+    case MenuItemType.ApiDetailFolder:
+    case MenuItemType.ApiSchemaFolder:
       return <FolderOpenIcon size={size} />
 
     default:

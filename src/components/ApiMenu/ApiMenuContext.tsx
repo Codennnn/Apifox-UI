@@ -4,27 +4,12 @@ import { CatalogType, MenuId } from '@/enums'
 
 import { type MenuState, useMenuData } from './api-menu-data'
 
-interface ExpandedMenuKeysHelper {
+interface ExpandedMenuKeysHelpers {
   addExpandedMenuKeys: (keys: string[]) => void
   removeExpandedMenuKeys: (keys: string[]) => void
 }
 
-const useExpandedMenuKeysHelper = (
-  setExpandedMenuKeys: React.Dispatch<React.SetStateAction<string[]>>
-) => {
-  return useMemo<ExpandedMenuKeysHelper>(() => {
-    return {
-      addExpandedMenuKeys: (keys) => {
-        setExpandedMenuKeys((k) => Array.from(new Set([...k, ...keys])))
-      },
-      removeExpandedMenuKeys: (keys) => {
-        setExpandedMenuKeys((k) => k.filter((key) => !keys.includes(key)))
-      },
-    }
-  }, [setExpandedMenuKeys])
-}
-
-interface ApiMenuContextData extends ExpandedMenuKeysHelper, MenuState {
+interface ApiMenuContextData extends ExpandedMenuKeysHelpers, MenuState {
   expandedMenuKeys: string[]
 }
 
@@ -39,7 +24,16 @@ export function ApiMenuContextProvider(props: React.PropsWithChildren) {
     MenuId.宠物店,
   ])
 
-  const helpers = useExpandedMenuKeysHelper(setExpandedMenuKeys)
+  const helpers = useMemo<ExpandedMenuKeysHelpers>(() => {
+    return {
+      addExpandedMenuKeys: (keys) => {
+        setExpandedMenuKeys((k) => Array.from(new Set([...k, ...keys])))
+      },
+      removeExpandedMenuKeys: (keys) => {
+        setExpandedMenuKeys((k) => k.filter((key) => !keys.includes(key)))
+      },
+    }
+  }, [setExpandedMenuKeys])
 
   const menuState = useMenuData()
 

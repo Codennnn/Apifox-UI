@@ -1,21 +1,19 @@
 import type { ApiMenuData } from '@/components/ApiMenu'
 import type { ApiTabItem } from '@/components/ApiTab'
 import { SchemaType } from '@/components/JsonSchema'
-import { ApiStatus, HttpMethod, MenuId, MenuItemType, MenuType } from '@/enums'
+import { ApiStatus, HttpMethod, MenuId, MenuItemType } from '@/enums'
 
 /** 菜单原始数据，通常从服务端中获取，然后在客户端中需要被组装为树状结构。 */
 export const apiDirectoryData: ApiMenuData[] = [
   {
     id: MenuId.宠物店,
     name: '宠物店',
-    menuType: MenuType.Folder,
     type: MenuItemType.ApiDetailFolder,
   },
   {
     id: MenuId.查询宠物详情,
     parentId: MenuId.宠物店,
     name: '查询宠物详情',
-    menuType: MenuType.File,
     type: MenuItemType.ApiDetail,
     data: {
       id: 'xx',
@@ -88,7 +86,6 @@ export const apiDirectoryData: ApiMenuData[] = [
     id: MenuId.新建宠物信息,
     parentId: MenuId.宠物店,
     name: '新建宠物信息',
-    menuType: MenuType.File,
     type: MenuItemType.ApiDetail,
     data: {
       id: 'xx',
@@ -128,13 +125,11 @@ export const apiDirectoryData: ApiMenuData[] = [
   {
     id: MenuId.文档,
     name: '文档',
-    menuType: MenuType.File,
     type: MenuItemType.Doc,
   },
   {
     id: 'schema.1',
     name: '宠物店',
-    menuType: MenuType.Folder,
     type: MenuItemType.ApiSchemaFolder,
     data: {
       jsonSchema: {
@@ -146,27 +141,23 @@ export const apiDirectoryData: ApiMenuData[] = [
     id: 'schema.2',
     parentId: 'schema.1',
     name: 'Pet',
-    menuType: MenuType.File,
     type: MenuItemType.ApiSchema,
   },
   {
     id: 'schema.3',
     parentId: 'schema.1',
     name: 'Category',
-    menuType: MenuType.File,
     type: MenuItemType.ApiSchema,
   },
   {
     id: 'schema.4',
     parentId: 'schema.1',
     name: 'Tag',
-    menuType: MenuType.File,
     type: MenuItemType.ApiSchema,
   },
   {
     id: 'schema.5',
     name: '引用模型',
-    menuType: MenuType.File,
     type: MenuItemType.ApiSchema,
   },
 ]

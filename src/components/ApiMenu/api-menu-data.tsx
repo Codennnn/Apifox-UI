@@ -8,8 +8,9 @@ import { FileIcon } from '@/components/icons/FileIcon'
 import { FolderIcon } from '@/components/icons/FolderIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
 import { useGlobalContext } from '@/contexts/global'
-import { CatalogType, MenuItemType, MenuType } from '@/enums'
+import { CatalogType, MenuItemType } from '@/enums'
 import { useStyles } from '@/hooks/useStyle'
+import { isMenuFolder } from '@/utils'
 
 import type { CatalogDataNode, TreeDataNode } from './ApiMenu.type'
 import { ApiMenuTitle } from './ApiMenuTitle'
@@ -80,7 +81,7 @@ export const useMenuData: UseMenuData = () => {
   const menus: CatalogDataNode[] | undefined = useMemo(
     () =>
       menuRawList?.map<CatalogDataNode>((item) => {
-        const isLeaf = item.menuType === MenuType.File
+        const isLeaf = !isMenuFolder(item.type)
 
         return {
           key: item.id,
@@ -167,20 +168,20 @@ export const useMenuData: UseMenuData = () => {
       return
     }
 
-    return topMenus.map<TreeDataNode>((menuType) => {
-      const treeData = arrayToTree(groupedMenus[menuType], {
+    return topMenus.map<TreeDataNode>((catalogType) => {
+      const treeData = arrayToTree(groupedMenus[catalogType], {
         customID: 'key',
         parentProperty: 'customData.catalog.parentId',
       })
 
       return {
-        key: menuType,
+        key: catalogType,
         icon: () => (
           <span className="inline-flex size-full items-center justify-center">
-            <FolderIcon size={15} type={menuType} />
+            <FolderIcon size={15} type={catalogType} />
           </span>
         ),
-        title: () => <ApiMenuTitleTop topMenuType={menuType} />,
+        title: () => <ApiMenuTitleTop topMenuType={catalogType} />,
         children: treeData,
         className: `top-folder ${styles.topFolder}`,
       }
