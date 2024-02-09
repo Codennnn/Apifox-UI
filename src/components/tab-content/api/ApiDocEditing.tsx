@@ -122,7 +122,11 @@ export function ApiDocEditing() {
 
   useEffect(() => {
     if (menuRawList) {
-      form.setFieldsValue(menuRawList.find(({ id }) => id === tabData.key)!.data as ApiDetails)
+      const apiDetails = menuRawList.find(({ id }) => id === tabData.key)?.data
+
+      if (apiDetails) {
+        form.setFieldsValue(apiDetails as ApiDetails)
+      }
     }
   }, [form, menuRawList, tabData.key])
 

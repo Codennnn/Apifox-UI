@@ -34,7 +34,7 @@ export function GlobalContextProvider(props: React.PropsWithChildren) {
       },
 
       removeMenuItem: ({ id }) => {
-        setMenuRawList((list) => list?.filter((item) => item.id !== id))
+        setMenuRawList((list) => list?.filter((item) => item.id !== id && item.parentId !== id))
       },
     }
   }, [])

@@ -41,6 +41,11 @@ const groupMenuByType = (menuData: CatalogDataNode[]) => {
         case MenuItemType.ApiSchemaFolder:
           res[CatalogType.Schema].push(catalogDataNode)
           break
+
+        case MenuItemType.HttpRequest:
+        case MenuItemType.RequestFolder:
+          res[CatalogType.Request].push(catalogDataNode)
+          break
       }
 
       return res
@@ -101,7 +106,8 @@ export const useMenuData: UseMenuData = () => {
     () =>
       menus?.map<CatalogDataNode>((item) => {
         const catalog = item.customData.catalog
-        const isHttp = catalog.type === MenuItemType.ApiDetail
+        const isHttp =
+          catalog.type === MenuItemType.ApiDetail || catalog.type === MenuItemType.HttpRequest
 
         return {
           ...item,

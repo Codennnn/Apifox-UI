@@ -54,7 +54,7 @@
     }
 
     .ant-tree-node-content-wrapper {
-      @apply flex items-center;
+      @apply flex items-center overflow-hidden;
     }
 
     .ant-tree-treenode {
@@ -76,7 +76,7 @@
     }
 
     .ant-tree-title {
-      @apply flex-1;
+      @apply flex-1 overflow-hidden;
     }
   }
 }

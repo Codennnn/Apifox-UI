@@ -80,7 +80,7 @@ export function ApiMenu() {
 
         ':hover': {
           '.app-menu-controls': {
-            display: 'unset',
+            display: 'inline-flex',
           },
         },
       },

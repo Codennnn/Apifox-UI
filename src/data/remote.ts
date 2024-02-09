@@ -53,7 +53,7 @@ export const apiDirectoryData: ApiMenuData[] = [
           data: JSON.stringify({
             code: 0,
             data: {
-              name: 'Hello Kity',
+              name: 'Hello Kitty',
               photoUrls: ['http://dummyimage.com/400x400'],
               id: 3,
               category: {
@@ -102,7 +102,7 @@ export const apiDirectoryData: ApiMenuData[] = [
           data: JSON.stringify({
             code: 0,
             data: {
-              name: 'Hello Kity',
+              name: 'Hello Kitty',
               photoUrls: ['http://dummyimage.com/400x400'],
               id: 3,
               category: {
@@ -128,7 +128,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     type: MenuItemType.Doc,
   },
   {
-    id: 'schema.1',
+    id: MenuId.宠物店S,
     name: '宠物店',
     type: MenuItemType.ApiSchemaFolder,
     data: {
@@ -138,27 +138,71 @@ export const apiDirectoryData: ApiMenuData[] = [
     },
   },
   {
-    id: 'schema.2',
-    parentId: 'schema.1',
+    id: MenuId.Pet,
+    parentId: MenuId.宠物店S,
     name: 'Pet',
     type: MenuItemType.ApiSchema,
   },
   {
-    id: 'schema.3',
-    parentId: 'schema.1',
+    id: MenuId.Category,
+    parentId: MenuId.宠物店S,
     name: 'Category',
     type: MenuItemType.ApiSchema,
   },
   {
-    id: 'schema.4',
-    parentId: 'schema.1',
+    id: MenuId.Tag,
+    parentId: MenuId.宠物店S,
     name: 'Tag',
     type: MenuItemType.ApiSchema,
   },
   {
-    id: 'schema.5',
+    id: MenuId.引用模型,
     name: '引用模型',
     type: MenuItemType.ApiSchema,
+  },
+  {
+    id: MenuId.Request,
+    name: 'xxx',
+    type: MenuItemType.RequestFolder,
+  },
+  {
+    id: MenuId.Request2,
+    parentId: MenuId.Request,
+    name: 'https://abc.com',
+    type: MenuItemType.HttpRequest,
+    data: {
+      id: 'xx',
+      path: 'https://abc.com',
+      name: '查询宠物详情',
+      method: HttpMethod.Get,
+      status: ApiStatus.Developing,
+      tags: ['宠物'],
+      serverId: '',
+      responses: [
+        {
+          code: 200,
+          name: '成功',
+          contentType: 'json',
+          jsonSchema: {
+            type: SchemaType.Object,
+            properties: [
+              {
+                name: 'code',
+                type: SchemaType.Integer,
+                description: '状态码',
+              },
+              {
+                name: 'data',
+                type: SchemaType.Refer,
+                $ref: '#/definitions/1501168',
+                description: '宠物信息',
+              },
+            ],
+          },
+        },
+      ],
+      createdAt: '2022-03-23T12:00:00.000Z',
+    },
   },
 ]
 

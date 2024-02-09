@@ -39,7 +39,7 @@ export function ApiMenuTitle(props: ApiMenuTitleProps) {
   const count = isFolder ? countLeaf(node) : null
 
   return (
-    <span className="flex items-center">
+    <span className="flex items-center overflow-hidden">
       <span className="flex flex-1 items-center truncate">
         {name}
 

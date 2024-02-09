@@ -30,9 +30,7 @@ interface ApiMenuSchema extends ApiMenuBase {
 
 interface ApiMenuRequest extends ApiMenuBase {
   type: MenuItemType.HttpRequest | MenuItemType.RequestFolder
-  data?: {
-    jsonSchema: JsonSchema
-  }
+  data?: ApiDetails
 }
 
 export type CatalogId = string

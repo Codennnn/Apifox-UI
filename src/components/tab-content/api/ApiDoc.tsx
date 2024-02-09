@@ -51,15 +51,17 @@ export function ApiDoc() {
   const { tabData } = useTabContentContext()
 
   const { docValue, methodConfig } = useMemo(() => {
-    const data = menuRawList?.find(({ id }) => id === tabData.key)!.data as ApiDetails | undefined
+    const apiDetails = menuRawList?.find(({ id }) => id === tabData.key)?.data as
+      | ApiDetails
+      | undefined
 
     let methodConfig
 
-    if (data) {
-      methodConfig = HTTP_METHOD_CONFIG[data.method]
+    if (apiDetails) {
+      methodConfig = HTTP_METHOD_CONFIG[apiDetails.method]
     }
 
-    return { docValue: data, methodConfig }
+    return { docValue: apiDetails, methodConfig }
   }, [menuRawList, tabData.key])
 
   const info = useMemo<BaseInfo>(() => {
