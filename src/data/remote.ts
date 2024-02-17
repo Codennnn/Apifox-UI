@@ -126,6 +126,11 @@ export const apiDirectoryData: ApiMenuData[] = [
     id: MenuId.文档,
     name: '文档',
     type: MenuItemType.Doc,
+    data: {
+      id: 'xx',
+      name: '文档',
+      content: '文档内容',
+    },
   },
   {
     id: MenuId.宠物店S,

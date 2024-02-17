@@ -87,11 +87,7 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
                 {
                   key: 'newSubCatalog',
                   label: menuConfig.newLabel,
-                  icon: (
-                    <span>
-                      <FolderIcon size={14} type={topMenuType} />
-                    </span>
-                  ),
+                  icon: <FolderIcon size={14} type={topMenuType} />,
                   onClick: (ev) => {
                     ev.domEvent.stopPropagation()
                   },

@@ -69,3 +69,20 @@ export interface ApiDetails {
   /** 接口文档更新时间 */
   updatedAt?: string
 }
+
+export interface ApiDoc {
+  /** 唯一标识 */
+  id: string
+  /** 文档标题 */
+  name: string
+  /** 创建者唯一标识 */
+  creatorId?: string
+  /** 编辑者唯一标识 */
+  editorId?: string
+  /** 文档内容 */
+  content?: string
+  /** 创建时间 */
+  createAt?: string
+  /** 最后修改时间 */
+  updateAt?: string
+}

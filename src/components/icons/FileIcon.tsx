@@ -11,7 +11,7 @@ import {
 import { CatalogType, MenuItemType } from '@/enums'
 import type { TabContentType } from '@/types'
 
-interface FileIconProps extends Pick<LucideProps, 'size'> {
+export interface FileIconProps extends Pick<LucideProps, 'size' | 'className' | 'style'> {
   type: TabContentType
 }
 
@@ -19,28 +19,30 @@ interface FileIconProps extends Pick<LucideProps, 'size'> {
  * 菜单目录文件夹下的文件图标。
  */
 export function FileIcon(props: FileIconProps) {
-  const { type, size } = props
+  const { type, size, className } = props
+
+  const iconProps = { size, className }
 
   switch (type) {
     case CatalogType.Http:
-      return <UnplugIcon size={size} />
+      return <UnplugIcon {...iconProps} />
 
     case CatalogType.Schema:
     case MenuItemType.ApiSchema:
-      return <PackageIcon size={size} />
+      return <PackageIcon {...iconProps} />
 
     case CatalogType.Request:
-      return <ZapIcon size={size} />
+      return <ZapIcon {...iconProps} />
 
     case CatalogType.Markdown:
-      return <FileDownIcon size={size} />
+      return <FileDownIcon {...iconProps} />
 
     case MenuItemType.Doc:
-      return <FileText size={size} />
+      return <FileText {...iconProps} />
 
     case MenuItemType.ApiDetailFolder:
     case MenuItemType.ApiSchemaFolder:
-      return <FolderOpenIcon size={size} />
+      return <FolderOpenIcon {...iconProps} />
 
     default:
       return null

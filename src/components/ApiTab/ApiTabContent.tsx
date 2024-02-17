@@ -1,6 +1,8 @@
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { Api } from '@/components/tab-content/api/Api'
 import { Blank } from '@/components/tab-content/Blank'
+import { Doc } from '@/components/tab-content/Doc'
+import { Schema } from '@/components/tab-content/Schema'
 import { MenuItemType } from '@/enums'
 
 /**
@@ -17,7 +19,10 @@ export function ApiTabContent() {
       return <Api />
 
     case MenuItemType.ApiSchema:
-      return null
+      return <Schema />
+
+    case MenuItemType.Doc:
+      return <Doc />
 
     case 'blank':
       return <Blank />

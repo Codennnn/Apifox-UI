@@ -1,7 +1,15 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
 import { create, useModal } from '@ebay/nice-modal-react'
-import { Cascader, type CascaderProps, Form, Input, Modal, type ModalProps } from 'antd'
+import {
+  Cascader,
+  type CascaderProps,
+  Form,
+  Input,
+  type InputRef,
+  Modal,
+  type ModalProps,
+} from 'antd'
 import { nanoid } from 'nanoid'
 
 import type { ApiMenuData } from '@/components/ApiMenu/ApiMenu.type'
@@ -57,11 +65,20 @@ export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalPr
     void modal.hide()
   }
 
+  const inputRef = useRef<InputRef>(null)
+
   return (
     <Modal
       title="新建目录"
       width={400}
       {...props}
+      afterOpenChange={(...parmas) => {
+        props.afterOpenChange?.(...parmas)
+
+        if (parmas.at(0)) {
+          inputRef.current?.focus()
+        }
+      }}
       open={modal.visible}
       onCancel={(...parmas) => {
         props.onCancel?.(...parmas)
@@ -86,7 +103,7 @@ export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalPr
         layout="vertical"
       >
         <Form.Item label="名称" name="name" rules={[{ required: true }]}>
-          <Input />
+          <Input ref={inputRef} />
         </Form.Item>
 
         <Form.Item label="父级目录" name="parentId" required={false} rules={[{ required: true }]}>

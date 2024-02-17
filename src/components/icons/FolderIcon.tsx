@@ -1,33 +1,32 @@
-import { LayoutIcon, type LucideProps, TrashIcon, UnplugIcon } from 'lucide-react'
+import { LayoutIcon, TrashIcon, UnplugIcon } from 'lucide-react'
 
 import { CatalogType } from '@/enums'
-import type { TabContentType } from '@/types'
 
-import { FileIcon } from './FileIcon'
+import { FileIcon, type FileIconProps } from './FileIcon'
 
-interface FolderIconProps extends Pick<LucideProps, 'size'> {
-  type: TabContentType
-}
+type FolderIconProps = FileIconProps
 
 /**
  * 菜单目录文件夹的图标。
  */
 export function FolderIcon(props: FolderIconProps) {
-  const { type, size = 16 } = props
+  const { type, size = 16, className } = props
+
+  const iconProps = { size, className }
 
   switch (type) {
     case CatalogType.Overview:
-      return <LayoutIcon size={size} />
+      return <LayoutIcon {...iconProps} />
 
     case CatalogType.Schema:
     case CatalogType.Request:
-      return <FileIcon size={size} type={type} />
+      return <FileIcon {...iconProps} type={type} />
 
     case CatalogType.Http:
-      return <UnplugIcon size={size} />
+      return <UnplugIcon {...iconProps} />
 
     case CatalogType.Recycle:
-      return <TrashIcon size={size} />
+      return <TrashIcon {...iconProps} />
 
     default:
       return null

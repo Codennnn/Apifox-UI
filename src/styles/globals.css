@@ -85,6 +85,10 @@
   &.ant-tabs {
     @apply h-full;
 
+    .ant-tabs-nav {
+      @apply mt-1 pr-3;
+    }
+
     .app-tabs-wrap {
       .ant-tabs-nav-wrap {
         flex: none;
@@ -93,10 +97,14 @@
       .ant-tabs-nav-list {
         @apply ml-2;
       }
-    }
 
-    .ant-tabs-nav {
-      @apply mt-1 pr-3;
+      > .ant-tabs-nav {
+        @apply mt-0 h-12;
+
+        > .ant-tabs-nav-wrap {
+          @apply mt-2;
+        }
+      }
     }
 
     .api-details-tabs {
