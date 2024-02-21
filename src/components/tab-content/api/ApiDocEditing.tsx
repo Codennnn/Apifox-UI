@@ -253,6 +253,7 @@ export function ApiDocEditing() {
 
         <GroupTitle>返回响应</GroupTitle>
         <Tabs
+          animated={false}
           className={styles.tabWithBorder}
           items={[
             {

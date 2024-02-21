@@ -2,6 +2,7 @@ import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { Api } from '@/components/tab-content/api/Api'
 import { Blank } from '@/components/tab-content/Blank'
 import { Doc } from '@/components/tab-content/Doc'
+import { Folder } from '@/components/tab-content/folder/Folder'
 import { Schema } from '@/components/tab-content/Schema'
 import { MenuItemType } from '@/enums'
 
@@ -20,6 +21,10 @@ export function ApiTabContent() {
 
     case MenuItemType.ApiSchema:
       return <Schema />
+
+    case MenuItemType.ApiDetailFolder:
+    case MenuItemType.ApiSchemaFolder:
+      return <Folder />
 
     case MenuItemType.Doc:
       return <Doc />

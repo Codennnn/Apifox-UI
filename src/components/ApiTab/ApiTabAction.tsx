@@ -10,7 +10,7 @@ export function ApiTabAction() {
   const { addTabItem, removeAllTabItems, removeOtherTabItems } = useMenuTabHelpers()
 
   return (
-    <div className="ml-2 flex gap-x-1">
+    <div className="ml-2 mt-2 flex gap-x-1">
       <Button
         size="small"
         type="text"

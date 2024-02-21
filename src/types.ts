@@ -1,3 +1,4 @@
+import type { ApiMenuBase } from '@/components/ApiMenu/ApiMenu.type'
 import type { JsonSchema, SchemaType } from '@/components/JsonSchema'
 
 import type { ApiStatus, CatalogType, HttpMethod, MenuItemType } from './enums'
@@ -85,4 +86,12 @@ export interface ApiDoc {
   createAt?: string
   /** 最后修改时间 */
   updateAt?: string
+}
+
+export interface ApiFolder {
+  name: string
+  parentId?: ApiMenuBase['id']
+  serverId?: string
+  /** 文件夹备注。 */
+  description?: string
 }

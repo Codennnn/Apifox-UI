@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid'
+
 import type { ApiMenuData } from '@/components/ApiMenu'
 import type { ApiTabItem } from '@/components/ApiTab'
 import { SchemaType } from '@/components/JsonSchema'
@@ -5,6 +7,41 @@ import { ApiStatus, HttpMethod, MenuId, MenuItemType } from '@/enums'
 
 /** 菜单原始数据，通常从服务端中获取，然后在客户端中需要被组装为树状结构。 */
 export const apiDirectoryData: ApiMenuData[] = [
+  {
+    id: MenuId.默认分组,
+    name: '默认分组',
+    type: MenuItemType.ApiDetailFolder,
+  },
+  {
+    id: MenuId.嵌套分组,
+    parentId: MenuId.默认分组,
+    name: '嵌套分组',
+    type: MenuItemType.ApiDetailFolder,
+  },
+  {
+    id: MenuId.xx,
+    parentId: MenuId.嵌套分组,
+    name: 'xxx',
+    type: MenuItemType.Doc,
+    data: {
+      id: nanoid(4),
+      name: '文档',
+      content: '文档内容',
+    },
+  },
+  {
+    id: MenuId.xxx,
+    parentId: MenuId.嵌套分组,
+    name: 'xxxx',
+    type: MenuItemType.ApiDetail,
+    data: {
+      id: nanoid(4),
+      path: '/xx',
+      name: '详情',
+      method: HttpMethod.Get,
+      status: ApiStatus.Developing,
+    },
+  },
   {
     id: MenuId.宠物店,
     name: '宠物店',
@@ -16,7 +53,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: '查询宠物详情',
     type: MenuItemType.ApiDetail,
     data: {
-      id: 'xx',
+      id: nanoid(4),
       path: '/pet/{petId}',
       name: '查询宠物详情',
       method: HttpMethod.Get,
@@ -88,7 +125,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: '新建宠物信息',
     type: MenuItemType.ApiDetail,
     data: {
-      id: 'xx',
+      id: nanoid(4),
       path: '/pet',
       name: '新建宠物信息',
       method: HttpMethod.Post,
@@ -127,7 +164,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: '文档',
     type: MenuItemType.Doc,
     data: {
-      id: 'xx',
+      id: nanoid(4),
       name: '文档',
       content: '文档内容',
     },
@@ -176,7 +213,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: 'https://abc.com',
     type: MenuItemType.HttpRequest,
     data: {
-      id: 'xx',
+      id: nanoid(4),
       path: 'https://abc.com',
       name: '查询宠物详情',
       method: HttpMethod.Get,
@@ -214,15 +251,23 @@ export const apiDirectoryData: ApiMenuData[] = [
 /** 团队成员。 */
 export const apiTabItems: ApiTabItem[] = []
 
-export const initialTabItems: ApiTabItem[] = [
-  {
-    key: MenuId.查询宠物详情,
-    label: '查询宠物详情',
-    contentType: MenuItemType.ApiDetail,
-  },
-  {
-    key: 'newCatalog',
-    label: '新建...',
-    contentType: 'blank',
-  },
-]
+export const initialTabItems: ApiTabItem[] = (() => {
+  return [
+    ...apiDirectoryData
+      .filter(({ id }) => {
+        return id === MenuId.xxx || id === MenuId.宠物店 || id === MenuId.查询宠物详情
+      })
+      .map(({ id, name, type }) => {
+        return {
+          key: id,
+          label: name,
+          contentType: type,
+        }
+      }),
+    {
+      key: 'newCatalog',
+      label: '新建...',
+      contentType: 'blank',
+    },
+  ]
+})()

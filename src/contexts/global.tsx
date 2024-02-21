@@ -6,6 +6,7 @@ import { apiDirectoryData } from '@/data/remote'
 interface MenuHelpers {
   addMenuItem: (menuData: ApiMenuData) => void
   removeMenuItem: (menuData: Pick<ApiMenuData, 'id'>) => void
+  updateMenuItem: (menuData: Partial<ApiMenuData> & Pick<ApiMenuData, 'id'>) => void
 }
 
 interface GlobalContextData extends MenuHelpers {
@@ -35,6 +36,18 @@ export function GlobalContextProvider(props: React.PropsWithChildren) {
 
       removeMenuItem: ({ id }) => {
         setMenuRawList((list) => list?.filter((item) => item.id !== id && item.parentId !== id))
+      },
+
+      updateMenuItem: ({ id, ...rest }) => {
+        setMenuRawList((list) =>
+          list?.map((item) => {
+            if (item.id === id) {
+              return { ...item, ...rest } as ApiMenuData
+            }
+
+            return item
+          })
+        )
       },
     }
   }, [])

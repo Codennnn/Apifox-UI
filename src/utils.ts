@@ -1,3 +1,4 @@
+import type { ApiMenuData } from '@/components/ApiMenu'
 import { CatalogType, MenuItemType } from '@/enums'
 
 export function getPageTitle(title?: string): string {
@@ -43,4 +44,22 @@ export function isMenuFolder(type: MenuItemType): boolean {
     type === MenuItemType.ApiSchemaFolder ||
     type === MenuItemType.RequestFolder
   )
+}
+
+export const findGroup = (
+  menuRawList: ApiMenuData[],
+  names: ApiMenuData[],
+  parentId?: string
+): ApiMenuData[] => {
+  const res = menuRawList.find((it) => it.id === parentId)
+
+  if (res) {
+    names.unshift(res)
+
+    if (res.parentId) {
+      return findGroup(menuRawList, names, res.parentId)
+    }
+  }
+
+  return names
 }

@@ -52,6 +52,10 @@ export const enum MenuItemType {
 }
 
 export const enum MenuId {
+  默认分组 = '.0',
+  嵌套分组 = '.0.1',
+  xx = '.0.1.0',
+  xxx = '.0.1.1',
   宠物店 = '.1',
   查询宠物详情 = '.1.2',
   新建宠物信息 = '.1.3',

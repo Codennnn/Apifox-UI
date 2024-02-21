@@ -1,22 +1,13 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { create, useModal } from '@ebay/nice-modal-react'
-import {
-  Cascader,
-  type CascaderProps,
-  Form,
-  Input,
-  type InputRef,
-  Modal,
-  type ModalProps,
-} from 'antd'
+import { Form, Input, type InputRef, Modal, type ModalProps } from 'antd'
 import { nanoid } from 'nanoid'
 
 import type { ApiMenuData } from '@/components/ApiMenu/ApiMenu.type'
+import { CatalogSelector } from '@/components/CatalogSelector'
 import { useGlobalContext } from '@/contexts/global'
-import { isMenuFolder } from '@/utils'
-
-const ROOT_CATALOG = 'xx'
+import { ROOT_CATALOG } from '@/hooks/useCatalog'
 
 interface NewCatalogModalProps extends Omit<ModalProps, 'open' | 'onOk'> {
   formData?: Pick<ApiMenuData, 'parentId' | 'type'>
@@ -26,29 +17,6 @@ type FormData = Pick<ApiMenuData, 'name' | 'parentId' | 'type'>
 
 export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalProps) => {
   const modal = useModal()
-
-  const { menuRawList } = useGlobalContext()
-
-  const catalogOptions = useMemo<CascaderProps['options']>(() => {
-    if (formData) {
-      const menuList = menuRawList
-        ?.filter((it) => it.type === formData.type && isMenuFolder(it.type))
-        .map((it) => {
-          return {
-            value: it.id,
-            label: it.name,
-          }
-        })
-
-      return [
-        {
-          value: ROOT_CATALOG,
-          label: '根目录',
-        },
-        ...(menuList || []),
-      ]
-    }
-  }, [menuRawList, formData])
 
   const [form] = Form.useForm<FormData>()
 
@@ -107,7 +75,7 @@ export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalPr
         </Form.Item>
 
         <Form.Item label="父级目录" name="parentId" required={false} rules={[{ required: true }]}>
-          <Cascader expandTrigger="hover" options={catalogOptions} />
+          <CatalogSelector type={formData?.type} />
         </Form.Item>
 
         <Form.Item hidden name="type" rules={[{ required: true }]}>

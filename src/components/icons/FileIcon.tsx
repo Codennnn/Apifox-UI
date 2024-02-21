@@ -1,7 +1,7 @@
 import {
   FileDownIcon,
   FileText,
-  FolderOpenIcon,
+  FolderClosedIcon,
   type LucideProps,
   PackageIcon,
   UnplugIcon,
@@ -42,7 +42,7 @@ export function FileIcon(props: FileIconProps) {
 
     case MenuItemType.ApiDetailFolder:
     case MenuItemType.ApiSchemaFolder:
-      return <FolderOpenIcon {...iconProps} />
+      return <FolderClosedIcon {...iconProps} />
 
     default:
       return null
