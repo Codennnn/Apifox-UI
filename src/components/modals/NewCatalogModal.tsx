@@ -22,7 +22,7 @@ export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalPr
 
   useEffect(() => {
     if (formData) {
-      form.setFieldsValue({ ...formData, parentId: formData.parentId ?? ROOT_CATALOG })
+      form.setFieldsValue(formData)
     }
   }, [form, formData])
 
@@ -75,7 +75,7 @@ export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalPr
         </Form.Item>
 
         <Form.Item label="父级目录" name="parentId" required={false} rules={[{ required: true }]}>
-          <CatalogSelector type={formData?.type} />
+          <CatalogSelector hideCreateNew type={formData?.type} />
         </Form.Item>
 
         <Form.Item hidden name="type" rules={[{ required: true }]}>

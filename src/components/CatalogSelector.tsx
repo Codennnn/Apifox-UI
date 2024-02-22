@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 
-import { Cascader } from 'antd'
+import { show } from '@ebay/nice-modal-react'
+import { Cascader, Divider, theme } from 'antd'
 
 import type { ApiMenuBase } from '@/components/ApiMenu/ApiMenu.type'
+import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
 import { useGlobalContext } from '@/contexts/global'
 import { ROOT_CATALOG, useCatalog, type UseCatalogParmas } from '@/hooks/useCatalog'
 import { findGroup } from '@/utils'
@@ -10,10 +12,13 @@ import { findGroup } from '@/utils'
 interface CatalogSelectorProps extends UseCatalogParmas {
   value?: ApiMenuBase['parentId']
   onChange?: (value: CatalogSelectorProps['value']) => void
+  hideCreateNew?: boolean
 }
 
 export function CatalogSelector(props: CatalogSelectorProps) {
-  const { value, onChange, type, exclued } = props
+  const { token } = theme.useToken()
+
+  const { value, onChange, type, exclued, hideCreateNew } = props
 
   const { menuRawList } = useGlobalContext()
   const { catalogOptions } = useCatalog({ type, exclued })
@@ -29,6 +34,31 @@ export function CatalogSelector(props: CatalogSelectorProps) {
     <Cascader
       showSearch
       allowClear={false}
+      dropdownRender={
+        hideCreateNew
+          ? void 0
+          : (menus) => {
+              return (
+                <>
+                  {menus}
+
+                  <Divider style={{ margin: 0 }} />
+
+                  <div
+                    className="inline-flex cursor-pointer p-2"
+                    style={{
+                      color: token.colorPrimary,
+                    }}
+                    onClick={() => {
+                      void show(NewCatalogModal)
+                    }}
+                  >
+                    新建目录
+                  </div>
+                </>
+              )
+            }
+      }
       expandTrigger="hover"
       options={catalogOptions}
       value={internalValue}

@@ -3,5 +3,4 @@ export const enum PageTabStatus {
   Update,
   /** 新创建，且未保存到数据库 */
   Create,
-  Document,
 }

@@ -1,7 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
+import { nanoid } from 'nanoid'
+
 import type { ApiMenuData } from '@/components/ApiMenu'
-import { apiDirectoryData } from '@/data/remote'
+import { apiDirectoryData, creator, recycleList } from '@/data/remote'
+import type { RecycleData } from '@/types'
 
 interface MenuHelpers {
   addMenuItem: (menuData: ApiMenuData) => void
@@ -11,6 +14,7 @@ interface MenuHelpers {
 
 interface GlobalContextData extends MenuHelpers {
   menuRawList?: ApiMenuData[]
+  recyleRawList?: RecycleData[]
 
   apiDetailDisplay: 'name' | 'path'
   setApiDetailDisplay: React.Dispatch<React.SetStateAction<GlobalContextData['apiDetailDisplay']>>
@@ -20,22 +24,37 @@ const GlobalContext = createContext({} as GlobalContextData)
 
 export function GlobalContextProvider(props: React.PropsWithChildren) {
   const [menuRawList, setMenuRawList] = useState<ApiMenuData[]>()
+  const [recyleRawList, setRecyleRawList] = useState<RecycleData[]>()
 
   useEffect(() => {
     setMenuRawList(apiDirectoryData)
+    setRecyleRawList(recycleList)
   }, [])
 
   const [apiDetailDisplay, setApiDetailDisplay] =
     useState<GlobalContextData['apiDetailDisplay']>('name')
 
-  const helpers = useMemo<MenuHelpers>(() => {
+  const menuHelpers = useMemo<MenuHelpers>(() => {
     return {
       addMenuItem: (menuData) => {
         setMenuRawList((list) => (list ? [...list, menuData] : [menuData]))
       },
 
       removeMenuItem: ({ id }) => {
-        setMenuRawList((list) => list?.filter((item) => item.id !== id && item.parentId !== id))
+        setMenuRawList((list) =>
+          list?.filter((item) => {
+            const shouldRemove = item.id === id || item.parentId === id
+
+            if (shouldRemove) {
+              setRecyleRawList((list) => [
+                ...(list || []),
+                { id: nanoid(4), expiredAt: '30天', creator, deletedItem: item },
+              ])
+            }
+
+            return !shouldRemove
+          })
+        )
       },
 
       updateMenuItem: ({ id, ...rest }) => {
@@ -56,9 +75,10 @@ export function GlobalContextProvider(props: React.PropsWithChildren) {
     <GlobalContext.Provider
       value={{
         menuRawList,
-        ...helpers,
+        recyleRawList,
         apiDetailDisplay,
         setApiDetailDisplay,
+        ...menuHelpers,
       }}
     >
       {props.children}

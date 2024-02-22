@@ -25,6 +25,7 @@ export function FileIcon(props: FileIconProps) {
 
   switch (type) {
     case CatalogType.Http:
+    case MenuItemType.ApiDetail:
       return <UnplugIcon {...iconProps} />
 
     case CatalogType.Schema:

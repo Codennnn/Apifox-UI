@@ -114,8 +114,8 @@ export const apiMenuConfig = {
   },
   [CatalogType.Request]: {
     title: '快捷请求',
-    newLabel: '新建负载均衡',
-    tipTitle: '添加负载均衡',
+    newLabel: '新建快捷请求',
+    tipTitle: '添加快捷请求',
   },
   [CatalogType.Markdown]: {
     title: 'Markdown',

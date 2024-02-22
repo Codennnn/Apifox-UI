@@ -2,6 +2,8 @@ import useEvent from 'react-use-event-hook'
 
 import { ConfigProvider, theme, Tree, type TreeProps } from 'antd'
 
+import { apiMenuConfig } from '@/configs/static'
+import { CatalogType, MenuItemType } from '@/enums'
 import { useStyles } from '@/hooks/useStyle'
 
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
@@ -49,23 +51,38 @@ export function ApiMenu() {
         switchExpandedKeys(menuId)
       }
 
-      if ('customData' in node) {
-        const dataNode = node as CatalogDataNode
-        const catalog = dataNode.customData.catalog
+      const isTabPresent = tabItems.some(({ key }) => key === menuId)
 
-        const isTabPresent = tabItems.some(({ key }) => key === menuId)
+      if (isTabPresent) {
+        activeTabItem({ key: menuId })
+      } else {
+        if (menuId === CatalogType.Overview || menuId === CatalogType.Recycle) {
+          const { title } = apiMenuConfig[menuId]
 
-        if (isTabPresent) {
-          activeTabItem({ key: menuId })
-        } else {
           addTabItem({
             key: menuId,
-            label: catalog.name,
-            contentType: catalog.type,
-            data: {
-              tabStatus: PageTabStatus.Update,
-            },
+            label: title,
+            contentType: menuId,
           })
+        } else {
+          if ('customData' in node) {
+            const dataNode = node as CatalogDataNode
+            const catalog = dataNode.customData.catalog
+
+            if (
+              catalog.type !== MenuItemType.ApiSchemaFolder &&
+              catalog.type !== MenuItemType.RequestFolder
+            ) {
+              addTabItem({
+                key: menuId,
+                label: catalog.name,
+                contentType: catalog.type,
+                data: {
+                  tabStatus: PageTabStatus.Update,
+                },
+              })
+            }
+          }
         }
       }
     }

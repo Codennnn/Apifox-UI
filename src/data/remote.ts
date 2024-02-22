@@ -4,6 +4,7 @@ import type { ApiMenuData } from '@/components/ApiMenu'
 import type { ApiTabItem } from '@/components/ApiTab'
 import { SchemaType } from '@/components/JsonSchema'
 import { ApiStatus, HttpMethod, MenuId, MenuItemType } from '@/enums'
+import type { Creator, RecycleData } from '@/types'
 
 /** 菜单原始数据，通常从服务端中获取，然后在客户端中需要被组装为树状结构。 */
 export const apiDirectoryData: ApiMenuData[] = [
@@ -40,6 +41,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       name: '详情',
       method: HttpMethod.Get,
       status: ApiStatus.Developing,
+      serverId: '',
     },
   },
   {
@@ -248,9 +250,6 @@ export const apiDirectoryData: ApiMenuData[] = [
   },
 ]
 
-/** 团队成员。 */
-export const apiTabItems: ApiTabItem[] = []
-
 export const initialTabItems: ApiTabItem[] = (() => {
   return [
     ...apiDirectoryData
@@ -271,3 +270,34 @@ export const initialTabItems: ApiTabItem[] = (() => {
     },
   ]
 })()
+
+export const creator: Creator = {
+  id: nanoid(4),
+  name: 'LeoKu',
+  username: 'LeoKu',
+}
+
+export const recycleList: RecycleData[] = [
+  {
+    id: nanoid(4),
+    creator,
+    deletedItem: { id: nanoid(4), name: 'xx', type: MenuItemType.ApiDetail },
+    expiredAt: '29天',
+  },
+  {
+    id: nanoid(4),
+    creator,
+    deletedItem: {
+      id: nanoid(4),
+      parentId: MenuId.嵌套分组,
+      name: 'xxxx',
+      type: MenuItemType.Doc,
+      data: {
+        id: nanoid(4),
+        name: '文档',
+        content: '文档内容',
+      },
+    },
+    expiredAt: '22天',
+  },
+]

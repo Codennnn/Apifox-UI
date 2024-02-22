@@ -18,6 +18,7 @@ import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
 import { apiMenuConfig } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
+import { ROOT_CATALOG } from '@/hooks/useCatalog'
 import { isMenuFolder } from '@/utils'
 
 import { useApiMenuContext } from './ApiMenuContext'
@@ -100,7 +101,7 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
                     ev.domEvent.stopPropagation()
                     void show(NewCatalogModal, {
                       formData: {
-                        parentId: undefined,
+                        parentId: ROOT_CATALOG,
                         type:
                           topMenuType === CatalogType.Http
                             ? MenuItemType.ApiDetailFolder

@@ -1,9 +1,15 @@
-import type { ApiMenuBase } from '@/components/ApiMenu/ApiMenu.type'
+import type { ApiMenuBase, ApiMenuData } from '@/components/ApiMenu/ApiMenu.type'
 import type { JsonSchema, SchemaType } from '@/components/JsonSchema'
 
 import type { ApiStatus, CatalogType, HttpMethod, MenuItemType } from './enums'
 
 export type TabContentType = CatalogType | MenuItemType | 'blank'
+
+export interface Creator {
+  id: string
+  name: string
+  username: string
+}
 
 /** 请求参数信息。 */
 interface Parameter {
@@ -94,4 +100,11 @@ export interface ApiFolder {
   serverId?: string
   /** 文件夹备注。 */
   description?: string
+}
+
+export interface RecycleData {
+  id: string
+  deletedItem: ApiMenuData
+  creator: Creator
+  expiredAt: string
 }

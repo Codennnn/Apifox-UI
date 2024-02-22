@@ -3,8 +3,10 @@ import { Api } from '@/components/tab-content/api/Api'
 import { Blank } from '@/components/tab-content/Blank'
 import { Doc } from '@/components/tab-content/Doc'
 import { Folder } from '@/components/tab-content/folder/Folder'
+import { Overview } from '@/components/tab-content/Overview'
+import { Recycle } from '@/components/tab-content/Recycle'
 import { Schema } from '@/components/tab-content/Schema'
-import { MenuItemType } from '@/enums'
+import { CatalogType, MenuItemType } from '@/enums'
 
 /**
  * 渲染页签内容。
@@ -28,6 +30,12 @@ export function ApiTabContent() {
 
     case MenuItemType.Doc:
       return <Doc />
+
+    case CatalogType.Overview:
+      return <Overview />
+
+    case CatalogType.Recycle:
+      return <Recycle />
 
     case 'blank':
       return <Blank />

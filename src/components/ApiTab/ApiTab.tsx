@@ -53,7 +53,7 @@ export function ApiTab(props: TabsProps) {
       const menuData = menuRawList?.find((it) => it.id === tabItem.key)
 
       const label = (
-        <span className="flex items-center gap-1">
+        <span className="app-tabs-tab-label flex items-center gap-1">
           {menuData?.type === MenuItemType.ApiDetail ? (
             <span className="mr-1 font-medium">
               <HttpMethodText method={menuData.data?.method} />
@@ -86,7 +86,7 @@ export function ApiTab(props: TabsProps) {
             }}
           >
             <span
-              className={`main-tabs-tab-close-icon flex size-full items-center justify-center text-[15px] ${
+              className={`main-tabs-tab-close-icon flex size-full items-center justify-center text-[15px] opacity-0 ${
                 tabItem.data?.editStatus === 'changed'
                   ? 'changed after:bg-primary-500 group relative overflow-hidden rounded-full after:absolute after:size-2 after:rounded-full after:content-[""] hover:overflow-auto hover:bg-transparent hover:after:hidden'
                   : ''
@@ -121,8 +121,18 @@ export function ApiTab(props: TabsProps) {
       appTabs: css({
         '&.ant-tabs': {
           '.app-tabs-wrap': {
+            '.ant-tabs-tab:hover': {
+              '.main-tabs-tab-close-icon': {
+                opacity: 1,
+              },
+            },
+
             '.ant-tabs-nav': {
               backgroundColor: token.colorFillAlter,
+
+              '.ant-tabs-tab:not(.ant-tabs-tab-active) .app-tabs-tab-label': {
+                color: token.colorTextSecondary,
+              },
             },
           },
 

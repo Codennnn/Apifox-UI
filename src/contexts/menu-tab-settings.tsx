@@ -56,7 +56,10 @@ interface MenuTabHelpers {
   /** 获取指定的页签项。 */
   getTabItem: (payload: Pick<ApiTabItem, 'key'>) => ApiTabItem | undefined
   /** 添加新的页签。 */
-  addTabItem: (payload: ApiTabItem, autoActive?: boolean) => void
+  addTabItem: (
+    payload: ApiTabItem,
+    config?: { autoActive?: boolean; replaceTab?: ApiTabItem['key'] }
+  ) => void
   /** 移除页签。 */
   removeTabItem: (payload: Pick<ApiTabItem, 'key'>) => void
   /** 移除所有页签。 */
@@ -88,19 +91,25 @@ export function useMenuTabHelpers(): MenuTabHelpers {
     return tabItems.find((item) => item.key === payload.key)
   })
 
-  const addTabItem = useEvent<MenuTabHelpers['addTabItem']>((payload, autoActive = true) => {
-    const isSameTabPresent = tabItems.some((item) => item.key === payload.key)
+  const addTabItem = useEvent<MenuTabHelpers['addTabItem']>(
+    (payload, { autoActive = true, replaceTab } = {}) => {
+      const isSameTabPresent = tabItems.some((item) => item.key === payload.key)
 
-    if (isSameTabPresent) {
-      throw new Error('已存在相同的页签。')
-    } else {
-      setTabItems((items) => [...items, payload])
+      if (isSameTabPresent) {
+        throw new Error('已存在相同的页签。')
+      } else {
+        if (replaceTab) {
+          setTabItems((items) => items.map((it) => (it.key === replaceTab ? payload : it)))
+        } else {
+          setTabItems((items) => [...items, payload])
+        }
 
-      if (autoActive) {
-        activeTabItem({ key: payload.key })
+        if (autoActive) {
+          activeTabItem({ key: payload.key })
+        }
       }
     }
-  })
+  )
 
   const removeTabItem = useEvent<MenuTabHelpers['removeTabItem']>((payload) => {
     setTabItems((items) => {
