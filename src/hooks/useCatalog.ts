@@ -6,7 +6,7 @@ import arrayToTree from 'array-to-tree'
 import type { ApiMenuData } from '@/components/ApiMenu'
 import { useGlobalContext } from '@/contexts/global'
 import type { MenuItemType } from '@/enums'
-import { isMenuFolder } from '@/utils'
+import { isMenuFolder } from '@/helpers'
 
 export const ROOT_CATALOG = '_'
 

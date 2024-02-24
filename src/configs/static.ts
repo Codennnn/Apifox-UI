@@ -1,5 +1,8 @@
 import { ApiStatus, CatalogType, HttpMethod } from '@/enums'
 
+/** 继承自父级。 */
+export const SERVER_INHERIT = ''
+
 /** 有关 HTTP 方法的用于展示配置。 */
 export const HTTP_METHOD_CONFIG = {
   [HttpMethod.Get]: {

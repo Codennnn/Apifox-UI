@@ -15,12 +15,14 @@ import {
   theme,
 } from 'antd'
 
+import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
 import { GroupTitle } from '@/components/ApiTab/GroupTitle'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { JsonSchemaEditor } from '@/components/JsonSchema'
 import { JsonViewer } from '@/components/JsonViewer'
 import { API_STATUS_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
+import { creator, initialCreateApiDetailsData } from '@/data/remote'
 import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
@@ -119,16 +121,21 @@ export function ApiDocEditing() {
 
   const { menuRawList } = useGlobalContext()
   const { tabData } = useTabContentContext()
+  const isCreating = tabData.data?.tabStatus === PageTabStatus.Create
 
   useEffect(() => {
-    if (menuRawList) {
-      const apiDetails = menuRawList.find(({ id }) => id === tabData.key)?.data
+    if (isCreating) {
+      form.setFieldsValue(initialCreateApiDetailsData)
+    } else {
+      if (menuRawList) {
+        const apiDetails = menuRawList.find(({ id }) => id === tabData.key)?.data
 
-      if (apiDetails) {
-        form.setFieldsValue(apiDetails as ApiDetails)
+        if (apiDetails) {
+          form.setFieldsValue(apiDetails as ApiDetails)
+        }
       }
     }
-  }, [form, menuRawList, tabData.key])
+  }, [form, menuRawList, isCreating, tabData.key])
 
   const { styles } = useStyles(({ token }) => {
     return {
@@ -175,9 +182,12 @@ export function ApiDocEditing() {
         <Space className="ml-auto pl-2">
           <Button type="primary">保存</Button>
 
-          <Button>运行</Button>
-
-          <Button>删除</Button>
+          {!isCreating && (
+            <>
+              <Button>运行</Button>
+              <Button>删除</Button>
+            </>
+          )}
         </Space>
       </div>
 
@@ -214,7 +224,11 @@ export function ApiDocEditing() {
 
             <Col lg={12} xl={6}>
               <Form.Item label="责任人" labelCol={{ span: 24 }} name="responsibleId">
-                <Select />
+                <Select
+                  options={[
+                    { label: `${creator.name}（@${creator.username}）`, value: creator.id },
+                  ]}
+                />
               </Form.Item>
             </Col>
 

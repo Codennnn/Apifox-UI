@@ -3,7 +3,7 @@
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-import { Button, ConfigProvider, Flex, theme, Tooltip } from 'antd'
+import { Button, ConfigProvider, Flex, Modal, theme, Tooltip } from 'antd'
 import { ChevronRightIcon, FilterIcon, PlusIcon } from 'lucide-react'
 
 import { ApiMenu } from '@/components/ApiMenu'
@@ -142,12 +142,15 @@ function HomeContent() {
 }
 
 export function HomePage() {
+  const [modal, contextHolder] = Modal.useModal()
+
   return (
     <LayoutProvider>
-      <GlobalContextProvider>
+      <GlobalContextProvider modal={modal}>
         <NiceModalProvider>
           <MenuTabProvider>
             <HomeContent />
+            {contextHolder}
           </MenuTabProvider>
         </NiceModalProvider>
       </GlobalContextProvider>

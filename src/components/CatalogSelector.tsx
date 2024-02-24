@@ -6,8 +6,8 @@ import { Cascader, Divider, theme } from 'antd'
 import type { ApiMenuBase } from '@/components/ApiMenu/ApiMenu.type'
 import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
 import { useGlobalContext } from '@/contexts/global'
+import { findFolders } from '@/helpers'
 import { ROOT_CATALOG, useCatalog, type UseCatalogParmas } from '@/hooks/useCatalog'
-import { findGroup } from '@/utils'
 
 interface CatalogSelectorProps extends UseCatalogParmas {
   value?: ApiMenuBase['parentId']
@@ -25,7 +25,7 @@ export function CatalogSelector(props: CatalogSelectorProps) {
 
   const internalValue = useMemo(() => {
     if (menuRawList && value) {
-      const group = findGroup(menuRawList, [], value).map(({ id }) => id)
+      const group = findFolders(menuRawList, [], value).map(({ id }) => id)
       return group.length > 0 ? group : [ROOT_CATALOG]
     }
   }, [value, menuRawList])

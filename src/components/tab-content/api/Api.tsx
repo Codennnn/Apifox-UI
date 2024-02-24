@@ -1,7 +1,7 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
-import { Button, ConfigProvider, Tabs, type TabsProps, theme, Tooltip } from 'antd'
-import { HistoryIcon } from 'lucide-react'
+import { Button, ConfigProvider, Space, Tabs, type TabsProps, theme, Tooltip } from 'antd'
+import { PanelRightIcon } from 'lucide-react'
 
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
@@ -15,6 +15,8 @@ export function Api() {
   const { token } = theme.useToken()
 
   const { tabData } = useTabContentContext()
+
+  const [panelOpen, setPanelOpen] = useState(false)
 
   const apiTabItems = useMemo<TabsProps['items']>(() => {
     return [
@@ -56,21 +58,55 @@ export function Api() {
             <ApiDocEditing />
           </ContentWrapper>
         ) : (
-          <Tabs
-            animated={false}
-            className="api-details-tabs"
-            defaultActiveKey="docEdit"
-            items={apiTabItems}
-            tabBarExtraContent={
-              <>
-                <Tooltip placement="topLeft" title="修改历史">
-                  <Button size="small" type="text">
-                    <IconText icon={<HistoryIcon size={18} />} />
-                  </Button>
-                </Tooltip>
-              </>
-            }
-          />
+          <div className="flex h-full overflow-hidden">
+            <Tabs
+              animated={false}
+              className="api-details-tabs"
+              defaultActiveKey="docEdit"
+              items={apiTabItems}
+              tabBarExtraContent={
+                <>
+                  <Tooltip placement="topLeft" title="历史记录、SEO 设置">
+                    <Button
+                      size="small"
+                      style={{
+                        backgroundColor: panelOpen ? token.colorFillSecondary : void 0,
+                      }}
+                      type="text"
+                      onClick={() => {
+                        setPanelOpen(!panelOpen)
+                      }}
+                    >
+                      <IconText icon={<PanelRightIcon size={18} />} />
+                    </Button>
+                  </Tooltip>
+                </>
+              }
+            />
+
+            <div
+              className={`h-full overflow-hidden ${panelOpen ? 'flex' : 'hidden'}`}
+              style={{
+                borderLeft: `1px solid ${token.colorBorderSecondary}`,
+              }}
+            >
+              <div style={{ width: 320 }}>
+                <div
+                  className="flex h-[50px] items-center px-4 py-2"
+                  style={{ borderBottom: `1px solid ${token.colorBorderSecondary}` }}
+                >
+                  <span className="text-base font-medium">历史记录</span>
+                </div>
+              </div>
+
+              <div
+                className="h-full p-1"
+                style={{ borderLeft: `1px solid ${token.colorBorderSecondary}` }}
+              >
+                <Space direction="vertical"></Space>
+              </div>
+            </div>
+          </div>
         )}
       </ConfigProvider>
     </div>

@@ -3,8 +3,16 @@ import { nanoid } from 'nanoid'
 import type { ApiMenuData } from '@/components/ApiMenu'
 import type { ApiTabItem } from '@/components/ApiTab'
 import { SchemaType } from '@/components/JsonSchema'
-import { ApiStatus, HttpMethod, MenuId, MenuItemType } from '@/enums'
-import type { Creator, RecycleData } from '@/types'
+import { SERVER_INHERIT } from '@/configs/static'
+import { ApiStatus, CatalogType, HttpMethod, MenuId, MenuItemType } from '@/enums'
+import { findFolders } from '@/helpers'
+import type { ApiDetails, Creator, RecycleData } from '@/types'
+
+export const creator: Creator = {
+  id: nanoid(4),
+  name: '张三',
+  username: '李四',
+}
 
 /** 菜单原始数据，通常从服务端中获取，然后在客户端中需要被组装为树状结构。 */
 export const apiDirectoryData: ApiMenuData[] = [
@@ -31,17 +39,18 @@ export const apiDirectoryData: ApiMenuData[] = [
     },
   },
   {
-    id: MenuId.xxx,
+    id: MenuId.示例接口,
     parentId: MenuId.嵌套分组,
-    name: 'xxxx',
+    name: '示例接口',
     type: MenuItemType.ApiDetail,
     data: {
       id: nanoid(4),
-      path: '/xx',
-      name: '详情',
+      path: '/example',
+      name: '示例接口',
       method: HttpMethod.Get,
-      status: ApiStatus.Developing,
-      serverId: '',
+      status: ApiStatus.Released,
+      responsibleId: creator.id,
+      serverId: SERVER_INHERIT,
     },
   },
   {
@@ -60,8 +69,9 @@ export const apiDirectoryData: ApiMenuData[] = [
       name: '查询宠物详情',
       method: HttpMethod.Get,
       status: ApiStatus.Developing,
+      responsibleId: creator.id,
       tags: ['宠物'],
-      serverId: '',
+      serverId: SERVER_INHERIT,
       responses: [
         {
           code: 200,
@@ -119,6 +129,7 @@ export const apiDirectoryData: ApiMenuData[] = [
         },
       ],
       createdAt: '2022-03-23T12:00:00.000Z',
+      updatedAt: '2022-03-23T12:00:00.000Z',
     },
   },
   {
@@ -133,7 +144,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       method: HttpMethod.Post,
       status: ApiStatus.Testing,
       tags: ['宠物'],
-      serverId: '',
+      serverId: SERVER_INHERIT,
       responseExamples: [
         {
           id: '1',
@@ -221,7 +232,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       method: HttpMethod.Get,
       status: ApiStatus.Developing,
       tags: ['宠物'],
-      serverId: '',
+      serverId: SERVER_INHERIT,
       responses: [
         {
           code: 200,
@@ -254,7 +265,7 @@ export const initialTabItems: ApiTabItem[] = (() => {
   return [
     ...apiDirectoryData
       .filter(({ id }) => {
-        return id === MenuId.xxx || id === MenuId.宠物店 || id === MenuId.查询宠物详情
+        return id === MenuId.示例接口 || id === MenuId.宠物店 || id === MenuId.查询宠物详情
       })
       .map(({ id, name, type }) => {
         return {
@@ -271,17 +282,45 @@ export const initialTabItems: ApiTabItem[] = (() => {
   ]
 })()
 
-export const creator: Creator = {
+export const initialExpandedKeys: ApiMenuData['id'][] = [
+  CatalogType.Http,
+  CatalogType.Schema,
+  ...initialTabItems.reduce<ApiMenuData['id'][]>((acc, { key }) => {
+    const target = apiDirectoryData.find((item) => item.id === key)
+
+    if (target?.parentId) {
+      acc.push(...findFolders(apiDirectoryData, [], target.parentId).map(({ id }) => id))
+    }
+
+    return acc
+  }, []),
+]
+
+export const initialCreateApiDetailsData: ApiDetails = {
   id: nanoid(4),
-  name: 'LeoKu',
-  username: 'LeoKu',
+  method: HttpMethod.Get,
+  status: ApiStatus.Developing,
+  serverId: SERVER_INHERIT,
 }
 
 export const recycleList: RecycleData[] = [
   {
     id: nanoid(4),
     creator,
-    deletedItem: { id: nanoid(4), name: 'xx', type: MenuItemType.ApiDetail },
+    deletedItem: {
+      id: nanoid(4),
+      name: '接口1',
+      type: MenuItemType.ApiDetail,
+      data: {
+        id: nanoid(4),
+        path: '/api',
+        name: '接口1',
+        method: HttpMethod.Get,
+        status: ApiStatus.Released,
+        responsibleId: creator.id,
+        serverId: SERVER_INHERIT,
+      },
+    },
     expiredAt: '29天',
   },
   {
@@ -290,14 +329,25 @@ export const recycleList: RecycleData[] = [
     deletedItem: {
       id: nanoid(4),
       parentId: MenuId.嵌套分组,
-      name: 'xxxx',
+      name: '文档1',
       type: MenuItemType.Doc,
       data: {
         id: nanoid(4),
-        name: '文档',
+        name: '文档1',
         content: '文档内容',
       },
     },
     expiredAt: '22天',
+  },
+  {
+    id: nanoid(4),
+    creator,
+    deletedItem: {
+      id: nanoid(4),
+      parentId: MenuId.默认分组,
+      name: '空分组',
+      type: MenuItemType.ApiDetailFolder,
+    },
+    expiredAt: '11天',
   },
 ]

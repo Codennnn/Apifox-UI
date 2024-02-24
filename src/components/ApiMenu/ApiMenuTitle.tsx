@@ -1,7 +1,7 @@
 import { theme } from 'antd'
 
 import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
-import { isMenuFolder } from '@/utils'
+import { isMenuFolder } from '@/helpers'
 
 import type { CatalogDataNode } from './ApiMenu.type'
 

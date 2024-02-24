@@ -11,15 +11,18 @@ import {
   MoreHorizontalIcon,
   PlusIcon,
 } from 'lucide-react'
+import { nanoid } from 'nanoid'
 
 import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
+import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
 import { FolderIcon } from '@/components/icons/FolderIcon'
 import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
 import { apiMenuConfig } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
+import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
 import { CatalogType, MenuItemType } from '@/enums'
+import { isMenuFolder } from '@/helpers'
 import { ROOT_CATALOG } from '@/hooks/useCatalog'
-import { isMenuFolder } from '@/utils'
 
 import { useApiMenuContext } from './ApiMenuContext'
 import { MenuActionButton } from './MenuActionButton'
@@ -49,6 +52,8 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
     removeExpandedMenuKeys,
   } = useApiMenuContext()
 
+  const { addTabItem } = useMenuTabHelpers()
+
   const menuFolderKeys = useMemo(() => {
     const folders = groupedMenus?.[topMenuType].filter((it) =>
       isMenuFolder(it.customData.catalog.type)
@@ -62,14 +67,14 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
     return menuFolderKeys.every((key) => expandedMenuKeys.includes(key))
   }, [menuFolderKeys, expandedMenuKeys])
 
-  const menuConfig = apiMenuConfig[topMenuType]
+  const { title, newLabel } = apiMenuConfig[topMenuType]
 
   const noActions = topMenuType === CatalogType.Overview || topMenuType === CatalogType.Recycle
 
   return (
     <span className="flex h-7 items-center">
       <span className="inline-flex items-center">
-        <span>{menuConfig.title}</span>
+        <span>{title}</span>
 
         {!noActions && (
           <span
@@ -87,10 +92,24 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
               items: [
                 {
                   key: 'newSubCatalog',
-                  label: menuConfig.newLabel,
+                  label: newLabel,
                   icon: <FolderIcon size={14} type={topMenuType} />,
                   onClick: (ev) => {
                     ev.domEvent.stopPropagation()
+
+                    const contentType =
+                      topMenuType === CatalogType.Http || topMenuType === CatalogType.Request
+                        ? MenuItemType.ApiDetail
+                        : topMenuType === CatalogType.Schema
+                          ? MenuItemType.ApiSchema
+                          : 'blank'
+
+                    addTabItem({
+                      key: nanoid(4),
+                      label: newLabel,
+                      contentType,
+                      data: { tabStatus: PageTabStatus.Create },
+                    })
                   },
                 },
                 {
@@ -99,6 +118,7 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
                   icon: <FolderPlusIcon size={14} />,
                   onClick: (ev) => {
                     ev.domEvent.stopPropagation()
+
                     void show(NewCatalogModal, {
                       formData: {
                         parentId: ROOT_CATALOG,

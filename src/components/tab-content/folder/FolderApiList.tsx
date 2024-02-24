@@ -6,8 +6,8 @@ import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
 import { useGlobalContext } from '@/contexts/global'
 import { MenuItemType } from '@/enums'
+import { findChildrenById, findFolders } from '@/helpers'
 import type { ApiDetails } from '@/types'
-import { findGroup } from '@/utils'
 
 interface DataSource extends ApiDetails {
   groupPath?: string
@@ -18,15 +18,19 @@ export function FolderApiList() {
   const { tabData } = useTabContentContext()
 
   const dataSource = useMemo(() => {
-    return menuRawList
-      ?.filter((it) => it.parentId === tabData.key && it.type === MenuItemType.ApiDetail)
-      .map((item) => {
-        const groupPath = findGroup(menuRawList, [], item.parentId)
-          .map((it) => it.name)
-          .join(' / ')
+    if (menuRawList) {
+      return findChildrenById(menuRawList, tabData.key)
+        .filter((it) => it.type === MenuItemType.ApiDetail)
+        .map((item) => {
+          const groupPath =
+            item.parentId &&
+            findFolders(menuRawList, [], item.parentId)
+              .map((it) => it.name)
+              .join(' / ')
 
-        return { ...(item.data as ApiDetails), groupPath }
-      })
+          return { ...(item.data as ApiDetails), groupPath }
+        })
+    }
   }, [menuRawList, tabData])
 
   return (

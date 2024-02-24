@@ -39,9 +39,7 @@ function NewItem(props: NewItemProps) {
             key: nanoid(4),
             label: newLabel,
             contentType: menuItemType,
-            data: {
-              tabStatus: PageTabStatus.Create,
-            },
+            data: { tabStatus: PageTabStatus.Create },
           },
           {
             replaceTab: tabData.key,

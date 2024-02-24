@@ -1,12 +1,14 @@
 import { useMemo } from 'react'
 
 import { Button, Dropdown, Select, type SelectProps, Space, theme, Tooltip } from 'antd'
+import dayjs from 'dayjs'
 import { Code2Icon, Link2Icon, ZapIcon } from 'lucide-react'
 
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { IconText } from '@/components/IconText'
 import { API_STATUS_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
+import { creator } from '@/data/remote'
 import type { ApiDetails } from '@/types'
 
 const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).map(
@@ -26,19 +28,14 @@ const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).
   }
 )
 
-type BaseInfo = Record<
-  keyof Pick<ApiDetails, 'createdAt' | 'updatedAt' | 'editorId' | 'creatorId' | 'responsibleId'>,
-  string
->
-
-function BaseInfoItem({ label, value }: { label: string; value: string }) {
+function BaseInfoItem({ label, value }: { label: string; value?: string }) {
   const { token } = theme.useToken()
 
   return (
     <div>
       <span style={{ color: token.colorTextTertiary }}>{label}</span>
       <span className="ml-2" style={{ color: token.colorTextSecondary }}>
-        {value}
+        {value || '-'}
       </span>
     </div>
   )
@@ -63,16 +60,6 @@ export function ApiDoc() {
 
     return { docValue: apiDetails, methodConfig }
   }, [menuRawList, tabData.key])
-
-  const info = useMemo<BaseInfo>(() => {
-    return {
-      createdAt: '2021年10月19日',
-      updatedAt: '5小时前',
-      editorId: '令狐冲',
-      creatorId: '令狐冲',
-      responsibleId: '未设置',
-    }
-  }, [])
 
   if (!docValue || !methodConfig) {
     return null
@@ -124,7 +111,7 @@ export function ApiDoc() {
         </Space>
       </div>
 
-      <div>
+      <div className="mb-3">
         <span
           className="mr-2 px-2 py-1 text-xs/6 font-bold text-white"
           style={{
@@ -138,7 +125,7 @@ export function ApiDoc() {
         <Select options={statusOptions} value={docValue.status} variant="borderless" />
       </div>
 
-      <div>
+      <div className="mb-3">
         <Space>
           {docValue.tags?.map((tag, idx) => {
             return (
@@ -160,11 +147,11 @@ export function ApiDoc() {
 
       <div>
         <Space wrap size="large">
-          <BaseInfoItem label="创建时间" value={info.createdAt} />
-          <BaseInfoItem label="修改时间" value={info.updatedAt} />
-          <BaseInfoItem label="修改者" value={info.editorId} />
-          <BaseInfoItem label="创建者" value={info.creatorId} />
-          <BaseInfoItem label="责任人" value={info.responsibleId} />
+          <BaseInfoItem label="创建时间" value={dayjs(docValue.createdAt).format('YYYY年M月D日')} />
+          <BaseInfoItem label="修改时间" value={dayjs(docValue.updatedAt).format('YYYY年M月D日')} />
+          <BaseInfoItem label="修改者" value={creator.name} />
+          <BaseInfoItem label="创建者" value={creator.name} />
+          <BaseInfoItem label="责任人" value={creator.name} />
         </Space>
       </div>
     </div>
