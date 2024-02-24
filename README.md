@@ -11,7 +11,7 @@
 
 这是一个模仿 Apifox 前端界面的开源项目，使用了 Next.js 和 Antd5 来构建。
 
-![Apifox UI 界面展示](https://i.imgur.com/j6gjAHs.png)
+![Apifox UI 界面展示](https://i.imgur.com/8UmNM9c.png)
 
 ## 动机
 
