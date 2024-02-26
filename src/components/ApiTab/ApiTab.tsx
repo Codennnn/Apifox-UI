@@ -6,13 +6,17 @@ import { BadgeInfoIcon, XIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
 import type { CatalogId } from '@/components/ApiMenu'
+import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
+import { FolderIcon } from '@/components/icons/FolderIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
+import { apiMenuConfig } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
+import { initialCreateApiDetailsData } from '@/data/remote'
+import { getCatalogType, getCreateType, isCreateType } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
 import { MenuItemType } from '../../enums'
-import { FileIcon } from '../icons/FileIcon'
 
 import type { Tab } from './ApiTab.type'
 import { ApiTabAction } from './ApiTabAction'
@@ -54,12 +58,27 @@ export function ApiTab(props: TabsProps) {
 
       const label = (
         <span className="app-tabs-tab-label flex items-center gap-1">
-          {menuData?.type === MenuItemType.ApiDetail ? (
+          {menuData?.type === MenuItemType.ApiDetail ||
+          menuData?.type === MenuItemType.HttpRequest ? (
             <span className="mr-1 font-medium">
               <HttpMethodText method={menuData.data?.method} />
             </span>
+          ) : tabItem.contentType === MenuItemType.ApiDetail &&
+            tabItem.data?.tabStatus === PageTabStatus.Create ? (
+            <span className="mr-1 font-medium">
+              <HttpMethodText method={initialCreateApiDetailsData.method} />
+            </span>
           ) : (
-            <FileIcon size={16} type={tabItem.contentType} />
+            <FolderIcon
+              size={16}
+              style={{
+                color:
+                  isCreateType(tabItem.contentType) && tabItem.contentType !== MenuItemType.Doc
+                    ? apiMenuConfig[getCatalogType(getCreateType(tabItem.contentType))].accentColor
+                    : void 0,
+              }}
+              type={tabItem.contentType}
+            />
           )}
           <span>{tabItem.label}</span>
         </span>

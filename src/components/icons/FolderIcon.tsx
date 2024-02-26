@@ -10,17 +10,13 @@ type FolderIconProps = FileIconProps
  * 菜单目录文件夹的图标。
  */
 export function FolderIcon(props: FolderIconProps) {
-  const { type, size = 16, className } = props
+  const { type, size = 16, className, style } = props
 
-  const iconProps = { size, className }
+  const iconProps: Pick<FileIconProps, 'size' | 'className' | 'style'> = { size, className, style }
 
   switch (type) {
     case CatalogType.Overview:
       return <LayoutIcon {...iconProps} />
-
-    case CatalogType.Schema:
-    case CatalogType.Request:
-      return <FileIcon {...iconProps} type={type} />
 
     case CatalogType.Http:
       return <UnplugIcon {...iconProps} />
@@ -29,6 +25,6 @@ export function FolderIcon(props: FolderIconProps) {
       return <TrashIcon {...iconProps} />
 
     default:
-      return null
+      return <FileIcon {...iconProps} type={type} />
   }
 }

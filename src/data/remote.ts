@@ -54,6 +54,21 @@ export const apiDirectoryData: ApiMenuData[] = [
     },
   },
   {
+    id: MenuId.示例接口2,
+    parentId: MenuId.嵌套分组,
+    name: '名称超长的示例接口',
+    type: MenuItemType.ApiDetail,
+    data: {
+      id: nanoid(4),
+      path: '/example',
+      name: '名称超长的示例接口',
+      method: HttpMethod.Get,
+      status: ApiStatus.Released,
+      responsibleId: creator.id,
+      serverId: SERVER_INHERIT,
+    },
+  },
+  {
     id: MenuId.宠物店,
     name: '宠物店',
     type: MenuItemType.ApiDetailFolder,
@@ -265,7 +280,12 @@ export const initialTabItems: ApiTabItem[] = (() => {
   return [
     ...apiDirectoryData
       .filter(({ id }) => {
-        return id === MenuId.示例接口 || id === MenuId.宠物店 || id === MenuId.查询宠物详情
+        return (
+          id === MenuId.示例接口 ||
+          id === MenuId.宠物店 ||
+          id === MenuId.查询宠物详情 ||
+          id === MenuId.引用模型
+        )
       })
       .map(({ id, name, type }) => {
         return {

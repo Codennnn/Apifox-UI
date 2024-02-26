@@ -1,6 +1,6 @@
 import { ConfigProvider, theme } from 'antd'
 
-export function ContentWrapper(props: React.PropsWithChildren<{ className?: string }>) {
+export function ApiTabContentWrapper(props: React.PropsWithChildren<{ className?: string }>) {
   const { token } = theme.useToken()
 
   return (

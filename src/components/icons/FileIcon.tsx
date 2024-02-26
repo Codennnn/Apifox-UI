@@ -1,6 +1,5 @@
 import {
-  FileDownIcon,
-  FileText,
+  FileMinusIcon,
   FolderClosedIcon,
   type LucideProps,
   PackageIcon,
@@ -19,9 +18,13 @@ export interface FileIconProps extends Pick<LucideProps, 'size' | 'className' | 
  * 菜单目录文件夹下的文件图标。
  */
 export function FileIcon(props: FileIconProps) {
-  const { type, size, className } = props
+  const { type, size, className, style } = props
 
-  const iconProps = { size, className }
+  const iconProps: Pick<FileIconProps, 'size' | 'className' | 'style'> = {
+    size,
+    className,
+    style,
+  }
 
   switch (type) {
     case CatalogType.Http:
@@ -33,13 +36,12 @@ export function FileIcon(props: FileIconProps) {
       return <PackageIcon {...iconProps} />
 
     case CatalogType.Request:
+    case MenuItemType.HttpRequest:
       return <ZapIcon {...iconProps} />
 
     case CatalogType.Markdown:
-      return <FileDownIcon {...iconProps} />
-
     case MenuItemType.Doc:
-      return <FileText {...iconProps} />
+      return <FileMinusIcon {...iconProps} />
 
     case MenuItemType.ApiDetailFolder:
     case MenuItemType.ApiSchemaFolder:

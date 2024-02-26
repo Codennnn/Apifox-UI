@@ -1,7 +1,5 @@
 import { createContext, useContext, useMemo, useState } from 'react'
 
-import { Modal } from 'antd'
-
 import { initialExpandedKeys } from '@/data/remote'
 
 import { type MenuState, useMenuData } from './api-menu-data'

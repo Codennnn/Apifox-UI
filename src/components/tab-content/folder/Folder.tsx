@@ -1,6 +1,6 @@
 import { Tabs } from 'antd'
 
-import { ContentWrapper } from '@/components/tab-content/api/ContentWrapper'
+import { ApiTabContentWrapper } from '@/components/ApiTab/ApiTabContentWrapper'
 
 import { FolderApiList } from './FolderApiList'
 import { FolderSetting } from './FolderSetting'
@@ -16,18 +16,18 @@ export function Folder() {
             key: 'settings',
             label: '目录设置',
             children: (
-              <ContentWrapper className="p-tabContent">
+              <ApiTabContentWrapper className="p-tabContent">
                 <FolderSetting />
-              </ContentWrapper>
+              </ApiTabContentWrapper>
             ),
           },
           {
             key: 'apis',
             label: '全部接口',
             children: (
-              <ContentWrapper className="p-tabContent">
+              <ApiTabContentWrapper className="p-tabContent">
                 <FolderApiList />
-              </ContentWrapper>
+              </ApiTabContentWrapper>
             ),
           },
         ]}

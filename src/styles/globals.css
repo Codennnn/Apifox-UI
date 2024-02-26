@@ -10,7 +10,8 @@
   --p-tab-content: 16px;
 }
 
-:root[theme='lightDefault'] {
+:root[theme='lightDefault'],
+:root[theme='lark'] {
   --color-green-6: #4caf50;
   --color-orange-6: #fa8c16;
   --color-blue-6: #1890ff;

@@ -3,18 +3,23 @@
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-import { Button, ConfigProvider, Flex, Modal, theme, Tooltip } from 'antd'
+import { Button, ConfigProvider, Dropdown, Flex, Modal, theme, Tooltip } from 'antd'
 import { ChevronRightIcon, FilterIcon, PlusIcon } from 'lucide-react'
 
 import { ApiMenu } from '@/components/ApiMenu'
 import { ApiMenuContextProvider } from '@/components/ApiMenu/ApiMenuContext'
 import { ApiTab } from '@/components/ApiTab'
 import { FooterBar } from '@/components/FooterBar'
+import { FileIcon } from '@/components/icons/FileIcon'
 import { IconText } from '@/components/IconText'
 import { SearchInput } from '@/components/SearchInput'
 import { SideNav } from '@/components/SideNav'
+import { apiMenuConfig } from '@/configs/static'
 import { GlobalContextProvider } from '@/contexts/global'
 import { LayoutProvider, useLayoutContext } from '@/contexts/layout-settings'
+import { MenuItemType } from '@/enums'
+import { getCatalogType } from '@/helpers'
+import { useHelpers } from '@/hooks/useHelpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { MenuTabProvider } from '../contexts/menu-tab-settings'
@@ -25,6 +30,8 @@ function HomeContent() {
   const { token } = theme.useToken()
 
   const { panelRef, isSideMenuCollapsed, setIsSideMenuCollapsed } = useLayoutContext()
+
+  const { createTabItem } = useHelpers()
 
   const { styles } = useStyles(({ token }) => {
     const resizeHandleInner = css({
@@ -92,9 +99,35 @@ function HomeContent() {
                   </Button>
                 </Tooltip>
 
-                <Button type="primary">
-                  <IconText icon={<PlusIcon size={18} />} />
-                </Button>
+                <Dropdown
+                  menu={{
+                    items: [
+                      ...[
+                        MenuItemType.ApiDetail,
+                        MenuItemType.HttpRequest,
+                        MenuItemType.Doc,
+                        MenuItemType.ApiSchema,
+                      ].map((t) => {
+                        const { newLabel } = apiMenuConfig[getCatalogType(t)]
+
+                        return {
+                          key: t,
+                          label: newLabel,
+                          icon: (
+                            <FileIcon size={16} style={{ color: token.colorPrimary }} type={t} />
+                          ),
+                          onClick: () => {
+                            createTabItem(t)
+                          },
+                        }
+                      }),
+                    ],
+                  }}
+                >
+                  <Button type="primary">
+                    <IconText icon={<PlusIcon size={18} />} />
+                  </Button>
+                </Dropdown>
               </ConfigProvider>
             </Flex>
 

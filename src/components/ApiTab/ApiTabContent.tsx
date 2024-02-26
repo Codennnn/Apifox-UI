@@ -1,5 +1,7 @@
+import { ApiTabContentWrapper } from '@/components/ApiTab/ApiTabContentWrapper'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { Api } from '@/components/tab-content/api/Api'
+import { ApiDocEditing } from '@/components/tab-content/api/ApiDocEditing'
 import { Blank } from '@/components/tab-content/Blank'
 import { Doc } from '@/components/tab-content/Doc'
 import { Folder } from '@/components/tab-content/folder/Folder'
@@ -20,6 +22,13 @@ export function ApiTabContent() {
   switch (tabData.contentType) {
     case MenuItemType.ApiDetail:
       return <Api />
+
+    case MenuItemType.HttpRequest:
+      return (
+        <ApiTabContentWrapper>
+          <ApiDocEditing />
+        </ApiTabContentWrapper>
+      )
 
     case MenuItemType.ApiSchema:
       return <Schema />

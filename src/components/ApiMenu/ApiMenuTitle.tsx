@@ -1,6 +1,7 @@
 import { theme } from 'antd'
 
 import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
+import { DropdownActions } from '@/components/ApiMenu/DropdownActions'
 import { isMenuFolder } from '@/helpers'
 
 import type { CatalogDataNode } from './ApiMenu.type'
@@ -34,21 +35,24 @@ export function ApiMenuTitle(props: ApiMenuTitleProps) {
 
   const { node, name, actions } = props
 
-  const isFolder = isMenuFolder(node.customData.catalog.type)
+  const catalog = node.customData.catalog
+  const isFolder = isMenuFolder(catalog.type)
 
   const count = isFolder ? countLeaf(node) : null
 
   return (
-    <span className="flex items-center overflow-hidden">
-      <span className="flex flex-1 items-center truncate">
-        {name}
+    <span className="flex items-center">
+      <DropdownActions catalog={catalog} isFolder={isFolder} trigger={['contextMenu']}>
+        <span className="flex flex-1 items-center overflow-hidden">
+          <span className="truncate">{name}</span>
 
-        {isFolder && count! > 0 && (
-          <span className="ml-1 text-xs" style={{ color: token.colorTextTertiary }}>
-            ({count})
-          </span>
-        )}
-      </span>
+          {isFolder && count! > 0 && (
+            <span className="ml-1 text-xs" style={{ color: token.colorTextTertiary }}>
+              ({count})
+            </span>
+          )}
+        </span>
+      </DropdownActions>
 
       <AppMenuControls>{actions}</AppMenuControls>
     </span>

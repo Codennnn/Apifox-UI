@@ -7,9 +7,10 @@ import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react'
 import { FileIcon } from '@/components/icons/FileIcon'
 import { FolderIcon } from '@/components/icons/FolderIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
+import { apiMenuConfig } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
-import { isMenuFolder } from '@/helpers'
+import { getCatalogType, isMenuFolder } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import type { CatalogDataNode, TreeDataNode } from './ApiMenu.type'
@@ -121,11 +122,17 @@ export const useMenuData: UseMenuData = () => {
                 )
               }
 
+              const { accentColor } = apiMenuConfig[getCatalogType(catalog.type)]
+
               return (
                 <span
                   className={`inline-flex size-full items-center justify-center ${item.customData.catalog.type === MenuItemType.ApiSchema ? 'text-blue-500' : ''}`}
                 >
-                  <FileIcon size={15} type={catalog.type} />
+                  <FileIcon
+                    size={15}
+                    style={{ color: catalog.type !== MenuItemType.Doc ? accentColor : void 0 }}
+                    type={catalog.type}
+                  />
                 </span>
               )
             }

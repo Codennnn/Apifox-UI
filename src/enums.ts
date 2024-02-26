@@ -46,7 +46,6 @@ export const enum MenuItemType {
   ApiSchema = 'apiSchema',
   ApiSchemaFolder = 'apiSchemaFolder',
   RequestFolder = 'requestFolder',
-  HttpResponse = 'httpResponse',
   HttpRequest = 'httpRequest',
   Doc = 'doc',
 }
@@ -56,6 +55,7 @@ export const enum MenuId {
   嵌套分组 = '.0.1',
   xx = '.0.1.0',
   示例接口 = '.0.1.1',
+  示例接口2 = '.0.1.2',
   宠物店 = '.1',
   查询宠物详情 = '.1.2',
   新建宠物信息 = '.1.3',

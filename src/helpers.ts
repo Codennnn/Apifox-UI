@@ -17,12 +17,55 @@ export function getCatalogType(type: MenuItemType): CatalogType {
   }
 }
 
+export function getCreateType(
+  type: MenuItemType | CatalogType
+): MenuItemType.ApiDetail | MenuItemType.ApiSchema | MenuItemType.Doc | MenuItemType.HttpRequest {
+  switch (type) {
+    case MenuItemType.ApiDetail:
+    case MenuItemType.ApiDetailFolder:
+    case CatalogType.Http:
+      return MenuItemType.ApiDetail
+
+    case MenuItemType.Doc:
+      return MenuItemType.Doc
+
+    case MenuItemType.ApiSchema:
+    case MenuItemType.ApiSchemaFolder:
+    case CatalogType.Schema:
+      return MenuItemType.ApiSchema
+
+    case MenuItemType.HttpRequest:
+    case MenuItemType.RequestFolder:
+    case CatalogType.Request:
+      return MenuItemType.HttpRequest
+
+    default:
+      throw new Error('未知类型')
+  }
+}
+
 /** 判断是否为菜单文件夹类型。 */
 export function isMenuFolder(type: MenuItemType): boolean {
   return (
     type === MenuItemType.ApiDetailFolder ||
     type === MenuItemType.ApiSchemaFolder ||
     type === MenuItemType.RequestFolder
+  )
+}
+
+/** 判断是否为菜单文件夹类型。 */
+export function isCreateType(
+  type: string
+): type is
+  | MenuItemType.ApiDetail
+  | MenuItemType.ApiSchema
+  | MenuItemType.Doc
+  | MenuItemType.HttpRequest {
+  return (
+    type === MenuItemType.ApiDetail ||
+    type === MenuItemType.ApiSchema ||
+    type === MenuItemType.HttpRequest ||
+    type === MenuItemType.Doc
   )
 }
 

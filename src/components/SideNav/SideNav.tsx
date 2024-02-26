@@ -12,7 +12,7 @@ export function SideNav() {
 
   return (
     <div
-      className="flex h-full basis-[80px] flex-col items-center overflow-y-auto overflow-x-hidden px-1"
+      className="flex h-full shrink-0 basis-[80px] flex-col items-center overflow-y-auto overflow-x-hidden px-1"
       style={{
         backgroundColor: token.colorFillQuaternary,
         borderRight: `1px solid ${token.colorBorderSecondary}`,

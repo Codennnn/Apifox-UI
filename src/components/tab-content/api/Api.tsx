@@ -4,12 +4,12 @@ import { Button, ConfigProvider, Space, Tabs, type TabsProps, theme, Tooltip } f
 import { PanelRightIcon } from 'lucide-react'
 
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
+import { ApiTabContentWrapper } from '@/components/ApiTab/ApiTabContentWrapper'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { IconText } from '@/components/IconText'
 
 import { ApiDoc } from './ApiDoc'
 import { ApiDocEditing } from './ApiDocEditing'
-import { ContentWrapper } from './ContentWrapper'
 
 export function Api() {
   const { token } = theme.useToken()
@@ -24,18 +24,18 @@ export function Api() {
         key: 'doc',
         label: '文档',
         children: (
-          <ContentWrapper className="p-tabContent">
+          <ApiTabContentWrapper className="p-tabContent">
             <ApiDoc />
-          </ContentWrapper>
+          </ApiTabContentWrapper>
         ),
       },
       {
         key: 'docEdit',
         label: '修改文档',
         children: (
-          <ContentWrapper>
+          <ApiTabContentWrapper>
             <ApiDocEditing />
-          </ContentWrapper>
+          </ApiTabContentWrapper>
         ),
       },
     ]
@@ -54,14 +54,14 @@ export function Api() {
         }}
       >
         {tabData.data?.tabStatus === PageTabStatus.Create ? (
-          <ContentWrapper>
+          <ApiTabContentWrapper>
             <ApiDocEditing />
-          </ContentWrapper>
+          </ApiTabContentWrapper>
         ) : (
           <div className="flex h-full overflow-hidden">
             <Tabs
               animated={false}
-              className="api-details-tabs"
+              className="api-details-tabs flex-1"
               defaultActiveKey="docEdit"
               items={apiTabItems}
               tabBarExtraContent={
