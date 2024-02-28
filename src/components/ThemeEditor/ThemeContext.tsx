@@ -75,10 +75,13 @@ export function ThemeProvider(props: React.PropsWithChildren<ThemeProviderProps>
           token: { ...themePresetTokens },
           components: {
             Modal: { colorBgMask: isDarkMode ? token.colorBgMask : 'rgb(255 255 255 / 0.72)' },
-            Tooltip: {
-              colorTextLightSolid: token.colorText,
-              colorBgSpotlight: token.colorBgContainer,
-            },
+            Tooltip:
+              themeMode !== 'darkDefault'
+                ? {
+                    colorTextLightSolid: token.colorText,
+                    colorBgSpotlight: token.colorBgContainer,
+                  }
+                : void 0,
           },
         }}
       >

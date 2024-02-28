@@ -1,5 +1,5 @@
 export function getPageTitle(title?: string): string {
-  const mainTitle = 'Apifox 复刻版用户界面'
+  const mainTitle = 'Apifox UI'
 
   return title ? `${title} - ${mainTitle}` : mainTitle
 }

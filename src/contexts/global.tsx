@@ -25,6 +25,9 @@ interface GlobalContextData extends MenuHelpers {
   recyleRawList?: RecycleData[]
   modal: ModalHookApi
 
+  menuSearchWord?: string
+  setMenuSearchWord?: React.Dispatch<React.SetStateAction<GlobalContextData['menuSearchWord']>>
+
   apiDetailDisplay: 'name' | 'path'
   setApiDetailDisplay: React.Dispatch<React.SetStateAction<GlobalContextData['apiDetailDisplay']>>
 }
@@ -42,6 +45,7 @@ export function GlobalContextProvider(props: React.PropsWithChildren<{ modal: Mo
     setRecyleRawList(recycleList)
   }, [])
 
+  const [menuSearchWord, setMenuSearchWord] = useState<string>()
   const [apiDetailDisplay, setApiDetailDisplay] =
     useState<GlobalContextData['apiDetailDisplay']>('name')
 
@@ -64,7 +68,7 @@ export function GlobalContextProvider(props: React.PropsWithChildren<{ modal: Mo
                   return rlist
                 }
 
-                return [...rlist, { id: nanoid(4), expiredAt: '30天', creator, deletedItem: item }]
+                return [...rlist, { id: nanoid(), expiredAt: '30天', creator, deletedItem: item }]
               })
             }
 
@@ -114,8 +118,12 @@ export function GlobalContextProvider(props: React.PropsWithChildren<{ modal: Mo
       value={{
         menuRawList,
         recyleRawList,
+
+        menuSearchWord,
+        setMenuSearchWord,
         apiDetailDisplay,
         setApiDetailDisplay,
+
         modal,
         ...menuHelpers,
       }}

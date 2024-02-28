@@ -1,8 +1,7 @@
 import type { TreeProps } from 'antd'
 
-import type { JsonSchema } from '@/components/JsonSchema'
 import type { MenuItemType } from '@/enums'
-import type { ApiDetails, ApiDoc, ApiFolder } from '@/types'
+import type { ApiDetails, ApiDoc, ApiFolder, ApiSchema } from '@/types'
 
 export interface ApiMenuBase {
   id: CatalogId
@@ -28,9 +27,7 @@ interface ApiMenuDoc extends ApiMenuBase {
 
 interface ApiMenuSchema extends ApiMenuBase {
   type: MenuItemType.ApiSchema | MenuItemType.ApiSchemaFolder
-  data?: {
-    jsonSchema: JsonSchema
-  }
+  data?: ApiSchema
 }
 
 interface ApiMenuRequest extends ApiMenuBase {

@@ -40,7 +40,7 @@ export function getCreateType(
       return MenuItemType.HttpRequest
 
     default:
-      throw new Error('未知类型')
+      throw new Error(`未处理的类型：${type}`)
   }
 }
 
@@ -53,9 +53,9 @@ export function isMenuFolder(type: MenuItemType): boolean {
   )
 }
 
-/** 判断是否为菜单文件夹类型。 */
+/** 判断是否为可创建菜单类型。 */
 export function isCreateType(
-  type: string
+  type: any
 ): type is
   | MenuItemType.ApiDetail
   | MenuItemType.ApiSchema

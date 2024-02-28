@@ -75,29 +75,31 @@ export interface MenuState {
   menuTree: TreeProps['treeData']
 }
 
-type UseMenuData = () => MenuState
-
-export const useMenuData: UseMenuData = () => {
-  const { menuRawList, apiDetailDisplay } = useGlobalContext()
+export function useMenuData(): MenuState {
+  const { menuRawList, menuSearchWord, apiDetailDisplay } = useGlobalContext()
 
   /**
    * 简单的菜单数据，可以被序列化存储。
    * 此处将从服务端获取到的菜单数据，按照符合菜单树组件的结构组装。
    */
-  const menus: CatalogDataNode[] | undefined = useMemo(
-    () =>
-      menuRawList?.map<CatalogDataNode>((item) => {
-        const isLeaf = !isMenuFolder(item.type)
+  const menus: CatalogDataNode[] | undefined = useMemo(() => {
+    const menuList = menuSearchWord
+      ? menuRawList?.filter(({ name }) => {
+          return name.includes(menuSearchWord)
+        })
+      : menuRawList
 
-        return {
-          key: item.id,
-          title: item.name,
-          isLeaf,
-          customData: { catalog: item },
-        }
-      }),
-    [menuRawList]
-  )
+    return menuList?.map<CatalogDataNode>((item) => {
+      const isLeaf = !isMenuFolder(item.type)
+
+      return {
+        key: item.id,
+        title: item.name,
+        isLeaf,
+        customData: { catalog: item },
+      }
+    })
+  }, [menuRawList, menuSearchWord])
 
   /**
    * 包含交互组件（即 React 组件）的菜单数据，需要传入到菜单树组件中使用。

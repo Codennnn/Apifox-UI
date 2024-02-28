@@ -6,6 +6,7 @@ import { Code2Icon, Link2Icon, ZapIcon } from 'lucide-react'
 
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { IconText } from '@/components/IconText'
+import { ApiRemoveButton } from '@/components/tab-content/api/ApiRemoveButton'
 import { API_STATUS_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { creator } from '@/data/remote'
@@ -107,7 +108,7 @@ export function ApiDoc() {
             <IconText icon={<Code2Icon size={14} />} text="生成代码" />
           </Button>
 
-          <Button>删除</Button>
+          <ApiRemoveButton tabKey={tabData.key} />
         </Space>
       </div>
 

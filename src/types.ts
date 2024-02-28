@@ -94,6 +94,10 @@ export interface ApiDoc {
   updateAt?: string
 }
 
+export interface ApiSchema {
+  jsonSchema: JsonSchema
+}
+
 export interface ApiFolder {
   name: string
   parentId?: ApiMenuBase['id']

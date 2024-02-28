@@ -6,10 +6,10 @@ import { SchemaType } from '@/components/JsonSchema'
 import { SERVER_INHERIT } from '@/configs/static'
 import { ApiStatus, CatalogType, HttpMethod, MenuId, MenuItemType } from '@/enums'
 import { findFolders } from '@/helpers'
-import type { ApiDetails, Creator, RecycleData } from '@/types'
+import type { ApiDetails, ApiSchema, Creator, RecycleData } from '@/types'
 
 export const creator: Creator = {
-  id: nanoid(4),
+  id: nanoid(),
   name: '张三',
   username: '李四',
 }
@@ -33,7 +33,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: 'xxx',
     type: MenuItemType.Doc,
     data: {
-      id: nanoid(4),
+      id: nanoid(),
       name: '文档',
       content: '文档内容',
     },
@@ -44,7 +44,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: '示例接口',
     type: MenuItemType.ApiDetail,
     data: {
-      id: nanoid(4),
+      id: nanoid(),
       path: '/example',
       name: '示例接口',
       method: HttpMethod.Get,
@@ -59,7 +59,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: '名称超长的示例接口',
     type: MenuItemType.ApiDetail,
     data: {
-      id: nanoid(4),
+      id: nanoid(),
       path: '/example',
       name: '名称超长的示例接口',
       method: HttpMethod.Get,
@@ -79,7 +79,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: '查询宠物详情',
     type: MenuItemType.ApiDetail,
     data: {
-      id: nanoid(4),
+      id: nanoid(),
       path: '/pet/{petId}',
       name: '查询宠物详情',
       method: HttpMethod.Get,
@@ -153,7 +153,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: '新建宠物信息',
     type: MenuItemType.ApiDetail,
     data: {
-      id: nanoid(4),
+      id: nanoid(),
       path: '/pet',
       name: '新建宠物信息',
       method: HttpMethod.Post,
@@ -192,7 +192,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: '文档',
     type: MenuItemType.Doc,
     data: {
-      id: nanoid(4),
+      id: nanoid(),
       name: '文档',
       content: '文档内容',
     },
@@ -229,6 +229,11 @@ export const apiDirectoryData: ApiMenuData[] = [
     id: MenuId.引用模型,
     name: '引用模型',
     type: MenuItemType.ApiSchema,
+    data: {
+      jsonSchema: {
+        type: SchemaType.Boolean,
+      },
+    },
   },
   {
     id: MenuId.Request,
@@ -241,7 +246,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     name: 'https://abc.com',
     type: MenuItemType.HttpRequest,
     data: {
-      id: nanoid(4),
+      id: nanoid(),
       path: 'https://abc.com',
       name: '查询宠物详情',
       method: HttpMethod.Get,
@@ -273,6 +278,55 @@ export const apiDirectoryData: ApiMenuData[] = [
       ],
       createdAt: '2022-03-23T12:00:00.000Z',
     },
+  },
+]
+
+export const recycleList: RecycleData[] = [
+  {
+    id: nanoid(),
+    creator,
+    deletedItem: {
+      id: nanoid(),
+      name: '接口1',
+      type: MenuItemType.ApiDetail,
+      data: {
+        id: nanoid(),
+        path: '/api',
+        name: '接口1',
+        method: HttpMethod.Get,
+        status: ApiStatus.Released,
+        responsibleId: creator.id,
+        serverId: SERVER_INHERIT,
+      },
+    },
+    expiredAt: '29天',
+  },
+  {
+    id: nanoid(),
+    creator,
+    deletedItem: {
+      id: nanoid(),
+      parentId: MenuId.嵌套分组,
+      name: '文档1',
+      type: MenuItemType.Doc,
+      data: {
+        id: nanoid(),
+        name: '文档1',
+        content: '文档内容',
+      },
+    },
+    expiredAt: '22天',
+  },
+  {
+    id: nanoid(),
+    creator,
+    deletedItem: {
+      id: nanoid(),
+      parentId: MenuId.默认分组,
+      name: '空分组',
+      type: MenuItemType.ApiDetailFolder,
+    },
+    expiredAt: '11天',
   },
 ]
 
@@ -317,57 +371,14 @@ export const initialExpandedKeys: ApiMenuData['id'][] = [
 ]
 
 export const initialCreateApiDetailsData: ApiDetails = {
-  id: nanoid(4),
+  id: nanoid(),
   method: HttpMethod.Get,
   status: ApiStatus.Developing,
   serverId: SERVER_INHERIT,
 }
 
-export const recycleList: RecycleData[] = [
-  {
-    id: nanoid(4),
-    creator,
-    deletedItem: {
-      id: nanoid(4),
-      name: '接口1',
-      type: MenuItemType.ApiDetail,
-      data: {
-        id: nanoid(4),
-        path: '/api',
-        name: '接口1',
-        method: HttpMethod.Get,
-        status: ApiStatus.Released,
-        responsibleId: creator.id,
-        serverId: SERVER_INHERIT,
-      },
-    },
-    expiredAt: '29天',
+export const initialCreateApiSchemaData: ApiSchema = {
+  jsonSchema: {
+    type: SchemaType.Object,
   },
-  {
-    id: nanoid(4),
-    creator,
-    deletedItem: {
-      id: nanoid(4),
-      parentId: MenuId.嵌套分组,
-      name: '文档1',
-      type: MenuItemType.Doc,
-      data: {
-        id: nanoid(4),
-        name: '文档1',
-        content: '文档内容',
-      },
-    },
-    expiredAt: '22天',
-  },
-  {
-    id: nanoid(4),
-    creator,
-    deletedItem: {
-      id: nanoid(4),
-      parentId: MenuId.默认分组,
-      name: '空分组',
-      type: MenuItemType.ApiDetailFolder,
-    },
-    expiredAt: '11天',
-  },
-]
+}

@@ -189,7 +189,7 @@ export function ApiTab(props: TabsProps) {
         onEdit={(key, action) => {
           if (action === 'add') {
             addTabItem({
-              key: nanoid(4),
+              key: nanoid(),
               label: '新建...',
               contentType: 'blank',
             })

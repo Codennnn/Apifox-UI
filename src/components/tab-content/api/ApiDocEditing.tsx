@@ -1,28 +1,22 @@
 import { useEffect } from 'react'
 
 import Link from 'next/link'
-import {
-  Button,
-  Col,
-  ConfigProvider,
-  Form,
-  Input,
-  Row,
-  Select,
-  type SelectProps,
-  Space,
-  Tabs,
-  theme,
-} from 'antd'
+import { Button, Col, Form, Input, Row, Select, type SelectProps, Space, Tabs, Tooltip } from 'antd'
+import { InfoIcon } from 'lucide-react'
+import { nanoid } from 'nanoid'
 
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
 import { GroupTitle } from '@/components/ApiTab/GroupTitle'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
-import { JsonSchemaEditor } from '@/components/JsonSchema'
+import { JsonSchemaCard } from '@/components/JsonSchemaCard'
 import { JsonViewer } from '@/components/JsonViewer'
-import { API_STATUS_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
+import { ApiRemoveButton } from '@/components/tab-content/api/ApiRemoveButton'
+import { UnderlineInput } from '@/components/UnderlineInput'
+import { API_STATUS_CONFIG, HTTP_CODE_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
+import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
 import { creator, initialCreateApiDetailsData } from '@/data/remote'
+import { MenuItemType } from '@/enums'
 import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
@@ -91,19 +85,16 @@ const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).
   }
 )
 
-const httpCodeOptions: SelectProps['options'] = [
-  { label: '200', value: 200 },
-  { label: '201', value: 201 },
-  { label: '204', value: 204 },
-  { label: '400', value: 400 },
-  { label: '401', value: 401 },
-  { label: '403', value: 403 },
-  { label: '404', value: 404 },
-  { label: '500', value: 500 },
-  { label: '502', value: 502 },
-  { label: '503', value: 503 },
-  { label: '504', value: 504 },
-]
+const httpCodeOptions: SelectProps['options'] = Object.entries(HTTP_CODE_CONFIG).map(
+  ([, { text, value, desc }]) => {
+    return {
+      label: value,
+      value,
+      text,
+      desc,
+    }
+  }
+)
 
 const contentTypeOptions: SelectProps['options'] = [
   { label: 'JSON', value: 'json' },
@@ -115,12 +106,12 @@ const contentTypeOptions: SelectProps['options'] = [
 ]
 
 export function ApiDocEditing() {
-  const { token } = theme.useToken()
-
   const [form] = Form.useForm<ApiDetails>()
 
-  const { menuRawList } = useGlobalContext()
+  const { menuRawList, addMenuItem, updateMenuItem } = useGlobalContext()
+  const { addTabItem } = useMenuTabHelpers()
   const { tabData } = useTabContentContext()
+
   const isCreating = tabData.data?.tabStatus === PageTabStatus.Create
 
   useEffect(() => {
@@ -128,10 +119,14 @@ export function ApiDocEditing() {
       form.setFieldsValue(initialCreateApiDetailsData)
     } else {
       if (menuRawList) {
-        const apiDetails = menuRawList.find(({ id }) => id === tabData.key)?.data
+        const menuData = menuRawList.find(({ id }) => id === tabData.key)
 
-        if (apiDetails) {
-          form.setFieldsValue(apiDetails as ApiDetails)
+        if (menuData && menuData.type === MenuItemType.ApiDetail) {
+          const apiDetails = menuData.data
+
+          if (apiDetails) {
+            form.setFieldsValue(apiDetails)
+          }
         }
       }
     }
@@ -139,18 +134,6 @@ export function ApiDocEditing() {
 
   const { styles } = useStyles(({ token }) => {
     return {
-      nameInput: css({
-        borderBottom: '1px solid transparent',
-
-        '&:hover': {
-          borderColor: token.colorBorder,
-        },
-
-        '&:focus': {
-          borderColor: token.colorPrimary,
-        },
-      }),
-
       tabWithBorder: css({
         '.ant-tabs-content-holder': {
           border: `1px solid ${token.colorBorderSecondary}`,
@@ -163,7 +146,39 @@ export function ApiDocEditing() {
   })
 
   return (
-    <Form className="flex h-full flex-col" form={form}>
+    <Form
+      className="flex h-full flex-col"
+      form={form}
+      onFinish={(values) => {
+        const menuName = values.name || '未命名接口'
+
+        if (isCreating) {
+          const menuItemId = nanoid()
+
+          addMenuItem({
+            id: menuItemId,
+            name: menuName,
+            type: MenuItemType.ApiDetail,
+            data: values,
+          })
+
+          addTabItem(
+            {
+              key: menuItemId,
+              label: menuName,
+              contentType: MenuItemType.ApiDetail,
+            },
+            { replaceTab: tabData.key }
+          )
+        } else {
+          updateMenuItem({
+            id: tabData.key,
+            name: menuName,
+            data: { ...values, name: menuName },
+          })
+        }
+      }}
+    >
       <div className="flex items-center px-tabContent py-3">
         <Space.Compact className="flex-1">
           <Form.Item noStyle name="method">
@@ -180,34 +195,23 @@ export function ApiDocEditing() {
         </Space.Compact>
 
         <Space className="ml-auto pl-2">
-          <Button type="primary">保存</Button>
+          <Button htmlType="submit" type="primary">
+            保存
+          </Button>
 
           {!isCreating && (
             <>
               <Button>运行</Button>
-              <Button>删除</Button>
+              <ApiRemoveButton tabKey={tabData.key} />
             </>
           )}
         </Space>
       </div>
 
       <div className="flex-1 overflow-y-auto p-tabContent pt-0">
-        <ConfigProvider
-          theme={{
-            components: {
-              Input: { borderRadiusLG: 0, paddingInlineLG: 0, paddingBlockLG: token.paddingXXS },
-            },
-          }}
-        >
-          <Form.Item noStyle name="name">
-            <Input
-              className={`font-medium ${styles.nameInput}`}
-              placeholder="未命名接口"
-              size="large"
-              variant="borderless"
-            />
-          </Form.Item>
-        </ConfigProvider>
+        <Form.Item noStyle name="name">
+          <UnderlineInput placeholder="未命名接口" />
+        </Form.Item>
 
         <div className="pt-2">
           <Row gutter={16}>
@@ -278,7 +282,23 @@ export function ApiDocEditing() {
                   <Row>
                     <Col className="px-8" lg={8} md={6}>
                       <Form.Item label="HTTP 状态码" name={['responses', 0, 'code']}>
-                        <Select options={httpCodeOptions} />
+                        <Select
+                          optionRender={({ label, data }) => (
+                            <span className="group flex items-center">
+                              {label}
+                              <span className="ml-3 font-normal opacity-65">
+                                {data.text as string}
+                              </span>
+                              <Tooltip title={`${data.desc as string}。`}>
+                                <InfoIcon
+                                  className="ml-auto mr-1 opacity-0 transition-opacity group-hover:opacity-100"
+                                  size={14}
+                                />
+                              </Tooltip>
+                            </span>
+                          )}
+                          options={httpCodeOptions}
+                        />
                       </Form.Item>
                     </Col>
                     <Col className="px-8" lg={8} md={6}>
@@ -293,36 +313,9 @@ export function ApiDocEditing() {
                     </Col>
                   </Row>
 
-                  <div
-                    style={{
-                      border: `1px solid ${token.colorBorderSecondary}`,
-                      borderRadius: token.borderRadius,
-                      marginBottom: token.marginSM,
-                    }}
-                  >
-                    <div
-                      className="flex justify-end"
-                      style={{
-                        padding: token.paddingSM,
-                        borderBottom: `1px solid ${token.colorBorderSecondary}`,
-                      }}
-                    >
-                      <Space size={token.paddingXXS}>
-                        <Button size="small" type="text">
-                          生成代码
-                        </Button>
-                        <Button size="small" type="text">
-                          JSON Schema
-                        </Button>
-                      </Space>
-                    </div>
-
-                    <div style={{ padding: token.paddingSM }}>
-                      <Form.Item noStyle name={['responses', 0, 'jsonSchema']}>
-                        <JsonSchemaEditor />
-                      </Form.Item>
-                    </div>
-                  </div>
+                  <Form.Item noStyle name={['responses', 0, 'jsonSchema']}>
+                    <JsonSchemaCard />
+                  </Form.Item>
 
                   <Form.Item dependencies={['responseExamples']}>
                     {({ getFieldValue }) => {
