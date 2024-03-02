@@ -11,6 +11,7 @@ export function UnderlineInput(props: InputProps) {
     return {
       nameInput: css({
         borderBottom: '1px solid transparent',
+        padding: `0 ${token.paddingXXS}px`,
 
         '&:hover': {
           borderColor: token.colorBorder,

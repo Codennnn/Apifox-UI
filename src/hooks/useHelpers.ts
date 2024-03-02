@@ -53,7 +53,7 @@ export function useHelpers() {
       {
         ...payload,
         key: nanoid(),
-        label: '新建文档',
+        label: '新建 Markdown',
         contentType: MenuItemType.Doc,
         data: { tabStatus: PageTabStatus.Create },
       },

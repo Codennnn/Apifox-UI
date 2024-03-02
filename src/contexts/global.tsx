@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import type { Modal } from 'antd'
+import type { message, Modal } from 'antd'
 import { nanoid } from 'nanoid'
 
 import type { ApiMenuData } from '@/components/ApiMenu'
@@ -8,6 +8,7 @@ import { apiDirectoryData, creator, recycleList } from '@/data/remote'
 import type { RecycleData } from '@/types'
 
 type ModalHookApi = ReturnType<typeof Modal.useModal>[0]
+type MessageApi = ReturnType<typeof message.useMessage>[0]
 
 interface MenuHelpers {
   /** 添加一个新的菜单项到菜单列表中。 */
@@ -24,6 +25,7 @@ interface GlobalContextData extends MenuHelpers {
   menuRawList?: ApiMenuData[]
   recyleRawList?: RecycleData[]
   modal: ModalHookApi
+  messageApi: MessageApi
 
   menuSearchWord?: string
   setMenuSearchWord?: React.Dispatch<React.SetStateAction<GlobalContextData['menuSearchWord']>>
@@ -34,8 +36,10 @@ interface GlobalContextData extends MenuHelpers {
 
 const GlobalContext = createContext({} as GlobalContextData)
 
-export function GlobalContextProvider(props: React.PropsWithChildren<{ modal: ModalHookApi }>) {
-  const { children, modal } = props
+export function GlobalContextProvider(
+  props: React.PropsWithChildren<{ modal: ModalHookApi; messageApi: MessageApi }>
+) {
+  const { children, modal, messageApi } = props
 
   const [menuRawList, setMenuRawList] = useState<ApiMenuData[]>()
   const [recyleRawList, setRecyleRawList] = useState<RecycleData[]>()
@@ -125,6 +129,7 @@ export function GlobalContextProvider(props: React.PropsWithChildren<{ modal: Mo
         setApiDetailDisplay,
 
         modal,
+        messageApi,
         ...menuHelpers,
       }}
     >

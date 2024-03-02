@@ -1,4 +1,6 @@
-import { Button, Dropdown } from 'antd'
+import { useMemo } from 'react'
+
+import { Button, Dropdown, type MenuProps } from 'antd'
 import { MoreHorizontalIcon, PlusIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
@@ -6,8 +8,38 @@ import { IconText } from '@/components/IconText'
 
 import { useMenuTabHelpers } from '../../contexts/menu-tab-settings'
 
+export function useApiTabActions() {
+  const { removeAllTabItems, removeOtherTabItems } = useMenuTabHelpers()
+
+  const menuItems = useMemo<MenuProps['items']>(
+    () => [
+      {
+        key: 'closeAll',
+        label: '关闭所有标签页',
+        onClick: () => {
+          removeAllTabItems()
+        },
+      },
+      {
+        key: 'closeOthers',
+        label: '关闭其他标签页',
+        onClick: () => {
+          removeOtherTabItems()
+        },
+      },
+    ],
+    [removeAllTabItems, removeOtherTabItems]
+  )
+
+  return {
+    menuItems,
+  }
+}
+
 export function ApiTabAction() {
-  const { addTabItem, removeAllTabItems, removeOtherTabItems } = useMenuTabHelpers()
+  const { addTabItem } = useMenuTabHelpers()
+
+  const { menuItems } = useApiTabActions()
 
   return (
     <div className="ml-2 mt-2 flex gap-x-1">
@@ -27,22 +59,7 @@ export function ApiTabAction() {
 
       <Dropdown
         menu={{
-          items: [
-            {
-              key: 'closeAll',
-              label: '关闭所有标签页',
-              onClick: () => {
-                removeAllTabItems()
-              },
-            },
-            {
-              key: 'closeOthers',
-              label: '关闭其他标签页',
-              onClick: () => {
-                removeOtherTabItems()
-              },
-            },
-          ],
+          items: menuItems,
         }}
       >
         <Button size="small" type="text">

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import useEvent from 'react-use-event-hook'
 
-import { ConfigProvider, Popconfirm, Tabs, type TabsProps } from 'antd'
+import { ConfigProvider, Dropdown, Popconfirm, Tabs, type TabsProps } from 'antd'
 import { BadgeInfoIcon, XIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
@@ -19,7 +19,7 @@ import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-se
 import { MenuItemType } from '../../enums'
 
 import type { Tab } from './ApiTab.type'
-import { ApiTabAction } from './ApiTabAction'
+import { ApiTabAction, useApiTabActions } from './ApiTabAction'
 import { ApiTabContent } from './ApiTabContent'
 import { TabContentProvider } from './TabContentContext'
 
@@ -40,6 +40,7 @@ export function ApiTab(props: TabsProps) {
   const { menuRawList } = useGlobalContext()
   const { tabItems, activeTabKey } = useMenuTabContext()
   const { activeTabItem, addTabItem, getTabItem, removeTabItem } = useMenuTabHelpers()
+  const { menuItems } = useApiTabActions()
 
   const handleItemRemove = useEvent((key: CatalogId, forceClose?: boolean) => {
     const item = getTabItem({ key })
@@ -80,7 +81,7 @@ export function ApiTab(props: TabsProps) {
               type={tabItem.contentType}
             />
           )}
-          <span>{tabItem.label}</span>
+          <span>{menuData?.name || tabItem.label}</span>
         </span>
       )
 
@@ -129,9 +130,15 @@ export function ApiTab(props: TabsProps) {
     })
   }, [tabItems, menuRawList, confirmKey, handleItemRemove])
 
-  const renderTabBar: TabsProps['renderTabBar'] = (props, DefaultTabBar) => (
+  const renderTabBar: TabsProps['renderTabBar'] = (tabBarProps, DefaultTabBar) => (
     <div className="app-tabs-wrap flex select-none items-center">
-      <DefaultTabBar {...props} />
+      <DefaultTabBar {...tabBarProps}>
+        {(node) => (
+          <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
+            {node}
+          </Dropdown>
+        )}
+      </DefaultTabBar>
     </div>
   )
 

@@ -21,7 +21,8 @@ export function Schema() {
 
   const [form] = Form.useForm<ApiSchemaForm>()
 
-  const { menuRawList, addMenuItem, updateMenuItem, removeMenuItem } = useGlobalContext()
+  const { menuRawList, addMenuItem, updateMenuItem, removeMenuItem, messageApi } =
+    useGlobalContext()
   const { addTabItem, removeTabItem } = useMenuTabHelpers()
   const { tabData } = useTabContentContext()
 
@@ -85,6 +86,8 @@ export function Schema() {
               name: menuName,
               data: values,
             })
+
+            messageApi.success('保存成功')
           }
         }}
         onValuesChange={(changedValues: ApiSchemaForm) => {

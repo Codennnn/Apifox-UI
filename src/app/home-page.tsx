@@ -3,7 +3,7 @@
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-import { Button, ConfigProvider, Dropdown, Flex, Modal, theme, Tooltip } from 'antd'
+import { Button, ConfigProvider, Dropdown, Flex, message, Modal, theme, Tooltip } from 'antd'
 import { ChevronRightIcon, FilterIcon, PlusIcon } from 'lucide-react'
 
 import { ApiMenu } from '@/components/ApiMenu'
@@ -112,7 +112,7 @@ function HomeContent() {
 
                         return {
                           key: t,
-                          label: newLabel,
+                          label: t === MenuItemType.Doc ? '新建 Markdown' : newLabel,
                           icon: (
                             <FileIcon size={16} style={{ color: token.colorPrimary }} type={t} />
                           ),
@@ -175,15 +175,18 @@ function HomeContent() {
 }
 
 export function HomePage() {
-  const [modal, contextHolder] = Modal.useModal()
+  const [modal, modalContextHolder] = Modal.useModal()
+  const [messageApi, messageContextHolder] = message.useMessage({ duration: 1 })
 
   return (
     <LayoutProvider>
-      <GlobalContextProvider modal={modal}>
+      <GlobalContextProvider messageApi={messageApi} modal={modal}>
         <NiceModalProvider>
           <MenuTabProvider>
             <HomeContent />
-            {contextHolder}
+
+            {modalContextHolder}
+            {messageContextHolder}
           </MenuTabProvider>
         </NiceModalProvider>
       </GlobalContextProvider>

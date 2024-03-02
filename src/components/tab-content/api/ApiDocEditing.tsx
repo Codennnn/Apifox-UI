@@ -24,6 +24,8 @@ import { ParamsTab } from './ParamsTab'
 
 import { css } from '@emotion/css'
 
+const DEFAULT_NAME = '未命名接口'
+
 const methodOptions: SelectProps['options'] = Object.entries(HTTP_METHOD_CONFIG).map(
   ([method, { color }]) => {
     return {
@@ -108,7 +110,7 @@ const contentTypeOptions: SelectProps['options'] = [
 export function ApiDocEditing() {
   const [form] = Form.useForm<ApiDetails>()
 
-  const { menuRawList, addMenuItem, updateMenuItem } = useGlobalContext()
+  const { menuRawList, addMenuItem, updateMenuItem, messageApi } = useGlobalContext()
   const { addTabItem } = useMenuTabHelpers()
   const { tabData } = useTabContentContext()
 
@@ -150,7 +152,7 @@ export function ApiDocEditing() {
       className="flex h-full flex-col"
       form={form}
       onFinish={(values) => {
-        const menuName = values.name || '未命名接口'
+        const menuName = values.name || DEFAULT_NAME
 
         if (isCreating) {
           const menuItemId = nanoid()
@@ -176,6 +178,8 @@ export function ApiDocEditing() {
             name: menuName,
             data: { ...values, name: menuName },
           })
+
+          messageApi.success('保存成功')
         }
       }}
     >
@@ -210,7 +214,7 @@ export function ApiDocEditing() {
 
       <div className="flex-1 overflow-y-auto p-tabContent pt-0">
         <Form.Item noStyle name="name">
-          <UnderlineInput placeholder="未命名接口" />
+          <UnderlineInput placeholder={DEFAULT_NAME} />
         </Form.Item>
 
         <div className="pt-2">

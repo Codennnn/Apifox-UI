@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Table } from 'antd'
+import { Button, Popconfirm, Table, Tooltip } from 'antd'
 
 import { FileIcon } from '@/components/icons/FileIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
@@ -36,7 +36,7 @@ export function Recycle() {
             title: '操作人',
             dataIndex: 'creator',
             render: (x: RecycleData['creator']) => {
-              return x.name
+              return <Tooltip title={x.username}>{x.name}</Tooltip>
             },
           },
           { title: '剩余时间', dataIndex: 'expiredAt' },
