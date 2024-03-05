@@ -12,7 +12,7 @@ export interface Creator {
 }
 
 /** 请求参数信息。 */
-interface Parameter {
+export interface Parameter {
   id: string
   name?: string
   type?: ParamType

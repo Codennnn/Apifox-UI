@@ -10,8 +10,8 @@ export function useStyle(cssFn: CSSFunction) {
   return css(cssFn(theme.useToken()))
 }
 
-type StyleFunction = (token: Theme) => Record<string, string>
+type StyleFunction<T> = (token: Theme) => T
 
-export function useStyles(fn: StyleFunction): { styles: ReturnType<StyleFunction> } {
+export function useStyles<T>(fn: StyleFunction<T>): { styles: ReturnType<StyleFunction<T>> } {
   return { styles: fn(theme.useToken()) }
 }

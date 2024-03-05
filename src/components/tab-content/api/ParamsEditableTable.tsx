@@ -2,16 +2,17 @@ import { Input, Select } from 'antd'
 
 import { EditableTable } from '@/components/EditableTable'
 import { ParamType } from '@/enums'
+import type { Parameter } from '@/types'
 
 interface ParamsEditableTableProps {
-  value?: any[]
+  value?: Parameter[]
   onChange?: (value: ParamsEditableTableProps['value']) => void
 }
 
 export function ParamsEditableTable(props: ParamsEditableTableProps) {
   const { value, onChange } = props
 
-  const handleChange = (v: any, idx: number) => {
+  const handleChange = (v: Partial<Record<keyof Parameter, any>>, idx: number) => {
     onChange?.(
       value?.map((it, i) => {
         if (i === idx) {

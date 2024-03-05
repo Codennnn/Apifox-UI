@@ -24,10 +24,8 @@ function BadgeLabel(props: React.PropsWithChildren<{ count?: number }>) {
   )
 }
 
-type Parameters = ApiDetails['parameters']
-
 interface ParamsTabProps {
-  value?: Parameters
+  value?: ApiDetails['parameters']
   onChange?: (value: ParamsTabProps['value']) => void
 }
 
