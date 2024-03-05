@@ -68,3 +68,11 @@ export const enum MenuId {
   Request = '/1',
   Request2 = '/1.1',
 }
+
+export const enum ParamType {
+  Integer = 'integer',
+  String = 'string',
+  Boolean = 'boolean',
+  Number = 'number',
+  Array = 'array',
+}

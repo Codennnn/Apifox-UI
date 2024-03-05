@@ -1,12 +1,8 @@
-import {
-  Color,
-  columnHeight,
-  INDENT,
-  items_key,
-  properties_key,
-  SchemaType,
-  SEPARATOR,
-} from './constants'
+import { theme } from 'antd'
+
+import { useStyles } from '@/hooks/useStyle'
+
+import { columnHeight, INDENT, items_key, properties_key, SchemaType, SEPARATOR } from './constants'
 import { useJsonSchemaContext } from './JsonSchema.context'
 import type { JsonSchema, ObjectSchema, PrimitiveSchema } from './JsonSchema.type'
 import { JsonSchemaNodeRow, type JsonSchemaNodeRowProps } from './JsonSchemaNodeRow'
@@ -14,38 +10,38 @@ import { getNodeLevelInfo, getRefDataModel } from './utils'
 
 import { css } from '@emotion/css'
 
-const styles = {
-  get node() {
-    return css(
-      {
-        position: 'relative',
-
-        '&:hover': {
-          [`> .${this.ref}`]: {
-            border: `1px solid ${Color.Primary}`,
-          },
-        },
-      },
-      { label: 'node' }
-    )
-  },
-
-  ref: css(
-    {
-      position: 'absolute',
-      inset: 0,
-      pointerEvents: 'none',
-    },
-    { label: 'ref-object' }
-  ),
-}
-
 const NodeWrapper = (
   props: React.PropsWithChildren<
     React.ComponentProps<'div'> & { shouldExpand: boolean; isRefModel?: boolean }
   >
 ) => {
   const { children, shouldExpand, isRefModel, className = '', style, ...rest } = props
+
+  const { styles } = useStyles(({ token }) => {
+    const ref = css(
+      {
+        position: 'absolute',
+        inset: 0,
+        pointerEvents: 'none',
+      },
+      { label: 'ref-object' }
+    )
+
+    const node = css(
+      {
+        position: 'relative',
+
+        '&:hover': {
+          [`> .${ref}`]: {
+            border: `1px solid ${token.colorPrimary}`,
+          },
+        },
+      },
+      { label: 'node' }
+    )
+
+    return { node, ref }
+  })
 
   return (
     <div
@@ -71,6 +67,8 @@ export interface JsonSchemaNodeProps extends Omit<JsonSchemaNodeRowProps, 'value
 }
 
 export function JsonSchemaNode(props: JsonSchemaNodeProps) {
+  const { token } = theme.useToken()
+
   const { value, onChange, fieldPath = [], onAddField, ...restProps } = props
 
   const { expandedKeys } = useJsonSchemaContext()
@@ -132,7 +130,7 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
               <div
                 className={css({
                   height: columnHeight,
-                  display: 'flex',
+                  display: shouldExpand ? 'flex' : 'none',
                   alignItems: 'center',
                 })}
                 style={{
@@ -143,7 +141,7 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
                 <span>
                   没有字段，
                   <span
-                    className={css({ color: Color.Primary, cursor: 'pointer' })}
+                    className={css({ color: token.colorPrimary, cursor: 'pointer' })}
                     onClick={() => {
                       onAddField?.([...fieldPath, properties_key, '0'])
                     }}

@@ -4,7 +4,7 @@ import type { ApiMenuData } from '@/components/ApiMenu'
 import type { ApiTabItem } from '@/components/ApiTab'
 import { SchemaType } from '@/components/JsonSchema'
 import { SERVER_INHERIT } from '@/configs/static'
-import { ApiStatus, CatalogType, HttpMethod, MenuId, MenuItemType } from '@/enums'
+import { ApiStatus, CatalogType, HttpMethod, MenuId, MenuItemType, ParamType } from '@/enums'
 import { findFolders } from '@/helpers'
 import type { ApiDetails, ApiSchema, Creator, RecycleData } from '@/types'
 
@@ -51,6 +51,39 @@ export const apiDirectoryData: ApiMenuData[] = [
       status: ApiStatus.Released,
       responsibleId: creator.id,
       serverId: SERVER_INHERIT,
+      parameters: {
+        query: [
+          {
+            id: nanoid(),
+            name: 'a',
+            type: ParamType.String,
+            enable: true,
+            required: false,
+            description: '1.xxx\n2.xxx\n3.xxx',
+            example: 'str',
+          },
+          {
+            id: nanoid(),
+            name: 'b',
+            type: ParamType.Integer,
+            enable: true,
+            required: false,
+            description: '',
+            example: '100',
+          },
+        ],
+      },
+      responses: [
+        {
+          code: 200,
+          name: '成功',
+          contentType: 'json',
+          jsonSchema: {
+            type: SchemaType.Object,
+            properties: [],
+          },
+        },
+      ],
     },
   },
   {
@@ -87,6 +120,39 @@ export const apiDirectoryData: ApiMenuData[] = [
       responsibleId: creator.id,
       tags: ['宠物'],
       serverId: SERVER_INHERIT,
+      parameters: {
+        query: [
+          {
+            id: nanoid(),
+            name: 'a',
+            type: ParamType.String,
+            enable: true,
+            required: false,
+            description: '123\n123\n123\n',
+            example: 'str',
+          },
+          {
+            id: nanoid(),
+            name: 'b',
+            type: ParamType.Integer,
+            enable: true,
+            required: false,
+            description: '',
+            example: '100',
+          },
+        ],
+        path: [
+          {
+            id: 'petId#0',
+            name: 'petId',
+            type: ParamType.String,
+            enable: true,
+            required: true,
+            description: '宠物 ID',
+            example: '1',
+          },
+        ],
+      },
       responses: [
         {
           code: 200,
@@ -158,6 +224,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       name: '新建宠物信息',
       method: HttpMethod.Post,
       status: ApiStatus.Testing,
+      responsibleId: creator.id,
       tags: ['宠物'],
       serverId: SERVER_INHERIT,
       responseExamples: [
@@ -281,54 +348,97 @@ export const apiDirectoryData: ApiMenuData[] = [
   },
 ]
 
-export const recycleList: RecycleData[] = [
-  {
-    id: nanoid(),
-    creator,
-    deletedItem: {
-      id: nanoid(),
-      name: '接口1',
-      type: MenuItemType.ApiDetail,
-      data: {
+export const recycleGroupData: RecycleData = {
+  [CatalogType.Http]: {
+    list: [
+      {
         id: nanoid(),
-        path: '/api',
-        name: '接口1',
-        method: HttpMethod.Get,
-        status: ApiStatus.Released,
-        responsibleId: creator.id,
-        serverId: SERVER_INHERIT,
+        creator,
+        deletedItem: {
+          id: nanoid(),
+          name: '接口1',
+          type: MenuItemType.ApiDetail,
+          data: {
+            id: nanoid(),
+            path: '/api',
+            name: '接口1',
+            method: HttpMethod.Get,
+            status: ApiStatus.Released,
+            responsibleId: creator.id,
+            serverId: SERVER_INHERIT,
+          },
+        },
+        expiredAt: '29天',
       },
-    },
-    expiredAt: '29天',
-  },
-  {
-    id: nanoid(),
-    creator,
-    deletedItem: {
-      id: nanoid(),
-      parentId: MenuId.嵌套分组,
-      name: '文档1',
-      type: MenuItemType.Doc,
-      data: {
+      {
         id: nanoid(),
-        name: '文档1',
-        content: '文档内容',
+        creator,
+        deletedItem: {
+          id: nanoid(),
+          parentId: MenuId.嵌套分组,
+          name: '文档1',
+          type: MenuItemType.Doc,
+          data: {
+            id: nanoid(),
+            name: '文档1',
+            content: '文档内容',
+          },
+        },
+        expiredAt: '22天',
       },
-    },
-    expiredAt: '22天',
+      {
+        id: nanoid(),
+        creator,
+        deletedItem: {
+          id: nanoid(),
+          parentId: MenuId.默认分组,
+          name: '空分组',
+          type: MenuItemType.ApiDetailFolder,
+        },
+        expiredAt: '11天',
+      },
+    ],
   },
-  {
-    id: nanoid(),
-    creator,
-    deletedItem: {
-      id: nanoid(),
-      parentId: MenuId.默认分组,
-      name: '空分组',
-      type: MenuItemType.ApiDetailFolder,
-    },
-    expiredAt: '11天',
+
+  [CatalogType.Schema]: {
+    list: [
+      {
+        id: nanoid(),
+        creator,
+        deletedItem: {
+          id: nanoid(),
+          name: '示例模型',
+          type: MenuItemType.ApiSchema,
+        },
+        expiredAt: '28天',
+      },
+    ],
   },
-]
+
+  [CatalogType.Request]: {
+    list: [
+      {
+        id: nanoid(),
+        creator,
+        deletedItem: {
+          id: nanoid(),
+          name: '示例请求',
+          type: MenuItemType.HttpRequest,
+          data: {
+            id: nanoid(),
+            path: '/request',
+            name: '示例请求',
+            method: HttpMethod.Get,
+            status: ApiStatus.Released,
+            responsibleId: creator.id,
+            serverId: SERVER_INHERIT,
+          },
+        },
+        expiredAt: '16天',
+      },
+    ],
+  },
+}
 
 export const initialTabItems: ApiTabItem[] = (() => {
   return [
@@ -356,6 +466,8 @@ export const initialTabItems: ApiTabItem[] = (() => {
   ]
 })()
 
+export const initialActiveTabKey = MenuId.查询宠物详情
+
 export const initialExpandedKeys: ApiMenuData['id'][] = [
   CatalogType.Http,
   CatalogType.Schema,
@@ -375,6 +487,17 @@ export const initialCreateApiDetailsData: ApiDetails = {
   method: HttpMethod.Get,
   status: ApiStatus.Developing,
   serverId: SERVER_INHERIT,
+  responses: [
+    {
+      code: 200,
+      name: '成功',
+      contentType: 'json',
+      jsonSchema: {
+        type: SchemaType.Object,
+        properties: [],
+      },
+    },
+  ],
 }
 
 export const initialCreateApiSchemaData: ApiSchema = {

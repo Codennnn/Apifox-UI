@@ -1,5 +1,9 @@
 import { Typography } from 'antd'
 
-export function GroupTitle(props: React.PropsWithChildren) {
-  return <Typography.Text type="secondary">{props.children}</Typography.Text>
+export function GroupTitle(props: React.PropsWithChildren<{ className?: string }>) {
+  return (
+    <div className={props.className}>
+      <Typography.Text>{props.children}</Typography.Text>
+    </div>
+  )
 }

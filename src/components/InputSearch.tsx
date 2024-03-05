@@ -9,7 +9,7 @@ import { useStyles } from '@/hooks/useStyle'
 
 import { css } from '@emotion/css'
 
-export function SearchInput() {
+export function InputSearch() {
   const { setMenuSearchWord } = useGlobalContext()
 
   const inputProps = useCompositionInput(

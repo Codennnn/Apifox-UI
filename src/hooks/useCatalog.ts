@@ -4,11 +4,10 @@ import type { CascaderProps } from 'antd'
 import arrayToTree from 'array-to-tree'
 
 import type { ApiMenuData } from '@/components/ApiMenu'
+import { ROOT_CATALOG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import type { MenuItemType } from '@/enums'
 import { isMenuFolder } from '@/helpers'
-
-export const ROOT_CATALOG = '_'
 
 interface CatalogOption {
   value: string

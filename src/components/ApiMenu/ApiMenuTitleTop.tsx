@@ -15,11 +15,10 @@ import {
 import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
 import { FileIcon } from '@/components/icons/FileIcon'
 import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
-import { apiMenuConfig } from '@/configs/static'
+import { apiMenuConfig, ROOT_CATALOG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
 import { getCreateType, isMenuFolder } from '@/helpers'
-import { ROOT_CATALOG } from '@/hooks/useCatalog'
 import { useHelpers } from '@/hooks/useHelpers'
 
 import { useApiMenuContext } from './ApiMenuContext'

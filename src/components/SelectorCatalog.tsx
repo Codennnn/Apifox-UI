@@ -5,17 +5,18 @@ import { Cascader, Divider, theme } from 'antd'
 
 import type { ApiMenuBase } from '@/components/ApiMenu/ApiMenu.type'
 import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
+import { ROOT_CATALOG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { findFolders } from '@/helpers'
-import { ROOT_CATALOG, useCatalog, type UseCatalogParmas } from '@/hooks/useCatalog'
+import { useCatalog, type UseCatalogParmas } from '@/hooks/useCatalog'
 
-interface CatalogSelectorProps extends UseCatalogParmas {
+interface SelectorCatalogProps extends UseCatalogParmas {
   value?: ApiMenuBase['parentId']
-  onChange?: (value: CatalogSelectorProps['value']) => void
+  onChange?: (value: SelectorCatalogProps['value']) => void
   hideCreateNew?: boolean
 }
 
-export function CatalogSelector(props: CatalogSelectorProps) {
+export function SelectorCatalog(props: SelectorCatalogProps) {
   const { token } = theme.useToken()
 
   const { value, onChange, type, exclued, hideCreateNew } = props

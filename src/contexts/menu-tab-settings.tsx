@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import useEvent from 'react-use-event-hook'
 
 import type { ApiTabItem, EditStatus } from '@/components/ApiTab'
-import { initialTabItems } from '@/data/remote'
+import { initialActiveTabKey, initialTabItems } from '@/data/remote'
 
 interface MenuTabContextData {
   /** 当前在 Tabs 中打开的所有页签。 */
@@ -27,7 +27,7 @@ export function MenuTabProvider(props: React.PropsWithChildren) {
 
   useEffect(() => {
     setTabItems(initialTabItems)
-    setActiveTabKey(initialTabItems[0].key)
+    setActiveTabKey(initialActiveTabKey)
   }, [])
 
   return (

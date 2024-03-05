@@ -3,10 +3,10 @@ import type { JsonSchema } from './JsonSchema.type'
 export const properties_key = 'properties'
 export const items_key = 'items'
 
-/** 字段名路径分隔符 */
+/** 字段名路径分隔符。 */
 export const SEPARATOR = '.'
 
-/** 树结构的层级缩进数值 */
+/** 树结构的层级缩进数值。 */
 export const INDENT = 16
 
 export const columnHeight = 32

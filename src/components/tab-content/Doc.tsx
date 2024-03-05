@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid'
 
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
-import { UnderlineInput } from '@/components/UnderlineInput'
+import { InputUnderline } from '@/components/InputUnderline'
 import { useGlobalContext } from '@/contexts/global'
 import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
 import { MenuItemType } from '@/enums'
@@ -96,7 +96,7 @@ export function Doc() {
     return (
       <div className="flex h-full flex-col">
         <div className="flex items-center px-tabContent py-2" style={{ gap: `${token.padding}px` }}>
-          <UnderlineInput
+          <InputUnderline
             placeholder={DEFAULT_DOC_NAME}
             style={{ fontWeight: 'bold', fontSize: '18px' }}
             value={name}

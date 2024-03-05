@@ -35,7 +35,7 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
       </div>
 
       <div style={{ padding: token.paddingSM }}>
-        <JsonSchemaEditor value={value} onChange={onChange} />
+        <JsonSchemaEditor defaultExpandAll value={value} onChange={onChange} />
       </div>
     </div>
   )

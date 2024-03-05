@@ -5,9 +5,9 @@ import { Form, Input, type InputRef, Modal, type ModalProps } from 'antd'
 import { nanoid } from 'nanoid'
 
 import type { ApiMenuData } from '@/components/ApiMenu/ApiMenu.type'
-import { CatalogSelector } from '@/components/CatalogSelector'
+import { SelectorCatalog } from '@/components/SelectorCatalog'
+import { ROOT_CATALOG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
-import { ROOT_CATALOG } from '@/hooks/useCatalog'
 
 interface NewCatalogModalProps extends Omit<ModalProps, 'open' | 'onOk'> {
   formData?: Pick<ApiMenuData, 'parentId' | 'type'>
@@ -75,7 +75,7 @@ export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalPr
         </Form.Item>
 
         <Form.Item label="父级目录" name="parentId" required={false} rules={[{ required: true }]}>
-          <CatalogSelector hideCreateNew type={formData?.type} />
+          <SelectorCatalog hideCreateNew type={formData?.type} />
         </Form.Item>
 
         <Form.Item hidden name="type" rules={[{ required: true }]}>

@@ -3,10 +3,11 @@ import { useEffect, useMemo } from 'react'
 import { Button, Form, Input } from 'antd'
 
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
-import { CatalogSelector } from '@/components/CatalogSelector'
+import { SelectorCatalog } from '@/components/SelectorCatalog'
+import { SelectorService } from '@/components/SelectorService'
+import { ROOT_CATALOG, SERVER_INHERIT } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { MenuItemType } from '@/enums'
-import { ROOT_CATALOG } from '@/hooks/useCatalog'
 import type { ApiFolder } from '@/types'
 
 export function FolderSetting() {
@@ -26,7 +27,7 @@ export function FolderSetting() {
       form.setFieldsValue({
         name: apiFolder.name,
         parentId: apiFolder.parentId || ROOT_CATALOG,
-        serverId: apiFolder.data?.serverId,
+        serverId: apiFolder.data?.serverId || SERVER_INHERIT,
         description: apiFolder.data?.description,
       })
     }
@@ -53,7 +54,7 @@ export function FolderSetting() {
         </Form.Item>
 
         <Form.Item label="父级目录" name="parentId" required={false} rules={[{ required: true }]}>
-          <CatalogSelector
+          <SelectorCatalog
             exclued={apiFolder?.id ? [apiFolder.id] : void 0}
             type={MenuItemType.ApiDetailFolder}
           />
@@ -64,7 +65,7 @@ export function FolderSetting() {
           name="serverId"
           tooltip="指定服务后，该目录下的所有接口，运行时都会使用该服务对应的 “前置 URL”（在环境里设置）。"
         >
-          <Input />
+          <SelectorService />
         </Form.Item>
 
         <Form.Item label="备注" name="description">

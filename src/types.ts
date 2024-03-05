@@ -1,7 +1,7 @@
 import type { ApiMenuBase, ApiMenuData } from '@/components/ApiMenu/ApiMenu.type'
-import type { JsonSchema, SchemaType } from '@/components/JsonSchema'
+import type { JsonSchema } from '@/components/JsonSchema'
 
-import type { ApiStatus, CatalogType, HttpMethod, MenuItemType } from './enums'
+import type { ApiStatus, CatalogType, HttpMethod, MenuItemType, ParamType } from './enums'
 
 export type TabContentType = CatalogType | MenuItemType | 'blank'
 
@@ -15,9 +15,9 @@ export interface Creator {
 interface Parameter {
   id: string
   name?: string
-  enabled?: boolean
+  type?: ParamType
+  enable?: boolean
   required?: boolean
-  type?: SchemaType
   description?: string
   example?: string
 }
@@ -51,9 +51,10 @@ export interface ApiDetails {
   serverId?: string
   /** 请求参数 */
   parameters?: {
-    cookie?: []
-    header?: []
+    cookie?: Parameter[]
+    header?: Parameter[]
     query?: Parameter[]
+    path?: Parameter[]
   }
   /** 请求参数 - Body */
   requestBody?: {
@@ -106,9 +107,13 @@ export interface ApiFolder {
   description?: string
 }
 
-export interface RecycleData {
+export interface RecycleDataItem {
   id: string
   deletedItem: ApiMenuData
   creator: Creator
   expiredAt: string
 }
+
+export type RecycleCatalogType = CatalogType.Http | CatalogType.Schema | CatalogType.Request
+
+export type RecycleData = Record<RecycleCatalogType, { list?: RecycleDataItem[] }>

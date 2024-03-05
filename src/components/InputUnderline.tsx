@@ -4,7 +4,7 @@ import { useStyles } from '@/hooks/useStyle'
 
 import { css } from '@emotion/css'
 
-export function UnderlineInput(props: InputProps) {
+export function InputUnderline(props: InputProps) {
   const { token } = theme.useToken()
 
   const { styles } = useStyles(({ token }) => {

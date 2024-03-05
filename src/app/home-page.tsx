@@ -12,7 +12,7 @@ import { ApiTab } from '@/components/ApiTab'
 import { FooterBar } from '@/components/FooterBar'
 import { FileIcon } from '@/components/icons/FileIcon'
 import { IconText } from '@/components/IconText'
-import { SearchInput } from '@/components/SearchInput'
+import { InputSearch } from '@/components/InputSearch'
 import { SideNav } from '@/components/SideNav'
 import { apiMenuConfig } from '@/configs/static'
 import { GlobalContextProvider } from '@/contexts/global'
@@ -80,7 +80,7 @@ function HomeContent() {
             }}
           >
             <Flex gap={token.paddingXXS} style={{ padding: token.paddingXS }}>
-              <SearchInput />
+              <InputSearch />
 
               <ConfigProvider
                 theme={{
@@ -143,10 +143,10 @@ function HomeContent() {
           </PanelResizeHandle>
 
           <Panel
-            className="relative flex h-full flex-col overflow-y-auto overflow-x-hidden"
+            className="relative flex h-full flex-1 flex-col overflow-y-auto overflow-x-hidden"
             minSize={50}
           >
-            <div className="grow overflow-auto">
+            <div className="flex-1 overflow-auto">
               <ApiTab />
             </div>
 

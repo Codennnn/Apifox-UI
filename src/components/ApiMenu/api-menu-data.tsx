@@ -10,7 +10,7 @@ import { HttpMethodText } from '@/components/icons/HttpMethodText'
 import { apiMenuConfig } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
-import { getCatalogType, isMenuFolder } from '@/helpers'
+import { getCatalogType, hasAccentColor, isMenuFolder } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import type { CatalogDataNode, TreeDataNode } from './ApiMenu.type'
@@ -132,7 +132,7 @@ export function useMenuData(): MenuState {
                 >
                   <FileIcon
                     size={15}
-                    style={{ color: catalog.type !== MenuItemType.Doc ? accentColor : void 0 }}
+                    style={{ color: hasAccentColor(catalog.type) ? accentColor : void 0 }}
                     type={catalog.type}
                   />
                 </span>

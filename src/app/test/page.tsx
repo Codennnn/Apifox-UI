@@ -10,48 +10,49 @@ import { type JsonSchema, JsonSchemaEditor, SchemaType } from '@/components/Json
 
 const json: JsonSchema = {
   type: SchemaType.Object,
-  properties: [
-    {
-      name: 'A',
-      type: SchemaType.Integer,
-      displayName: 'aa',
-      description: 'aaa',
-    },
-    {
-      name: 'B',
-      type: SchemaType.Object,
-      properties: [
-        {
-          name: 'B1',
-          type: SchemaType.String,
-        },
-      ],
-      displayName: 'bb',
-      description: 'bbb',
-    },
-    {
-      name: 'C',
-      type: SchemaType.Array,
-      items: {
-        type: SchemaType.Object,
-        properties: [
-          {
-            name: 'C1',
-            type: SchemaType.String,
-          },
-        ],
-      },
-      displayName: 'cc',
-    },
-    {
-      name: 'D',
-      type: SchemaType.Refer,
-      $ref: 'json1',
-      displayName: 'cc',
-    },
-  ],
-  displayName: '对象',
-  description: '说明',
+  properties: [],
+  // properties: [
+  //   {
+  //     name: 'A',
+  //     type: SchemaType.Integer,
+  //     displayName: 'aa',
+  //     description: 'aaa',
+  //   },
+  //   {
+  //     name: 'B',
+  //     type: SchemaType.Object,
+  //     properties: [
+  //       {
+  //         name: 'B1',
+  //         type: SchemaType.String,
+  //       },
+  //     ],
+  //     displayName: 'bb',
+  //     description: 'bbb',
+  //   },
+  //   {
+  //     name: 'C',
+  //     type: SchemaType.Array,
+  //     items: {
+  //       type: SchemaType.Object,
+  //       properties: [
+  //         {
+  //           name: 'C1',
+  //           type: SchemaType.String,
+  //         },
+  //       ],
+  //     },
+  //     displayName: 'cc',
+  //   },
+  //   {
+  //     name: 'D',
+  //     type: SchemaType.Refer,
+  //     $ref: 'json1',
+  //     displayName: 'cc',
+  //   },
+  // ],
+  // displayName: '对象',
+  // description: '说明',
 }
 
 export default function TestPage() {

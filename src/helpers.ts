@@ -105,3 +105,11 @@ export function findChildrenById(arr: ApiMenuData[], id: ApiMenuData['id']): Api
 
   return result
 }
+
+export function hasAccentColor(type: any): boolean {
+  return (
+    type === MenuItemType.ApiDetail ||
+    type === MenuItemType.ApiSchema ||
+    type === MenuItemType.HttpRequest
+  )
+}

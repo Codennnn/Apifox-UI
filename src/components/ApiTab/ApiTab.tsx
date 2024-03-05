@@ -12,7 +12,7 @@ import { HttpMethodText } from '@/components/icons/HttpMethodText'
 import { apiMenuConfig } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { initialCreateApiDetailsData } from '@/data/remote'
-import { getCatalogType, getCreateType, isCreateType } from '@/helpers'
+import { getCatalogType, getCreateType, hasAccentColor, isCreateType } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
@@ -74,7 +74,7 @@ export function ApiTab(props: TabsProps) {
               size={16}
               style={{
                 color:
-                  isCreateType(tabItem.contentType) && tabItem.contentType !== MenuItemType.Doc
+                  isCreateType(tabItem.contentType) && hasAccentColor(tabItem.contentType)
                     ? apiMenuConfig[getCatalogType(getCreateType(tabItem.contentType))].accentColor
                     : void 0,
               }}
@@ -187,7 +187,6 @@ export function ApiTab(props: TabsProps) {
         hideAdd
         activeKey={activeTabKey}
         className={`app-tabs ${styles.appTabs}`}
-        hidden={false}
         items={items}
         renderTabBar={renderTabBar}
         tabBarExtraContent={<ApiTabAction />}

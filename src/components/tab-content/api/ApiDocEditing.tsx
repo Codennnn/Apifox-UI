@@ -8,10 +8,11 @@ import { nanoid } from 'nanoid'
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
 import { GroupTitle } from '@/components/ApiTab/GroupTitle'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
+import { InputUnderline } from '@/components/InputUnderline'
 import { JsonSchemaCard } from '@/components/JsonSchemaCard'
 import { JsonViewer } from '@/components/JsonViewer'
+import { SelectorService } from '@/components/SelectorService'
 import { ApiRemoveButton } from '@/components/tab-content/api/ApiRemoveButton'
-import { UnderlineInput } from '@/components/UnderlineInput'
 import { API_STATUS_CONFIG, HTTP_CODE_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
@@ -38,37 +39,6 @@ const methodOptions: SelectProps['options'] = Object.entries(HTTP_METHOD_CONFIG)
     }
   }
 )
-
-const serviceOptions: SelectProps['options'] = [
-  {
-    label: '默认设置',
-    options: [
-      {
-        label: (
-          <span className="flex items-center justify-between font-normal">
-            <span>继承父级</span>
-            <span className="ml-10 truncate opacity-50">跟随父级目录设置（推荐）</span>
-          </span>
-        ),
-        value: '',
-      },
-    ],
-  },
-  {
-    label: '手动指定',
-    options: [
-      {
-        label: (
-          <span className="flex items-center justify-between font-normal">
-            <span>默认服务</span>
-            <span className="ml-10 truncate opacity-50">http://127.0.0.1（正式环境）</span>
-          </span>
-        ),
-        value: 'default',
-      },
-    ],
-  },
-]
 
 const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).map(
   ([method, { text, color }]) => {
@@ -123,7 +93,10 @@ export function ApiDocEditing() {
       if (menuRawList) {
         const menuData = menuRawList.find(({ id }) => id === tabData.key)
 
-        if (menuData && menuData.type === MenuItemType.ApiDetail) {
+        if (
+          menuData &&
+          (menuData.type === MenuItemType.ApiDetail || menuData.type === MenuItemType.HttpRequest)
+        ) {
           const apiDetails = menuData.data
 
           if (apiDetails) {
@@ -148,7 +121,7 @@ export function ApiDocEditing() {
   })
 
   return (
-    <Form
+    <Form<ApiDetails>
       className="flex h-full flex-col"
       form={form}
       onFinish={(values) => {
@@ -214,7 +187,7 @@ export function ApiDocEditing() {
 
       <div className="flex-1 overflow-y-auto p-tabContent pt-0">
         <Form.Item noStyle name="name">
-          <UnderlineInput placeholder={DEFAULT_NAME} />
+          <InputUnderline placeholder={DEFAULT_NAME} />
         </Form.Item>
 
         <div className="pt-2">
@@ -258,7 +231,7 @@ export function ApiDocEditing() {
                   </span>
                 }
               >
-                <Select options={serviceOptions} />
+                <SelectorService />
               </Form.Item>
             </Col>
 
@@ -270,10 +243,12 @@ export function ApiDocEditing() {
           </Row>
         </div>
 
-        <GroupTitle>请求参数</GroupTitle>
-        <ParamsTab />
+        <GroupTitle className="mt-2">请求参数</GroupTitle>
+        <Form.Item noStyle name="parameters">
+          <ParamsTab />
+        </Form.Item>
 
-        <GroupTitle>返回响应</GroupTitle>
+        <GroupTitle className="mt-8">返回响应</GroupTitle>
         <Tabs
           animated={false}
           className={styles.tabWithBorder}

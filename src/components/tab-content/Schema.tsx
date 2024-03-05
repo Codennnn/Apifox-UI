@@ -6,8 +6,8 @@ import { nanoid } from 'nanoid'
 import type { ApiMenuData } from '@/components/ApiMenu'
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
+import { InputUnderline } from '@/components/InputUnderline'
 import { JsonSchemaCard } from '@/components/JsonSchemaCard'
-import { UnderlineInput } from '@/components/UnderlineInput'
 import { useGlobalContext } from '@/contexts/global'
 import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
 import { initialCreateApiSchemaData } from '@/data/remote'
@@ -98,7 +98,7 @@ export function Schema() {
       >
         <div className="mb-3 flex items-center" style={{ gap: `${token.padding}px` }}>
           <Form.Item noStyle name="name">
-            <UnderlineInput placeholder="数据模型名称，建议使用代码模型名称或同义词" />
+            <InputUnderline placeholder="数据模型名称，建议使用代码模型名称或同义词" />
           </Form.Item>
 
           <Space>

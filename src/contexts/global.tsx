@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 import type { message, Modal } from 'antd'
+import { current, produce } from 'immer'
 import { nanoid } from 'nanoid'
 
 import type { ApiMenuData } from '@/components/ApiMenu'
-import { apiDirectoryData, creator, recycleList } from '@/data/remote'
-import type { RecycleData } from '@/types'
+import { apiDirectoryData, creator, recycleGroupData } from '@/data/remote'
+import { CatalogType } from '@/enums'
+import { getCatalogType } from '@/helpers'
+import type { RecycleCatalogType, RecycleData, RecycleDataItem } from '@/types'
 
 type ModalHookApi = ReturnType<typeof Modal.useModal>[0]
 type MessageApi = ReturnType<typeof message.useMessage>[0]
@@ -18,12 +21,17 @@ interface MenuHelpers {
   /** 更新一个菜单项的信息。 */
   updateMenuItem: (menuData: Partial<ApiMenuData> & Pick<ApiMenuData, 'id'>) => void
   /** 从回收站中恢复菜单项。 */
-  restoreMenuItem: (menuData: Partial<ApiMenuData> & Pick<ApiMenuData, 'id'>) => void
+  restoreMenuItem: (
+    menuData: Partial<ApiMenuData> & {
+      restoreId: RecycleDataItem['id']
+      catalogType: RecycleCatalogType
+    }
+  ) => void
 }
 
 interface GlobalContextData extends MenuHelpers {
   menuRawList?: ApiMenuData[]
-  recyleRawList?: RecycleData[]
+  recyleRawData?: RecycleData
   modal: ModalHookApi
   messageApi: MessageApi
 
@@ -42,11 +50,11 @@ export function GlobalContextProvider(
   const { children, modal, messageApi } = props
 
   const [menuRawList, setMenuRawList] = useState<ApiMenuData[]>()
-  const [recyleRawList, setRecyleRawList] = useState<RecycleData[]>()
+  const [recyleRawData, setRecyleRawData] = useState<RecycleData>()
 
   useEffect(() => {
     setMenuRawList(apiDirectoryData)
-    setRecyleRawList(recycleList)
+    setRecyleRawData(recycleGroupData)
   }, [])
 
   const [menuSearchWord, setMenuSearchWord] = useState<string>()
@@ -60,20 +68,39 @@ export function GlobalContextProvider(
       },
 
       removeMenuItem: ({ id }) => {
-        setMenuRawList((list) =>
-          list?.filter((item) => {
+        setMenuRawList((rawList) =>
+          rawList?.filter((item) => {
             const shouldRemove = item.id === id || item.parentId === id
 
             if (shouldRemove) {
-              setRecyleRawList((rlist = []) => {
-                const exists = rlist.findIndex((it) => it.deletedItem.id === id) !== -1
+              setRecyleRawData((d) =>
+                d
+                  ? produce(d, (draft) => {
+                      let catalogType = getCatalogType(item.type)
 
-                if (exists) {
-                  return rlist
-                }
+                      if (catalogType === CatalogType.Markdown) {
+                        catalogType = CatalogType.Http
+                      }
 
-                return [...rlist, { id: nanoid(), expiredAt: '30天', creator, deletedItem: item }]
-              })
+                      if (
+                        catalogType === CatalogType.Http ||
+                        catalogType === CatalogType.Schema ||
+                        catalogType === CatalogType.Request
+                      ) {
+                        const list = draft[catalogType].list
+
+                        const exists = list?.findIndex((it) => it.deletedItem.id === id) !== -1
+
+                        if (!exists) {
+                          draft[catalogType].list = [
+                            { id: nanoid(), expiredAt: '30天', creator, deletedItem: item },
+                            ...list,
+                          ]
+                        }
+                      }
+                    })
+                  : d
+              )
             }
 
             return !shouldRemove
@@ -93,26 +120,34 @@ export function GlobalContextProvider(
         )
       },
 
-      restoreMenuItem: ({ id }) => {
-        setRecyleRawList((list) => {
-          return list?.filter((item) => {
-            const shouldRestore = item.deletedItem.id === id
+      restoreMenuItem: ({ restoreId, catalogType }) => {
+        setRecyleRawData((d) =>
+          produce(d, (draft) => {
+            if (draft) {
+              const list = draft[catalogType].list
 
-            if (shouldRestore) {
-              setMenuRawList((mlist = []) => {
-                const exists = mlist.findIndex((it) => it.id === id) !== -1
+              draft[catalogType].list = list?.filter((li) => {
+                const shouldRestore = li.id === restoreId
 
-                if (exists) {
-                  return mlist
+                if (shouldRestore) {
+                  const apiMenuDataItem = current(li).deletedItem
+
+                  setMenuRawList((rawList) => {
+                    const exists = rawList?.findIndex((it) => it.id === apiMenuDataItem.id) !== -1
+
+                    if (exists) {
+                      return rawList
+                    }
+
+                    return [...rawList, apiMenuDataItem]
+                  })
                 }
 
-                return [...mlist, item.deletedItem]
+                return !shouldRestore
               })
             }
-
-            return !shouldRestore
           })
-        })
+        )
       },
     }
   }, [])
@@ -121,7 +156,7 @@ export function GlobalContextProvider(
     <GlobalContext.Provider
       value={{
         menuRawList,
-        recyleRawList,
+        recyleRawData,
 
         menuSearchWord,
         setMenuSearchWord,
