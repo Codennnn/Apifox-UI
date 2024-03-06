@@ -34,38 +34,38 @@ export const enum Color {
 export const defaultSchemaTypeConfig = {
   [SchemaType.Void]: {
     text: 'void',
-    hexColor: Color.Warning,
+    varColor: '--color-orange-6',
   },
   [SchemaType.Integer]: {
     text: 'integer',
-    hexColor: Color.Error,
+    varColor: '--color-pink-6',
   },
   [SchemaType.Double]: {
     text: 'double',
-    hexColor: Color.Error,
+    varColor: '--color-orange-6',
   },
   [SchemaType.String]: {
     text: 'string',
-    hexColor: '#047857',
+    varColor: '--color-green-6',
   },
   [SchemaType.Boolean]: {
     text: 'boolean',
-    hexColor: '#f87171',
+    varColor: '--color-pink-6',
   },
   [SchemaType.Array]: {
     text: 'array',
-    hexColor: Color.Success,
+    varColor: '--color-green-6',
   },
   [SchemaType.Object]: {
     text: 'object',
-    hexColor: Color.Primary,
+    varColor: '--color-blue-6',
   },
   [SchemaType.Refer]: {
     text: 'refer',
     label: '引用模型',
-    hexColor: Color.Warning,
+    varColor: '--color-purple-6',
   },
-} as const satisfies Record<SchemaType, { text: string; label?: string; hexColor: string }>
+} as const satisfies Record<SchemaType, { text: string; label?: string; varColor: string }>
 
 export const defaultFieldData: JsonSchema = {
   name: '',

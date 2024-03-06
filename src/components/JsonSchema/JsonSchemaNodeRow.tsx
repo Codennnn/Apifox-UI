@@ -42,12 +42,12 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
     fromRef,
   } = props
 
-  const { styles: s } = useStyles(({ token }) => {
+  const { styles } = useStyles(({ token }) => {
     return {
       tag: css(
         {
           padding: '0 5px',
-          fontSize: '13px',
+          fontSize: '12px',
           borderRadius: '3px',
           cursor: 'default',
           userSelect: 'none',
@@ -70,7 +70,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             display: 'flex',
 
             '&:hover': {
-              backgroundColor: token.colorFillTertiary,
+              backgroundColor: token.colorFillQuaternary,
             },
           },
           { label: 'row' }
@@ -84,7 +84,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             margin: '0 3px',
             fontSize: '13px',
             cursor: 'default',
-            borderBottom: `1px solid ${token.colorBorderSecondary}`,
+            borderBottom: `1px solid ${token.colorFillQuaternary}`,
             transition: 'border-color 0.2s',
 
             '.ant-input': {
@@ -211,21 +211,21 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
 
         action: css(
           {
-            fontSize: '13px',
+            fontSize: '12px',
             cursor: 'pointer',
             userSelect: 'none',
             padding: '2px 5px',
             borderRadius: '4px',
 
             '&:hover': {
-              backgroundColor: token.colorBorderSecondary,
+              backgroundColor: token.colorFillAlter,
             },
           },
           { label: 'action' }
         ),
 
         actionAdd: css({
-          color: token.colorSuccess,
+          color: token.colorSuccessActive,
         }),
 
         actionRemove: css({
@@ -270,13 +270,13 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
   const shouldExpand = expandedKeys?.includes(pathString) || false
 
   return (
-    <div className={s.row.main}>
-      <div className={`${s.row.col} ${s.row.name}`}>
+    <div className={styles.row.main}>
+      <div className={`${styles.row.col} ${styles.row.name}`}>
         <span style={{ width: indentWidth + (fromRef ? INDENT : 0) }} />
 
         {showExpandIcon ? (
           <span
-            className={`${s.row.expandIcon} ${shouldExpand ? s.row.expanded : ''}`}
+            className={`${styles.row.expandIcon} ${shouldExpand ? styles.row.expanded : ''}`}
             style={{ width: INDENT }}
             onClick={() => {
               const newExpandedKeys = shouldExpand
@@ -293,16 +293,16 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
           <span style={{ width: INDENT }} />
         )}
 
-        <span className={`${s.row.nameInner} ${isCustom ? s.colHover : ''}`}>
+        <span className={`${styles.row.nameInner} ${isCustom ? styles.colHover : ''}`}>
           {isRoot || isItems ? (
             <span
-              className={s.tag}
+              className={styles.tag}
               style={{ color: token.colorPrimary, backgroundColor: token.colorPrimaryBg }}
             >
               {isItems ? 'ITEMS' : '根节点'}
             </span>
           ) : (
-            <span className={s.row.nameContent}>
+            <span className={styles.row.nameContent}>
               {readonly ? (
                 name
               ) : (
@@ -319,7 +319,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         </span>
       </div>
 
-      <div className={`${s.row.col} ${s.row.type} ${s.colHover}`}>
+      <div className={`${styles.row.col} ${styles.row.type} ${styles.colHover}`}>
         <Dropdown
           arrow
           menu={{
@@ -372,15 +372,15 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
           trigger={['click']}
         >
           <span
-            className={readonly ? '' : s.typeSelect}
-            style={{ color: defaultSchemaTypeConfig[type].hexColor }}
+            className={readonly ? '' : styles.typeSelect}
+            style={{ color: `var(${defaultSchemaTypeConfig[type].varColor})` }}
           >
             {defaultSchemaTypeConfig[type].text}
           </span>
         </Dropdown>
       </div>
 
-      <div className={`${s.row.col} ${s.row.title} ${s.colHover}`}>
+      <div className={`${styles.row.col} ${styles.row.title} ${styles.colHover}`}>
         <Input
           placeholder="中文名"
           value={displayName}
@@ -390,7 +390,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         />
       </div>
 
-      <div className={`${s.row.col} ${s.row.description} ${s.colHover}`}>
+      <div className={`${styles.row.col} ${styles.row.description} ${styles.colHover}`}>
         <Input
           placeholder="说明"
           value={description}
@@ -404,7 +404,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         return (
           <div
             key={column.key}
-            className={`${s.row.col} ${s.colHover} ${column.colClassName ?? ''}`}
+            className={`${styles.row.col} ${styles.colHover} ${column.colClassName ?? ''}`}
             style={column.colStyle}
           >
             {column.render?.(value[column.key as 'type'], value, { fieldPath })}
@@ -412,9 +412,9 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         )
       })}
 
-      <div className={`${s.row.col} ${s.row.actions}`}>
+      <div className={`${styles.row.col} ${styles.row.actions}`}>
         <span
-          className={`${s.row.action} ${s.row.actionAdd}`}
+          className={`${styles.row.action} ${styles.row.actionAdd}`}
           onClick={() => {
             if (isRoot) {
               onAddField?.([...fieldPath, properties_key, '0'])
@@ -428,7 +428,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
 
         {!isRoot && !isItems && (
           <span
-            className={`${s.row.action} ${s.row.actionRemove}`}
+            className={`${styles.row.action} ${styles.row.actionRemove}`}
             onClick={() => {
               onRemoveField?.(fieldPath)
             }}

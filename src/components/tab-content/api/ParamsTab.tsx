@@ -12,14 +12,14 @@ function BadgeLabel(props: React.PropsWithChildren<{ count?: number }>) {
     <span>
       {children}
 
-      {count && (
+      {typeof count === 'number' && count > 0 ? (
         <span
           className="ml-1 inline-flex size-4 items-center justify-center rounded-full text-xs"
           style={{ backgroundColor: token.colorFillContent, color: token.colorSuccessActive }}
         >
           {count}
         </span>
-      )}
+      ) : null}
     </span>
   )
 }
@@ -64,9 +64,11 @@ export function ParamsTab(props: ParamsTabProps) {
                     <Typography.Text type="secondary">Path 参数</Typography.Text>
                   </div>
                   <ParamsEditableTable
+                    autoNewRow={false}
+                    removable={false}
                     value={value.path}
-                    onChange={(query) => {
-                      onChange?.({ ...value, query })
+                    onChange={(path) => {
+                      onChange?.({ ...value, path })
                     }}
                   />
                 </>

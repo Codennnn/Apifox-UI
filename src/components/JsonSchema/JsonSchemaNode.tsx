@@ -138,7 +138,7 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
                     getNodeLevelInfo([...fieldPath, properties_key, '0']).indentWidth + INDENT,
                 }}
               >
-                <span>
+                <span style={{ color: token.colorTextTertiary }}>
                   没有字段，
                   <span
                     className={css({ color: token.colorPrimary, cursor: 'pointer' })}

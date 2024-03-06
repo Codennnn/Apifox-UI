@@ -1,4 +1,4 @@
-import { ApiStatus, CatalogType, HttpMethod } from '@/enums'
+import { ApiStatus, CatalogType, HttpMethod, ParamType } from '@/enums'
 
 /** 根目录 ID。 */
 export const ROOT_CATALOG = '_'
@@ -167,6 +167,29 @@ export const API_STATUS_CONFIG = {
   {
     text: string
     color: string
+  }
+>
+
+export const PARAMS_CONFIG = {
+  [ParamType.String]: {
+    varColor: '--color-green-6',
+  },
+  [ParamType.Integer]: {
+    varColor: '--color-pink-6',
+  },
+  [ParamType.Boolean]: {
+    varColor: '--color-pink-6',
+  },
+  [ParamType.Number]: {
+    varColor: '--color-pink-6',
+  },
+  [ParamType.Array]: {
+    varColor: '--color-green-6',
+  },
+} as const satisfies Record<
+  ParamType,
+  {
+    varColor: string
   }
 >
 

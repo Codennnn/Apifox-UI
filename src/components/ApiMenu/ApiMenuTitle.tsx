@@ -41,9 +41,9 @@ export function ApiMenuTitle(props: ApiMenuTitleProps) {
   const count = isFolder ? countLeaf(node) : null
 
   return (
-    <span className="flex items-center">
-      <DropdownActions catalog={catalog} isFolder={isFolder} trigger={['contextMenu']}>
-        <span className="flex flex-1 items-center overflow-hidden">
+    <DropdownActions catalog={catalog} isFolder={isFolder} trigger={['contextMenu']}>
+      <span className="flex w-full items-center truncate">
+        <span className="flex items-center truncate pr-1">
           <span className="truncate">{name}</span>
 
           {isFolder && count! > 0 && (
@@ -52,9 +52,9 @@ export function ApiMenuTitle(props: ApiMenuTitleProps) {
             </span>
           )}
         </span>
-      </DropdownActions>
 
-      <AppMenuControls>{actions}</AppMenuControls>
-    </span>
+        <AppMenuControls>{actions}</AppMenuControls>
+      </span>
+    </DropdownActions>
   )
 }

@@ -37,6 +37,8 @@ export interface ApiDetails {
   path?: string
   /** 接口名称 */
   name?: string
+  /** 接口说明 */
+  description?: string
   /** 接口状态 */
   status: ApiStatus
   /** 责任人 */

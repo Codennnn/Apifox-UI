@@ -20,7 +20,7 @@ export function ApiMenuContextProvider(props: React.PropsWithChildren) {
 
   const [expandedMenuKeys, setExpandedMenuKeys] = useState<string[]>(initialExpandedKeys)
 
-  const helpers = useMemo<ExpandedMenuKeysHelpers>(() => {
+  const expandHelpers = useMemo<ExpandedMenuKeysHelpers>(() => {
     return {
       addExpandedMenuKeys: (keys) => {
         setExpandedMenuKeys((k) => Array.from(new Set([...k, ...keys])))
@@ -34,7 +34,7 @@ export function ApiMenuContextProvider(props: React.PropsWithChildren) {
   const menuState = useMenuData()
 
   return (
-    <ApiMenuContext.Provider value={{ expandedMenuKeys, ...helpers, ...menuState }}>
+    <ApiMenuContext.Provider value={{ expandedMenuKeys, ...expandHelpers, ...menuState }}>
       {children}
     </ApiMenuContext.Provider>
   )

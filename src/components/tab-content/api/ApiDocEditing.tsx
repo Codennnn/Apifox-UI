@@ -21,6 +21,7 @@ import { MenuItemType } from '@/enums'
 import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
+import { InputDesc } from './InputDesc'
 import { ParamsTab } from './ParamsTab'
 
 import { css } from '@emotion/css'
@@ -237,7 +238,7 @@ export function ApiDocEditing() {
 
             <Col span={24}>
               <Form.Item label="说明" labelCol={{ span: 24 }} name="description">
-                <Input.TextArea placeholder="支持 Markdown 格式" rows={3} />
+                <InputDesc />
               </Form.Item>
             </Col>
           </Row>

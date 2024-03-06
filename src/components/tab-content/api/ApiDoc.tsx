@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { Viewer } from '@bytemd/react'
 import { Button, Dropdown, Select, type SelectProps, Space, theme, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { Code2Icon, Link2Icon, ZapIcon } from 'lucide-react'
@@ -28,6 +29,14 @@ const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).
     }
   }
 )
+
+function GroupTitle(props: React.PropsWithChildren<{ className?: string }>) {
+  return (
+    <h2 className={`text-base font-normal opacity-80 ${props.className ?? ''}`}>
+      {props.children}
+    </h2>
+  )
+}
 
 function BaseInfoItem({ label, value }: { label: string; value?: string }) {
   const { token } = theme.useToken()
@@ -154,6 +163,17 @@ export function ApiDoc() {
           <BaseInfoItem label="创建者" value={creator.name} />
           <BaseInfoItem label="责任人" value={creator.name} />
         </Space>
+      </div>
+
+      {docValue.description ? (
+        <div>
+          <GroupTitle>接口说明</GroupTitle>
+          <Viewer value={docValue.description} />
+        </div>
+      ) : null}
+
+      <div>
+        <GroupTitle>请求参数</GroupTitle>
       </div>
     </div>
   )

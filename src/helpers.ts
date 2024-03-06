@@ -69,6 +69,31 @@ export function isCreateType(
   )
 }
 
+/** 判断两个菜单是否在同一分组。 */
+export function isMenuSameGroup(left: ApiMenuData, right: ApiMenuData): boolean {
+  switch (left.type) {
+    case MenuItemType.ApiDetailFolder:
+    case MenuItemType.ApiDetail:
+    case MenuItemType.Doc:
+      return (
+        right.type === MenuItemType.ApiDetailFolder ||
+        right.type === MenuItemType.ApiDetail ||
+        right.type === MenuItemType.Doc
+      )
+
+    case MenuItemType.ApiSchemaFolder:
+    case MenuItemType.ApiSchema:
+      return right.type === MenuItemType.ApiSchemaFolder || right.type === MenuItemType.ApiSchema
+
+    case MenuItemType.RequestFolder:
+    case MenuItemType.HttpRequest:
+      return right.type === MenuItemType.RequestFolder || right.type === MenuItemType.HttpRequest
+
+    default:
+      return false
+  }
+}
+
 /** 递归寻找目标菜单的父级文件夹。 */
 export function findFolders(
   menuRawList: ApiMenuData[],

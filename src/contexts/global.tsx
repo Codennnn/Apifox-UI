@@ -7,8 +7,9 @@ import { nanoid } from 'nanoid'
 import type { ApiMenuData } from '@/components/ApiMenu'
 import { apiDirectoryData, creator, recycleGroupData } from '@/data/remote'
 import { CatalogType } from '@/enums'
-import { getCatalogType } from '@/helpers'
+import { getCatalogType, isMenuFolder } from '@/helpers'
 import type { RecycleCatalogType, RecycleData, RecycleDataItem } from '@/types'
+import { moveArrayItem } from '@/utils'
 
 type ModalHookApi = ReturnType<typeof Modal.useModal>[0]
 type MessageApi = ReturnType<typeof message.useMessage>[0]
@@ -27,6 +28,13 @@ interface MenuHelpers {
       catalogType: RecycleCatalogType
     }
   ) => void
+  /** 移动菜单项。 */
+  moveMenuItem: (moveInfo: {
+    dragKey: ApiMenuData['id']
+    dropKey: ApiMenuData['id']
+    /** the drop position relative to the drop node, inside 0, top -1, bottom 1 */
+    dropPosition: 0 | -1 | 1
+  }) => void
 }
 
 interface GlobalContextData extends MenuHelpers {
@@ -148,6 +156,53 @@ export function GlobalContextProvider(
             }
           })
         )
+      },
+
+      moveMenuItem: ({ dragKey, dropKey, dropPosition }) => {
+        setMenuRawList((list = []) => {
+          const { dragMenu, dropMenu, dragMenuIdx, dropMenuIdx } = list.reduce<{
+            dragMenu: ApiMenuData | null
+            dropMenu: ApiMenuData | null
+            dragMenuIdx: number | null
+            dropMenuIdx: number | null
+          }>(
+            (acc, item, idx) => {
+              if (item.id === dragKey) {
+                acc.dragMenu = item
+                acc.dragMenuIdx = idx
+              } else if (item.id === dropKey) {
+                acc.dropMenu = item
+                acc.dropMenuIdx = idx
+              }
+
+              return acc
+            },
+            { dragMenu: null, dropMenu: null, dragMenuIdx: null, dropMenuIdx: null }
+          )
+
+          if (
+            dragMenu &&
+            dropMenu &&
+            typeof dragMenuIdx === 'number' &&
+            typeof dropMenuIdx === 'number'
+          ) {
+            return produce(list, (draft) => {
+              if (isMenuFolder(dropMenu.type) && dropPosition === 0) {
+                draft[dragMenuIdx].parentId = dropMenu.id
+                moveArrayItem(draft, dragMenuIdx, dropMenuIdx + 1)
+              } else if (dropPosition === 1) {
+                if (dragMenu.parentId !== dropMenu.parentId) {
+                  draft[dragMenuIdx].parentId = dropMenu.parentId
+                  moveArrayItem(draft, dragMenuIdx, dropMenuIdx + 1)
+                } else {
+                  moveArrayItem(draft, dragMenuIdx, dropMenuIdx + 1)
+                }
+              }
+            })
+          }
+
+          return list
+        })
       },
     }
   }, [])

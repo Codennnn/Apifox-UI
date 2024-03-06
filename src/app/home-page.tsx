@@ -63,7 +63,7 @@ function HomeContent() {
     <div className="flex h-full" style={{ backgroundColor: token.colorBgContainer }}>
       <SideNav />
 
-      <div className="relative w-full">
+      <div className="relative w-full overflow-hidden">
         <PanelGroup direction="horizontal">
           <Panel
             ref={panelRef}

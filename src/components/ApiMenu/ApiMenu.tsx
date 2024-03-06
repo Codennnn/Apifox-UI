@@ -1,9 +1,11 @@
 import useEvent from 'react-use-event-hook'
 
-import { ConfigProvider, theme, Tree, type TreeProps } from 'antd'
+import { ConfigProvider, Tree, type TreeProps } from 'antd'
 
 import { apiMenuConfig } from '@/configs/static'
+import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
+import { isMenuSameGroup } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
@@ -25,8 +27,7 @@ type TreeOnSelect = NonNullable<TreeProps['onSelect']>
  * - 文件夹可以包含文件和另一个文件夹，包含的关系以层级递进的形式展示。
  */
 export function ApiMenu() {
-  const { token } = theme.useToken()
-
+  const { moveMenuItem } = useGlobalContext()
   const { expandedMenuKeys, addExpandedMenuKeys, removeExpandedMenuKeys, menuTree } =
     useApiMenuContext()
 
@@ -95,6 +96,12 @@ export function ApiMenu() {
           borderRadius: token.borderRadiusSM,
         },
 
+        '&.ant-tree-treenode-selected': {
+          '::before, :hover::before': {
+            backgroundColor: token.colorPrimaryBg,
+          },
+        },
+
         ':hover': {
           '.app-menu-controls': {
             display: 'inline-flex',
@@ -103,6 +110,21 @@ export function ApiMenu() {
       },
     }),
   }))
+
+  const handleDrop: TreeProps['onDrop'] = (info) => {
+    const dropKey = info.node.key
+    const dragKey = info.dragNode.key
+    const dropPos = info.node.pos.split('-')
+    const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1])
+
+    if (
+      typeof dragKey === 'string' &&
+      typeof dropKey === 'string' &&
+      (dropPosition === 0 || dropPosition === 1 || dropPosition === -1)
+    ) {
+      moveMenuItem({ dragKey, dropKey, dropPosition })
+    }
+  }
 
   return (
     <ConfigProvider
@@ -113,7 +135,6 @@ export function ApiMenu() {
             motionDurationSlow: '0',
             colorBgTextHover: 'transparent',
             colorBgContainer: 'transparent',
-            colorPrimary: token.colorFillTertiary,
             colorTextLightSolid: 'currentColor',
           },
         },
@@ -121,14 +142,31 @@ export function ApiMenu() {
     >
       {!!menuTree && (
         <Tree.DirectoryTree
+          blockNode
           showIcon
-          draggable={false}
+          allowDrop={({ dragNode, dropNode }) => {
+            if (dropNode.className?.includes('top-folder')) {
+              return false
+            }
+
+            return isMenuSameGroup(
+              (dragNode as CatalogDataNode).customData.catalog,
+              (dropNode as CatalogDataNode).customData.catalog
+            )
+          }}
+          draggable={{
+            icon: false,
+            nodeDraggable: (node) => {
+              return !node.className?.includes('top-folder')
+            },
+          }}
           expandedKeys={expandedMenuKeys}
           rootClassName={styles.menuTree}
           selectedKeys={selectedKeys}
           switcherIcon={
             ((node) => {
               const hasChildren = node.data?.children?.length
+
               return hasChildren ? (
                 <SwitcherIcon
                   onClick={() => {
@@ -143,6 +181,7 @@ export function ApiMenu() {
             }) as CatalogDataNode['switcherIcon']
           }
           treeData={menuTree}
+          onDrop={handleDrop}
           onSelect={handleMenuSelect}
         />
       )}

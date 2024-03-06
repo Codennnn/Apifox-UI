@@ -4,26 +4,29 @@ import { useStyles } from '@/hooks/useStyle'
 
 import { css } from '@emotion/css'
 
-interface ColumnType<T> {
+interface ColumnType<RecordType> {
   title?: string
   dataIndex?: string
   width?: number | string
-  render?: (text: any, record: T, index: number) => React.ReactNode
+  render?: (text: any, record: RecordType, index: number) => React.ReactNode
 }
 
-interface EditableTableProps<T = any> {
-  columns?: ColumnType<T>[]
-  dataSource?: any[]
+export interface EditableTableProps<RecordType = any> {
+  columns?: ColumnType<RecordType>[]
+  dataSource?: RecordType[]
+  /** 是否自动展示新增行。 */
+  autoNewRow?: boolean
+  newRowRecord?: Partial<RecordType>
 }
 
-export function EditableTable(props: EditableTableProps) {
+export function EditableTable<RecordType = any>(props: EditableTableProps<RecordType>) {
   const { token } = theme.useToken()
 
-  const { columns, dataSource = [{}] } = props
+  const { columns, dataSource = [], autoNewRow, newRowRecord } = props
 
   const { styles } = useStyles(({ token }) => {
     const th = css({
-      color: token.colorTextSecondary,
+      color: token.colorTextTertiary,
       borderBottom: `1px solid ${token.colorBorderSecondary}`,
     })
 
@@ -31,15 +34,29 @@ export function EditableTable(props: EditableTableProps) {
       color: token.colorTextSecondary,
       textAlign: 'left',
       borderBottom: `1px solid ${token.colorBorderSecondary}`,
+      overflow: 'hidden',
 
-      '&:hover, &:focus-within': {
-        outline: `1px solid ${token.colorPrimary}`,
-        borderColor: 'transparent',
+      '&:not(:last-of-type)': {
+        '&:hover, &:focus-within': {
+          outline: `1px solid ${token.colorPrimary}`,
+          borderColor: 'transparent',
+        },
+      },
+
+      '.ant-input': {
+        height: '32px',
+        padding: '0 5px',
+      },
+
+      'textarea.ant-input': {
+        padding: '5px',
       },
     })
 
     return { th, td }
   })
+
+  const internalDataSource = autoNewRow ? [...dataSource, { ...newRowRecord }] : dataSource
 
   return (
     <table
@@ -68,17 +85,18 @@ export function EditableTable(props: EditableTableProps) {
       </thead>
 
       <tbody>
-        {dataSource.map((record, ridx) => (
+        {internalDataSource.map((record, ridx) => (
           <tr key={`${ridx}`}>
             {columns?.map((col, cidx) => {
               return (
                 <td
                   key={`${cidx}`}
                   className={styles.td}
-                  style={{ border: dataSource.length === ridx + 1 ? 'none' : void 0 }}
+                  style={{ border: internalDataSource.length === ridx + 1 ? 'none' : void 0 }}
                 >
-                  {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
-                  {col.dataIndex ? col.render?.(record[col.dataIndex], record, ridx) : null}
+                  {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                  {/* @ts-expect-error */}
+                  {col.render?.(col.dataIndex ? record[col.dataIndex] : null, record, ridx)}
                 </td>
               )
             })}
