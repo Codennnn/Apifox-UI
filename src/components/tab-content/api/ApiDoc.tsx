@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 
 import { Viewer } from '@bytemd/react'
-import { Button, Dropdown, Select, type SelectProps, Space, theme, Tooltip } from 'antd'
+import { Button, Card, Select, type SelectProps, Space, theme, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { Code2Icon, Link2Icon, ZapIcon } from 'lucide-react'
+import { Code2Icon, ZapIcon } from 'lucide-react'
 
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { IconText } from '@/components/IconText'
@@ -11,7 +11,10 @@ import { ApiRemoveButton } from '@/components/tab-content/api/ApiRemoveButton'
 import { API_STATUS_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { creator } from '@/data/remote'
-import type { ApiDetails } from '@/types'
+import { useStyles } from '@/hooks/useStyle'
+import type { ApiDetails, Parameter } from '@/types'
+
+import { css } from '@emotion/css'
 
 const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).map(
   ([method, { text, color }]) => {
@@ -51,6 +54,77 @@ function BaseInfoItem({ label, value }: { label: string; value?: string }) {
   )
 }
 
+function ApiParameter({ param }: { param: Parameter }) {
+  const { token } = theme.useToken()
+
+  const isLongDesc = param.description?.includes('\n')
+
+  return (
+    <div>
+      <Space>
+        <span
+          className="inline-flex items-center text-xs font-semibold"
+          style={{
+            padding: `${token.paddingXXS}px ${token.paddingXS}px`,
+            color: token.colorPrimary,
+            backgroundColor: token.colorPrimaryBg,
+            borderRadius: token.borderRadiusSM,
+          }}
+        >
+          {param.name}
+        </span>
+
+        <span
+          className="font-semibold"
+          style={{
+            color: token.colorTextSecondary,
+          }}
+        >
+          {param.type}
+        </span>
+
+        {!isLongDesc && (
+          <span
+            className="text-xs"
+            style={{
+              color: token.colorTextDescription,
+            }}
+          >
+            {param.description}
+          </span>
+        )}
+      </Space>
+
+      {isLongDesc && (
+        <div
+          className="mt-2 text-xs"
+          style={{
+            color: token.colorTextDescription,
+          }}
+        >
+          <Viewer value={param.description || ''} />
+        </div>
+      )}
+
+      <div className="ml-1 mt-2">
+        <span className="text-xs">示例值：</span>
+        <span
+          className="text-xs"
+          style={{
+            padding: `0 ${token.paddingXXS}px`,
+            color: token.colorTextDescription,
+            backgroundColor: token.colorFillQuaternary,
+            border: `1px solid ${token.colorBorderSecondary}`,
+            borderRadius: token.borderRadiusSM,
+          }}
+        >
+          {param.example}
+        </span>
+      </div>
+    </div>
+  )
+}
+
 export function ApiDoc() {
   const { token } = theme.useToken()
 
@@ -71,40 +145,41 @@ export function ApiDoc() {
     return { docValue: apiDetails, methodConfig }
   }, [menuRawList, tabData.key])
 
+  const { styles } = useStyles(({ token }) => {
+    return {
+      card: css({
+        '&.ant-card': {
+          '> .ant-card-head': {
+            minHeight: 'unset',
+            fontWeight: 'normal',
+            padding: `0 ${token.paddingSM}px`,
+            fontSize: token.fontSize,
+
+            '.ant-card-head-title': {
+              padding: `${token.paddingXS}px 0`,
+            },
+          },
+        },
+      }),
+    }
+  })
+
   if (!docValue || !methodConfig) {
     return null
   }
 
   return (
-    <div>
+    <div className="h-full p-tabContent">
       <div className="flex items-center">
         <Space className="group/action">
-          <h2 className="text-base font-medium">{docValue.name}</h2>
+          <h2 className="text-base font-semibold">{docValue.name}</h2>
 
           <Space className="opacity-0 group-hover/action:opacity-100" size="small">
             <Tooltip title="复制 ID">
               <Button size="small" type="link">
-                <IconText icon={<Link2Icon size={14} />} text={docValue.id} />
+                #{docValue.id}
               </Button>
             </Tooltip>
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: '1',
-                    label: '复制协作链接',
-                  },
-                  {
-                    key: '2',
-                    label: '复制接口信息',
-                  },
-                ],
-              }}
-            >
-              <Button size="small" type="text">
-                <IconText icon={<Link2Icon size={14} />} />
-              </Button>
-            </Dropdown>
           </Space>
         </Space>
 
@@ -174,6 +249,27 @@ export function ApiDoc() {
 
       <div>
         <GroupTitle>请求参数</GroupTitle>
+        {docValue.parameters ? (
+          <>
+            <Card className={styles.card} title="Path 参数">
+              <div className="flex flex-col gap-3">
+                {docValue.parameters.path?.map((param) => (
+                  <ApiParameter key={param.id} param={param} />
+                ))}
+              </div>
+            </Card>
+
+            <Card className={styles.card} title="Query 参数">
+              <div className="flex flex-col gap-3">
+                {docValue.parameters.query?.map((param) => (
+                  <ApiParameter key={param.id} param={param} />
+                ))}
+              </div>
+            </Card>
+          </>
+        ) : (
+          '无'
+        )}
       </div>
     </div>
   )

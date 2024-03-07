@@ -118,7 +118,7 @@ export function useMenuData(): MenuState {
             if (item.isLeaf) {
               if (isHttp) {
                 return (
-                  <span className="mr-1 inline-block w-[29px] whitespace-nowrap text-left text-xs/none font-medium">
+                  <span className="mr-1 inline-block w-[29px] whitespace-nowrap text-left text-xs/none font-semibold">
                     <HttpMethodText method={catalog.data?.method} />
                   </span>
                 )

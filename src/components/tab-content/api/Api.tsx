@@ -24,7 +24,7 @@ export function Api() {
         key: 'doc',
         label: '文档',
         children: (
-          <ApiTabContentWrapper className="p-tabContent">
+          <ApiTabContentWrapper>
             <ApiDoc />
           </ApiTabContentWrapper>
         ),

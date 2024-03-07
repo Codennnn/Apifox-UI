@@ -23,6 +23,7 @@
   --color-purple-6: #9373ee;
   --color-red-6: #f5222d;
   --color-grey-6: rgb(170 170 170);
+  --color-scrollbar-thumb: rgb(0 0 0 / 15%);
 
   color-scheme: light;
 }
@@ -39,8 +40,23 @@
   --color-purple-6: #9383f1;
   --color-red-6: #d32029;
   --color-grey-6: rgb(170 170 170);
+  --color-scrollbar-thumb: rgb(255 255 255 / 30%);
 
   color-scheme: dark;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* 
@@ -86,6 +102,30 @@
   }
 }
 
+.ant-tabs.ant-tabs-card {
+  > .ant-tabs-nav .ant-tabs-tab {
+    &:hover,
+    &.ant-tabs-tab-active {
+      color: currentcolor;
+
+      .ant-tabs-tab-btn {
+        color: currentcolor;
+      }
+    }
+  }
+
+  > .app-tabs-wrap .ant-tabs-nav .ant-tabs-tab {
+    &:hover,
+    &.ant-tabs-tab-active {
+      color: currentcolor;
+
+      .ant-tabs-tab-btn {
+        color: currentcolor;
+      }
+    }
+  }
+}
+
 .app-tabs {
   &.ant-tabs {
     @apply h-full;
@@ -97,6 +137,24 @@
     .app-tabs-wrap {
       .ant-tabs-nav-wrap {
         flex: none;
+
+        .ant-tabs-tab:not(.ant-tabs-tab-active) {
+          border-color: transparent;
+
+          &::before {
+            position: absolute;
+            right: -4px;
+            width: 1px;
+            height: 24px;
+            content: '';
+          }
+        }
+
+        .ant-tabs-tab:hover {
+          .main-tabs-tab-close-icon {
+            opacity: 1;
+          }
+        }
       }
 
       .ant-tabs-nav-list {
@@ -127,30 +185,6 @@
         .ant-tabs-tabpane {
           @apply h-full;
         }
-      }
-    }
-  }
-}
-
-.ant-tabs.ant-tabs-card {
-  > .ant-tabs-nav .ant-tabs-tab {
-    &:hover,
-    &.ant-tabs-tab-active {
-      color: currentcolor;
-
-      .ant-tabs-tab-btn {
-        color: currentcolor;
-      }
-    }
-  }
-
-  > .app-tabs-wrap .ant-tabs-nav .ant-tabs-tab {
-    &:hover,
-    &.ant-tabs-tab-active {
-      color: currentcolor;
-
-      .ant-tabs-tab-btn {
-        color: currentcolor;
       }
     }
   }

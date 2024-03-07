@@ -250,89 +250,105 @@ export function ApiDocEditing() {
         </Form.Item>
 
         <GroupTitle className="mt-8">返回响应</GroupTitle>
-        <Tabs
-          animated={false}
-          className={styles.tabWithBorder}
-          items={[
-            {
-              key: '1',
-              label: '成功(200)',
-              children: (
-                <div className="p-tabContent">
-                  <Row>
-                    <Col className="px-8" lg={8} md={6}>
-                      <Form.Item label="HTTP 状态码" name={['responses', 0, 'code']}>
-                        <Select
-                          optionRender={({ label, data }) => (
-                            <span className="group flex items-center">
-                              {label}
-                              <span className="ml-3 font-normal opacity-65">
-                                {data.text as string}
-                              </span>
-                              <Tooltip title={`${data.desc as string}。`}>
-                                <InfoIcon
-                                  className="ml-auto mr-1 opacity-0 transition-opacity group-hover:opacity-100"
-                                  size={14}
-                                />
-                              </Tooltip>
-                            </span>
-                          )}
-                          options={httpCodeOptions}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col className="px-8" lg={8} md={6}>
-                      <Form.Item label="名称" name={['responses', 0, 'name']}>
-                        <Input />
-                      </Form.Item>
-                    </Col>
-                    <Col className="px-8" lg={8} md={6}>
-                      <Form.Item label="内容格式" name={['responses', 0, 'contentType']}>
-                        <Select options={contentTypeOptions} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
+        <Form.Item
+          shouldUpdate={(prev: ApiDetails, curr: ApiDetails) => prev.responses !== curr.responses}
+        >
+          {({ getFieldValue }) => {
+            const responses: ApiDetails['responses'] = getFieldValue('responses')
 
-                  <Form.Item noStyle name={['responses', 0, 'jsonSchema']}>
-                    <JsonSchemaCard />
-                  </Form.Item>
+            return (
+              <Tabs
+                animated={false}
+                className={styles.tabWithBorder}
+                items={responses?.map((resp, idx) => {
+                  return {
+                    key: `${idx}`,
+                    label: `${resp.name}(${resp.code})`,
+                    children: (
+                      <div className="p-tabContent">
+                        <Row>
+                          <Col className="px-8" lg={8} md={6}>
+                            <Form.Item label="HTTP 状态码" name={['responses', idx, 'code']}>
+                              <Select
+                                optionRender={({ label, data }) => (
+                                  <span className="group flex items-center">
+                                    {label}
+                                    <span className="ml-3 font-normal opacity-65">
+                                      {data.text as string}
+                                    </span>
+                                    <Tooltip title={`${data.desc as string}。`}>
+                                      <InfoIcon
+                                        className="ml-auto mr-1 opacity-0 transition-opacity group-hover:opacity-100"
+                                        size={14}
+                                      />
+                                    </Tooltip>
+                                  </span>
+                                )}
+                                options={httpCodeOptions}
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col className="px-8" lg={8} md={6}>
+                            <Form.Item label="名称" name={['responses', idx, 'name']}>
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                          <Col className="px-8" lg={8} md={6}>
+                            <Form.Item label="内容格式" name={['responses', idx, 'contentType']}>
+                              <Select options={contentTypeOptions} />
+                            </Form.Item>
+                          </Col>
+                        </Row>
 
-                  <Form.Item dependencies={['responseExamples']}>
-                    {({ getFieldValue }) => {
-                      const examples = getFieldValue([
-                        'responseExamples',
-                      ]) as ApiDetails['responseExamples']
-                      return (
-                        <Tabs
-                          className={styles.tabWithBorder}
-                          items={examples?.map((it, idx) => {
-                            return {
-                              key: it.id,
-                              label: it.name,
-                              children: (
-                                <div className="p-tabContent">
-                                  <Form.Item noStyle name={['responseExamples', idx, 'data']}>
-                                    <JsonViewer />
-                                  </Form.Item>
-                                </div>
-                              ),
-                            }
-                          })}
-                          type="card"
-                        />
-                      )
-                    }}
-                  </Form.Item>
-                </div>
-              ),
-            },
-            {
-              key: '2',
-              label: '公共响应',
-            },
-          ]}
-          type="card"
-        />
+                        <Form.Item noStyle name={['responses', idx, 'jsonSchema']}>
+                          <JsonSchemaCard />
+                        </Form.Item>
+
+                        <Form.Item dependencies={['responseExamples']}>
+                          {({ getFieldValue: getFieldValue2 }) => {
+                            const examples: ApiDetails['responseExamples'] = getFieldValue2([
+                              'responseExamples',
+                            ])
+                            const targetExamples = examples?.filter(
+                              ({ responseId }) => responseId === resp.id
+                            )
+
+                            return (
+                              <Tabs
+                                className={styles.tabWithBorder}
+                                items={targetExamples?.map((it, i) => {
+                                  const targetIdx = examples?.findIndex((itt) => itt.id === it.id)
+
+                                  return {
+                                    key: `${i}`,
+                                    label: it.name,
+                                    children:
+                                      typeof targetIdx === 'number' && targetIdx !== -1 ? (
+                                        <div className="p-tabContent">
+                                          <Form.Item
+                                            noStyle
+                                            name={['responseExamples', targetIdx, 'data']}
+                                          >
+                                            <JsonViewer />
+                                          </Form.Item>
+                                        </div>
+                                      ) : null,
+                                  }
+                                })}
+                                type="card"
+                              />
+                            )
+                          }}
+                        </Form.Item>
+                      </div>
+                    ),
+                  }
+                })}
+                type="card"
+              />
+            )
+          }}
+        </Form.Item>
       </div>
     </Form>
   )

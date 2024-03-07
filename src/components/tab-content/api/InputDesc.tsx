@@ -9,14 +9,25 @@ import { MarkdownEditor } from '@/components/MarkdownEditor'
 export function InputDesc({
   value,
   onChange,
-}: Pick<React.ComponentProps<typeof Input.TextArea>, 'onChange'> & { value?: string }) {
+}: {
+  value?: string
+  onChange?: (value: string) => void
+}) {
   const { token } = theme.useToken()
 
   const [open, setOpen] = useState(false)
+  const [editorValue, setEditorValue] = useState('')
 
   return (
     <div className="relative">
-      <Input.TextArea placeholder="支持 Markdown 格式" rows={3} value={value} onChange={onChange} />
+      <Input.TextArea
+        placeholder="支持 Markdown 格式"
+        rows={3}
+        value={value}
+        onChange={(ev) => {
+          onChange?.(ev.target.value)
+        }}
+      />
 
       <div className="absolute right-1 top-1 z-50">
         <Button
@@ -31,21 +42,40 @@ export function InputDesc({
       </div>
 
       <Modal
+        afterOpenChange={(opened) => {
+          if (opened) {
+            if (value) {
+              setEditorValue(value)
+            }
+          } else {
+            setEditorValue('')
+          }
+        }}
+        maskClosable={false}
         open={open}
         title="接口说明"
         width={1200}
         onCancel={() => {
           setOpen(false)
         }}
+        onOk={() => {
+          setOpen(false)
+          onChange?.(editorValue)
+        }}
       >
         <div
-          className="min-h-96 overflow-hidden"
+          className="h-[calc(100vh_-_340px)] overflow-hidden [&_.bytemd]:border-t-0"
           style={{
             border: `1px solid ${token.colorBorderSecondary}`,
             borderRadius: token.borderRadius,
           }}
         >
-          <MarkdownEditor value={value || ''} />
+          <MarkdownEditor
+            value={editorValue}
+            onChange={(val) => {
+              setEditorValue(val)
+            }}
+          />
         </div>
       </Modal>
     </div>

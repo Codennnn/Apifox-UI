@@ -22,8 +22,20 @@ export interface Parameter {
   example?: string
 }
 
-export interface ApiDetailsResponseExample {
+interface ApiDetailsResponse {
   id: string
+  /** HTTP 状态码 */
+  code: number
+  /** 名称 */
+  name: string
+  /** 内容格式 */
+  contentType?: string
+  jsonSchema?: JsonSchema
+}
+
+interface ApiDetailsResponseExample {
+  id: string
+  responseId: ApiDetailsResponse['id']
   name: string
   data: string
 }
@@ -37,8 +49,6 @@ export interface ApiDetails {
   path?: string
   /** 接口名称 */
   name?: string
-  /** 接口说明 */
-  description?: string
   /** 接口状态 */
   status: ApiStatus
   /** 责任人 */
@@ -51,6 +61,8 @@ export interface ApiDetails {
   tags?: string[]
   /** 前置 URL 选择 */
   serverId?: string
+  /** 接口说明 */
+  description?: string
   /** 请求参数 */
   parameters?: {
     cookie?: Parameter[]
@@ -63,15 +75,7 @@ export interface ApiDetails {
     parameters: Parameter[]
   }
   /** 返回响应 */
-  responses?: {
-    /** HTTP 状态码 */
-    code?: number
-    /** 名称 */
-    name?: string
-    /** 内容格式 */
-    contentType?: string
-    jsonSchema?: JsonSchema
-  }[]
+  responses?: ApiDetailsResponse[]
   /** 响应示例 */
   responseExamples?: ApiDetailsResponseExample[]
   /** 接口文档创建时间 */

@@ -61,12 +61,12 @@ export function ApiTab(props: TabsProps) {
         <span className="app-tabs-tab-label flex items-center gap-1">
           {menuData?.type === MenuItemType.ApiDetail ||
           menuData?.type === MenuItemType.HttpRequest ? (
-            <span className="mr-1 font-medium">
+            <span className="mr-1 font-semibold">
               <HttpMethodText method={menuData.data?.method} />
             </span>
           ) : tabItem.contentType === MenuItemType.ApiDetail &&
             tabItem.data?.tabStatus === PageTabStatus.Create ? (
-            <span className="mr-1 font-medium">
+            <span className="mr-1 font-semibold">
               <HttpMethodText method={initialCreateApiDetailsData.method} />
             </span>
           ) : (
@@ -147,9 +147,11 @@ export function ApiTab(props: TabsProps) {
       appTabs: css({
         '&.ant-tabs': {
           '.app-tabs-wrap': {
-            '.ant-tabs-tab:hover': {
-              '.main-tabs-tab-close-icon': {
-                opacity: 1,
+            '.ant-tabs-tab': {
+              '&:not(.ant-tabs-tab-active)': {
+                '&::before': {
+                  backgroundColor: token.colorBorder,
+                },
               },
             },
 

@@ -8,6 +8,9 @@ import { ApiStatus, CatalogType, HttpMethod, MenuId, MenuItemType, ParamType } f
 import { findFolders } from '@/helpers'
 import type { ApiDetails, ApiSchema, Creator, RecycleData } from '@/types'
 
+const RESPONSE_ID_1 = nanoid()
+const RESPONSE_ID_2 = nanoid()
+
 export const creator: Creator = {
   id: nanoid(),
   name: '张三',
@@ -54,6 +57,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       serverId: SERVER_INHERIT,
       responses: [
         {
+          id: nanoid(),
           code: 200,
           name: '成功',
           contentType: 'json',
@@ -99,6 +103,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       responsibleId: creator.id,
       tags: ['宠物'],
       serverId: SERVER_INHERIT,
+      description: '## 接口说明',
       parameters: {
         query: [
           {
@@ -134,6 +139,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       },
       responses: [
         {
+          id: RESPONSE_ID_1,
           code: 200,
           name: '成功',
           contentType: 'json',
@@ -154,10 +160,21 @@ export const apiDirectoryData: ApiMenuData[] = [
             ],
           },
         },
+        {
+          id: RESPONSE_ID_2,
+          code: 404,
+          name: '记录不存在',
+          contentType: 'json',
+          jsonSchema: {
+            type: SchemaType.Object,
+            properties: [],
+          },
+        },
       ],
       responseExamples: [
         {
           id: '1',
+          responseId: RESPONSE_ID_1,
           name: '成功示例',
           data: JSON.stringify({
             code: 0,
@@ -181,7 +198,8 @@ export const apiDirectoryData: ApiMenuData[] = [
         },
         {
           id: '2',
-          name: '记录不存在',
+          responseId: RESPONSE_ID_2,
+          name: '异常示例',
           data: JSON.stringify({
             code: -1,
             message: 'Not found',
@@ -206,31 +224,6 @@ export const apiDirectoryData: ApiMenuData[] = [
       responsibleId: creator.id,
       tags: ['宠物'],
       serverId: SERVER_INHERIT,
-      responseExamples: [
-        {
-          id: '1',
-          name: '成功示例',
-          data: JSON.stringify({
-            code: 0,
-            data: {
-              name: 'Hello Kitty',
-              photoUrls: ['http://dummyimage.com/400x400'],
-              id: 3,
-              category: {
-                id: 71,
-                name: 'Cat',
-              },
-              tags: [
-                {
-                  id: 22,
-                  name: 'Cat',
-                },
-              ],
-              status: 'sold',
-            },
-          }),
-        },
-      ],
     },
   },
   {
@@ -284,7 +277,7 @@ export const apiDirectoryData: ApiMenuData[] = [
             items: {
               type: SchemaType.String,
             },
-            description: '照片URL',
+            description: '照片 URL',
           },
           {
             name: 'status',
@@ -364,13 +357,14 @@ export const apiDirectoryData: ApiMenuData[] = [
     data: {
       id: nanoid(),
       path: 'https://abc.com',
-      name: '查询宠物详情',
+      name: '快捷接口示例',
       method: HttpMethod.Get,
       status: ApiStatus.Developing,
       tags: ['宠物'],
       serverId: SERVER_INHERIT,
       responses: [
         {
+          id: nanoid(),
           code: 200,
           name: '成功',
           contentType: 'json',
@@ -539,6 +533,7 @@ export const initialCreateApiDetailsData: ApiDetails = {
   serverId: SERVER_INHERIT,
   responses: [
     {
+      id: nanoid(),
       code: 200,
       name: '成功',
       contentType: 'json',
