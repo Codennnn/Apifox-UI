@@ -81,7 +81,7 @@ export function ThemeProvider(props: React.PropsWithChildren<ThemeProviderProps>
                     colorTextLightSolid: token.colorText,
                     colorBgSpotlight: token.colorBgContainer,
                   }
-                : void 0,
+                : undefined,
           },
         }}
       >

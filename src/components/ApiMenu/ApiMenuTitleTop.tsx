@@ -14,8 +14,8 @@ import {
 
 import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
 import { FileIcon } from '@/components/icons/FileIcon'
-import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
-import { apiMenuConfig, ROOT_CATALOG } from '@/configs/static'
+import { ModalNewCatalog } from '@/components/modals/ModalNewCatalog'
+import { API_MENU_CONFIG, ROOT_CATALOG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
 import { getCreateType, isMenuFolder } from '@/helpers'
@@ -64,7 +64,7 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
     return menuFolderKeys.every((key) => expandedMenuKeys.includes(key))
   }, [menuFolderKeys, expandedMenuKeys])
 
-  const { title, newLabel } = apiMenuConfig[topMenuType]
+  const { title, newLabel } = API_MENU_CONFIG[topMenuType]
 
   const noActions = topMenuType === CatalogType.Overview || topMenuType === CatalogType.Recycle
 
@@ -109,7 +109,7 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
                   onClick: (ev) => {
                     ev.domEvent.stopPropagation()
 
-                    void show(NewCatalogModal, {
+                    void show(ModalNewCatalog, {
                       formData: {
                         parentId: ROOT_CATALOG,
                         type:

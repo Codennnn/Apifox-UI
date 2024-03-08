@@ -2,7 +2,7 @@ import { Button, ConfigProvider, Popconfirm, Table, Tabs, theme, Tooltip } from 
 
 import { FileIcon } from '@/components/icons/FileIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
-import { apiMenuConfig } from '@/configs/static'
+import { API_MENU_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
 import { hasAccentColor } from '@/helpers'
@@ -28,7 +28,7 @@ function RecycleTable(props: RecycleTableProps) {
           dataIndex: 'deletedItem',
           render: (x: RecycleDataItem['deletedItem']) => {
             const isHttp = x.type === MenuItemType.ApiDetail || x.type === MenuItemType.HttpRequest
-            const { accentColor } = apiMenuConfig[catalogType]
+            const { accentColor } = API_MENU_CONFIG[catalogType]
 
             return (
               <div className="inline-flex items-center gap-x-1">
@@ -37,7 +37,7 @@ function RecycleTable(props: RecycleTableProps) {
                 ) : (
                   <FileIcon
                     size={15}
-                    style={{ color: hasAccentColor(x.type) ? accentColor : void 0 }}
+                    style={{ color: hasAccentColor(x.type) ? accentColor : undefined }}
                     type={x.type}
                   />
                 )}

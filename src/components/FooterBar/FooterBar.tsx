@@ -3,7 +3,7 @@ import { Button, type ButtonProps, Space } from 'antd'
 import { ChevronsLeftIcon, ChevronsRightIcon, GithubIcon, ShirtIcon } from 'lucide-react'
 
 import { IconText } from '@/components/IconText'
-import { SettingsModal } from '@/components/modals/SettingsModal'
+import { ModalSettings } from '@/components/modals/ModalSettings'
 import { useLayoutContext } from '@/contexts/layout-settings'
 
 function SmallButton({ children, ...props }: React.PropsWithChildren<ButtonProps>) {
@@ -40,7 +40,7 @@ export function FooterBar() {
       <Space className="ml-auto flex items-center" size={0}>
         <SmallButton
           onClick={() => {
-            void show(SettingsModal)
+            void show(ModalSettings)
           }}
         >
           <IconText icon={<ShirtIcon size={14} />} />

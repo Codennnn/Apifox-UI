@@ -70,10 +70,10 @@ export function Doc() {
             <Button
               type="primary"
               onClick={() => {
-                const values: ApiDoc = { id: nanoid(), name: name || DEFAULT_DOC_NAME, content }
+                const values: ApiDoc = { id: nanoid(6), name: name || DEFAULT_DOC_NAME, content }
 
                 if (isCreating) {
-                  const menuItemId = nanoid()
+                  const menuItemId = nanoid(6)
 
                   addMenuItem({
                     id: menuItemId,
@@ -122,7 +122,7 @@ export function Doc() {
         <div
           className="flex items-center"
           style={{
-            padding: `${token.paddingXS}px 0`,
+            padding: `${token.paddingXS}px ${token.paddingSM}px`,
             borderBottom: `1px solid ${token.colorBorderSecondary}`,
           }}
         >
@@ -137,7 +137,12 @@ export function Doc() {
           </Button>
         </div>
 
-        <div className="flex-1 overflow-auto">
+        <div
+          className="flex-1 overflow-auto"
+          style={{
+            padding: `${token.paddingSM}px`,
+          }}
+        >
           <Viewer value={docValue?.content || ''} />
         </div>
       </div>

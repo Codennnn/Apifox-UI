@@ -193,7 +193,7 @@ export const PARAMS_CONFIG = {
   }
 >
 
-export const apiMenuConfig = {
+export const API_MENU_CONFIG = {
   [CatalogType.Overview]: {
     title: '项目概况',
     newLabel: '',

@@ -1,5 +1,5 @@
 import type { ApiMenuData } from '@/components/ApiMenu'
-import { CatalogType, MenuItemType } from '@/enums'
+import { CatalogType, ContentType, MenuItemType } from '@/enums'
 
 export function getCatalogType(type: MenuItemType): CatalogType {
   switch (type) {
@@ -137,4 +137,26 @@ export function hasAccentColor(type: any): boolean {
     type === MenuItemType.ApiSchema ||
     type === MenuItemType.HttpRequest
   )
+}
+
+export function getContentTypeString(type: ContentType): string {
+  switch (type) {
+    case ContentType.JSON:
+      return 'application/json'
+
+    case ContentType.XML:
+      return 'application/xml'
+
+    case ContentType.HTML:
+      return 'text/html'
+
+    case ContentType.Raw:
+      return 'text/plain'
+
+    case ContentType.Binary:
+      return 'application/octet-stream'
+
+    default:
+      return 'text/plain'
+  }
 }

@@ -55,7 +55,7 @@ export function FolderSetting() {
 
         <Form.Item label="父级目录" name="parentId" required={false} rules={[{ required: true }]}>
           <SelectorCatalog
-            exclued={apiFolder?.id ? [apiFolder.id] : void 0}
+            exclued={apiFolder?.id ? [apiFolder.id] : undefined}
             type={MenuItemType.ApiDetailFolder}
           />
         </Form.Item>

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-import { Button, ConfigProvider, Space, Tabs, type TabsProps, theme, Tooltip } from 'antd'
+import { Button, ConfigProvider, Tabs, type TabsProps, theme, Tooltip } from 'antd'
 import { PanelRightIcon } from 'lucide-react'
 
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
@@ -10,6 +10,7 @@ import { IconText } from '@/components/IconText'
 
 import { ApiDoc } from './ApiDoc'
 import { ApiDocEditing } from './ApiDocEditing'
+import { ApiSidePanel } from './ApiSidePanel'
 
 export function Api() {
   const { token } = theme.useToken()
@@ -70,7 +71,7 @@ export function Api() {
                     <Button
                       size="small"
                       style={{
-                        backgroundColor: panelOpen ? token.colorFillSecondary : void 0,
+                        backgroundColor: panelOpen ? token.colorFillSecondary : undefined,
                       }}
                       type="text"
                       onClick={() => {
@@ -84,28 +85,12 @@ export function Api() {
               }
             />
 
-            <div
-              className={`h-full overflow-hidden ${panelOpen ? 'flex' : 'hidden'}`}
-              style={{
-                borderLeft: `1px solid ${token.colorBorderSecondary}`,
+            <ApiSidePanel
+              open={panelOpen}
+              onClose={() => {
+                setPanelOpen(false)
               }}
-            >
-              <div style={{ width: 320 }}>
-                <div
-                  className="flex h-[50px] items-center px-4 py-2"
-                  style={{ borderBottom: `1px solid ${token.colorBorderSecondary}` }}
-                >
-                  <span className="text-base font-medium">历史记录</span>
-                </div>
-              </div>
-
-              <div
-                className="h-full p-1"
-                style={{ borderLeft: `1px solid ${token.colorBorderSecondary}` }}
-              >
-                <Space direction="vertical"></Space>
-              </div>
-            </div>
+            />
           </div>
         )}
       </ConfigProvider>

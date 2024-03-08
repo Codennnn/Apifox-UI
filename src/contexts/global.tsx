@@ -101,7 +101,7 @@ export function GlobalContextProvider(
 
                         if (!exists) {
                           draft[catalogType].list = [
-                            { id: nanoid(), expiredAt: '30天', creator, deletedItem: item },
+                            { id: nanoid(6), expiredAt: '30天', creator, deletedItem: item },
                             ...list,
                           ]
                         }
@@ -120,7 +120,11 @@ export function GlobalContextProvider(
         setMenuRawList((list) =>
           list?.map((item) => {
             if (item.id === id) {
-              return { ...item, ...rest } as ApiMenuData
+              return {
+                ...item,
+                ...rest,
+                data: { ...item.data, ...rest.data, name: rest.name || item.name },
+              } as ApiMenuData
             }
 
             return item

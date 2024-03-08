@@ -1,5 +1,5 @@
 import { CaretRightOutlined, MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { Dropdown, Input, theme } from 'antd'
+import { Dropdown, Input, theme, Tooltip } from 'antd'
 import { omit } from 'lodash'
 
 import { useStyles } from '@/hooks/useStyle'
@@ -413,18 +413,20 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
       })}
 
       <div className={`${styles.row.col} ${styles.row.actions}`}>
-        <span
-          className={`${styles.row.action} ${styles.row.actionAdd}`}
-          onClick={() => {
-            if (isRoot) {
-              onAddField?.([...fieldPath, properties_key, '0'])
-            } else {
-              onAddField?.(fieldPath)
-            }
-          }}
-        >
-          <PlusCircleOutlined />
-        </span>
+        <Tooltip title={isRoot ? '添加子节点' : '添加相邻节点'}>
+          <span
+            className={`${styles.row.action} ${styles.row.actionAdd}`}
+            onClick={() => {
+              if (isRoot) {
+                onAddField?.([...fieldPath, properties_key, '0'])
+              } else {
+                onAddField?.(fieldPath)
+              }
+            }}
+          >
+            <PlusCircleOutlined />
+          </span>
+        </Tooltip>
 
         {!isRoot && !isItems && (
           <span

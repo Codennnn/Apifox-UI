@@ -55,9 +55,9 @@ const renderMenuContent = (props: { menuKey: SettingsMenuKey }) => {
   }
 }
 
-type SettingsModalProps = Omit<ModalProps, 'open' | 'footer'>
+type ModalSettingsProps = Omit<ModalProps, 'open' | 'footer'>
 
-export const SettingsModal = create((props: SettingsModalProps) => {
+export const ModalSettings = create((props: ModalSettingsProps) => {
   const { token } = theme.useToken()
 
   const modal = useModal()

@@ -39,7 +39,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
             ...target,
             ...v,
             type: ParamType.String,
-            id: nanoid(),
+            id: nanoid(6),
           },
         ])
       }
@@ -59,7 +59,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
               <div>
                 <Input
                   placeholder="添加参数"
-                  value={typeof text === 'string' ? text : void 0}
+                  value={typeof text === 'string' ? text : undefined}
                   variant="borderless"
                   onChange={(ev) => {
                     handleChange({ name: ev.target.value }, idx)
@@ -92,10 +92,10 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                     color:
                       typeof text === 'string'
                         ? `var(${PARAMS_CONFIG[text as ParamType].varColor})`
-                        : void 0,
+                        : undefined,
                   }}
                   suffixIcon={null}
-                  value={typeof text === 'string' ? text : void 0}
+                  value={typeof text === 'string' ? text : undefined}
                   variant="borderless"
                   onChange={(val) => {
                     handleChange({ type: val }, idx)
@@ -112,7 +112,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
           render: (text, _, idx) => {
             return (
               <Input
-                value={typeof text === 'string' ? text : void 0}
+                value={typeof text === 'string' ? text : undefined}
                 variant="borderless"
                 onChange={(ev) => {
                   handleChange({ example: ev.target.value }, idx)
@@ -135,7 +135,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                     overflowY: 'hidden',
                     resize: 'none',
                   }}
-                  value={typeof text === 'string' ? text : void 0}
+                  value={typeof text === 'string' ? text : undefined}
                   variant="borderless"
                   onChange={(ev) => {
                     handleChange({ description: ev.target.value }, idx)

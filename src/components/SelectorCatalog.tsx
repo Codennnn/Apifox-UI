@@ -1,16 +1,16 @@
 import { useMemo } from 'react'
 
 import { show } from '@ebay/nice-modal-react'
-import { Cascader, Divider, theme } from 'antd'
+import { Cascader, type CascaderProps, Divider, theme } from 'antd'
 
 import type { ApiMenuBase } from '@/components/ApiMenu/ApiMenu.type'
-import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
+import { ModalNewCatalog } from '@/components/modals/ModalNewCatalog'
 import { ROOT_CATALOG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { findFolders } from '@/helpers'
 import { useCatalog, type UseCatalogParmas } from '@/hooks/useCatalog'
 
-interface SelectorCatalogProps extends UseCatalogParmas {
+interface SelectorCatalogProps extends UseCatalogParmas, Pick<CascaderProps, 'placeholder'> {
   value?: ApiMenuBase['parentId']
   onChange?: (value: SelectorCatalogProps['value']) => void
   hideCreateNew?: boolean
@@ -19,7 +19,7 @@ interface SelectorCatalogProps extends UseCatalogParmas {
 export function SelectorCatalog(props: SelectorCatalogProps) {
   const { token } = theme.useToken()
 
-  const { value, onChange, type, exclued, hideCreateNew } = props
+  const { value, onChange, type, exclued, hideCreateNew, ...rest } = props
 
   const { menuRawList } = useGlobalContext()
   const { catalogOptions } = useCatalog({ type, exclued })
@@ -33,11 +33,12 @@ export function SelectorCatalog(props: SelectorCatalogProps) {
 
   return (
     <Cascader
+      {...rest}
       showSearch
       allowClear={false}
       dropdownRender={
         hideCreateNew
-          ? void 0
+          ? undefined
           : (menus) => {
               return (
                 <>
@@ -51,7 +52,7 @@ export function SelectorCatalog(props: SelectorCatalogProps) {
                       color: token.colorPrimary,
                     }}
                     onClick={() => {
-                      void show(NewCatalogModal)
+                      void show(ModalNewCatalog)
                     }}
                   >
                     新建目录

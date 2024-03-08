@@ -2,7 +2,7 @@ import useEvent from 'react-use-event-hook'
 
 import { ConfigProvider, Tree, type TreeProps } from 'antd'
 
-import { apiMenuConfig } from '@/configs/static'
+import { API_MENU_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
 import { isMenuSameGroup } from '@/helpers'
@@ -58,7 +58,7 @@ export function ApiMenu() {
         activeTabItem({ key: menuId })
       } else {
         if (menuId === CatalogType.Overview || menuId === CatalogType.Recycle) {
-          const { title } = apiMenuConfig[menuId]
+          const { title } = API_MENU_CONFIG[menuId]
 
           addTabItem({
             key: menuId,

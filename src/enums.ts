@@ -76,3 +76,11 @@ export const enum ParamType {
   Number = 'number',
   Array = 'array',
 }
+
+export const enum ContentType {
+  JSON = 'json',
+  XML = 'xml',
+  HTML = 'html',
+  Raw = 'raw',
+  Binary = 'binary',
+}

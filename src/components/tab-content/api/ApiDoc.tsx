@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { Viewer } from '@bytemd/react'
-import { Button, Card, Select, type SelectProps, Space, theme, Tooltip } from 'antd'
+import { Button, Card, Select, type SelectProps, Space, Tabs, theme, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { Code2Icon, ZapIcon } from 'lucide-react'
 
@@ -161,6 +161,15 @@ export function ApiDoc() {
           },
         },
       }),
+
+      tabWithBorder: css({
+        '.ant-tabs-content-holder': {
+          border: `1px solid ${token.colorBorderSecondary}`,
+          borderTop: 'none',
+          borderBottomLeftRadius: token.borderRadius,
+          borderBottomRightRadius: token.borderRadius,
+        },
+      }),
     }
   })
 
@@ -169,7 +178,7 @@ export function ApiDoc() {
   }
 
   return (
-    <div className="h-full p-tabContent">
+    <div className="h-full overflow-auto p-tabContent">
       <div className="flex items-center">
         <Space className="group/action">
           <h2 className="text-base font-semibold">{docValue.name}</h2>
@@ -250,7 +259,7 @@ export function ApiDoc() {
       <div>
         <GroupTitle>请求参数</GroupTitle>
         {docValue.parameters ? (
-          <>
+          <div className="flex flex-col gap-y-4">
             <Card className={styles.card} title="Path 参数">
               <div className="flex flex-col gap-3">
                 {docValue.parameters.path?.map((param) => (
@@ -266,11 +275,42 @@ export function ApiDoc() {
                 ))}
               </div>
             </Card>
-          </>
+          </div>
         ) : (
           '无'
         )}
       </div>
+
+      {!!docValue.responses && (
+        <div>
+          <GroupTitle>返回响应</GroupTitle>
+          <Tabs
+            className={styles.tabWithBorder}
+            items={docValue.responses.map((res) => {
+              return {
+                key: res.id,
+                label: `${res.name}(${res.code})`,
+                children: (
+                  <div>
+                    <div className="flex flex-wrap items-center gap-4 p-3">
+                      <span>
+                        <span style={{ color: token.colorTextSecondary }}>HTTP 状态码：</span>
+                        <span>{res.code}</span>
+                      </span>
+
+                      <span>
+                        <span style={{ color: token.colorTextSecondary }}>内容格式：</span>
+                        <span>{res.contentType}</span>
+                      </span>
+                    </div>
+                  </div>
+                ),
+              }
+            })}
+            type="card"
+          />
+        </div>
+      )}
     </div>
   )
 }

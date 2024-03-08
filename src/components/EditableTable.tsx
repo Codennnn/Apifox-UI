@@ -92,7 +92,7 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
                 <td
                   key={`${cidx}`}
                   className={styles.td}
-                  style={{ border: internalDataSource.length === ridx + 1 ? 'none' : void 0 }}
+                  style={{ border: internalDataSource.length === ridx + 1 ? 'none' : undefined }}
                 >
                   {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                   {/* @ts-expect-error */}

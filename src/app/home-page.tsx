@@ -14,7 +14,7 @@ import { FileIcon } from '@/components/icons/FileIcon'
 import { IconText } from '@/components/IconText'
 import { InputSearch } from '@/components/InputSearch'
 import { SideNav } from '@/components/SideNav'
-import { apiMenuConfig } from '@/configs/static'
+import { API_MENU_CONFIG } from '@/configs/static'
 import { GlobalContextProvider } from '@/contexts/global'
 import { LayoutProvider, useLayoutContext } from '@/contexts/layout-settings'
 import { MenuItemType } from '@/enums'
@@ -108,7 +108,7 @@ function HomeContent() {
                         MenuItemType.Doc,
                         MenuItemType.ApiSchema,
                       ].map((t) => {
-                        const { newLabel } = apiMenuConfig[getCatalogType(t)]
+                        const { newLabel } = API_MENU_CONFIG[getCatalogType(t)]
 
                         return {
                           key: t,

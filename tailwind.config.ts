@@ -6,7 +6,12 @@ export default {
   theme: {
     extend: {
       colors: {},
+
       padding: {
+        tabContent: 'var(--p-tab-content)',
+      },
+
+      margin: {
         tabContent: 'var(--p-tab-content)',
       },
     },

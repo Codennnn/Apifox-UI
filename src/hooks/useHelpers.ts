@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid'
 
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
 import type { ApiTabItem } from '@/components/ApiTab/ApiTab.type'
-import { apiMenuConfig } from '@/configs/static'
+import { API_MENU_CONFIG } from '@/configs/static'
 import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
 import { CatalogType, MenuItemType } from '@/enums'
 
@@ -13,12 +13,12 @@ export function useHelpers() {
     payload?: Partial<ApiTabItem>,
     config?: { autoActive?: boolean; replaceTab?: ApiTabItem['key'] }
   ) => {
-    const { newLabel } = apiMenuConfig[CatalogType.Http]
+    const { newLabel } = API_MENU_CONFIG[CatalogType.Http]
 
     addTabItem(
       {
         ...payload,
-        key: nanoid(),
+        key: nanoid(6),
         label: newLabel,
         contentType: MenuItemType.ApiDetail,
         data: { tabStatus: PageTabStatus.Create },
@@ -31,12 +31,12 @@ export function useHelpers() {
     payload?: Partial<ApiTabItem>,
     config?: { autoActive?: boolean; replaceTab?: ApiTabItem['key'] }
   ) => {
-    const { newLabel } = apiMenuConfig[CatalogType.Request]
+    const { newLabel } = API_MENU_CONFIG[CatalogType.Request]
 
     addTabItem(
       {
         ...payload,
-        key: nanoid(),
+        key: nanoid(6),
         label: newLabel,
         contentType: MenuItemType.HttpRequest,
         data: { tabStatus: PageTabStatus.Create },
@@ -52,7 +52,7 @@ export function useHelpers() {
     addTabItem(
       {
         ...payload,
-        key: nanoid(),
+        key: nanoid(6),
         label: '新建 Markdown',
         contentType: MenuItemType.Doc,
         data: { tabStatus: PageTabStatus.Create },
@@ -65,12 +65,12 @@ export function useHelpers() {
     payload?: Partial<ApiTabItem>,
     config?: { autoActive?: boolean; replaceTab?: ApiTabItem['key'] }
   ) => {
-    const { newLabel } = apiMenuConfig[CatalogType.Schema]
+    const { newLabel } = API_MENU_CONFIG[CatalogType.Schema]
 
     addTabItem(
       {
         ...payload,
-        key: nanoid(),
+        key: nanoid(6),
         label: newLabel,
         contentType: MenuItemType.ApiSchema,
         data: { tabStatus: PageTabStatus.Create },

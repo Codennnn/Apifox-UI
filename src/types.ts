@@ -1,7 +1,14 @@
 import type { ApiMenuBase, ApiMenuData } from '@/components/ApiMenu/ApiMenu.type'
 import type { JsonSchema } from '@/components/JsonSchema'
 
-import type { ApiStatus, CatalogType, HttpMethod, MenuItemType, ParamType } from './enums'
+import type {
+  ApiStatus,
+  CatalogType,
+  ContentType,
+  HttpMethod,
+  MenuItemType,
+  ParamType,
+} from './enums'
 
 export type TabContentType = CatalogType | MenuItemType | 'blank'
 
@@ -22,14 +29,14 @@ export interface Parameter {
   example?: string
 }
 
-interface ApiDetailsResponse {
+export interface ApiDetailsResponse {
   id: string
   /** HTTP 状态码 */
   code: number
-  /** 名称 */
+  /** 响应名称 */
   name: string
   /** 内容格式 */
-  contentType?: string
+  contentType?: ContentType
   jsonSchema?: JsonSchema
 }
 

@@ -9,13 +9,13 @@ import { SelectorCatalog } from '@/components/SelectorCatalog'
 import { ROOT_CATALOG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 
-interface NewCatalogModalProps extends Omit<ModalProps, 'open' | 'onOk'> {
+interface ModalNewCatalogProps extends Omit<ModalProps, 'open' | 'onOk'> {
   formData?: Pick<ApiMenuData, 'parentId' | 'type'>
 }
 
 type FormData = Pick<ApiMenuData, 'name' | 'parentId' | 'type'>
 
-export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalProps) => {
+export const ModalNewCatalog = create(({ formData, ...props }: ModalNewCatalogProps) => {
   const modal = useModal()
 
   const [form] = Form.useForm<FormData>()
@@ -43,7 +43,9 @@ export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalPr
       afterOpenChange={(...parmas) => {
         props.afterOpenChange?.(...parmas)
 
-        if (parmas.at(0)) {
+        const opened = parmas.at(0)
+
+        if (opened) {
           inputRef.current?.focus()
         }
       }}
@@ -56,14 +58,14 @@ export const NewCatalogModal = create(({ formData, ...props }: NewCatalogModalPr
         form.validateFields().then((values) => {
           addMenuItem({
             ...values,
-            id: nanoid(),
+            id: nanoid(6),
             parentId: values.parentId === ROOT_CATALOG ? undefined : values.parentId,
           })
           handleHide()
         })
       }}
     >
-      <Form
+      <Form<FormData>
         form={form}
         initialValues={{
           parentId: ROOT_CATALOG,

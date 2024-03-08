@@ -33,6 +33,32 @@ export function MarkdownEditor(
           '.CodeMirror': {
             backgroundColor: token.colorBgContainer,
             color: token.colorText,
+
+            '&.cm-s-default': {
+              '.cm-header': {
+                color: token.colorPrimary,
+              },
+
+              '.cm-link': {
+                color: token.colorInfo,
+              },
+
+              '.cm-def': {
+                color: token.colorError,
+              },
+
+              '.cm-keyword': {
+                color: token.colorWarningActive,
+              },
+
+              '.cm-quote': {
+                color: token.colorSuccessActive,
+              },
+
+              '.cm-variable-2': {
+                color: token.colorInfoActive,
+              },
+            },
           },
 
           '.bytemd-toolbar': {

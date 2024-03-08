@@ -7,7 +7,7 @@ import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react'
 import { FileIcon } from '@/components/icons/FileIcon'
 import { FolderIcon } from '@/components/icons/FolderIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
-import { apiMenuConfig } from '@/configs/static'
+import { API_MENU_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
 import { getCatalogType, hasAccentColor, isMenuFolder } from '@/helpers'
@@ -124,7 +124,7 @@ export function useMenuData(): MenuState {
                 )
               }
 
-              const { accentColor } = apiMenuConfig[getCatalogType(catalog.type)]
+              const { accentColor } = API_MENU_CONFIG[getCatalogType(catalog.type)]
 
               return (
                 <span
@@ -132,7 +132,7 @@ export function useMenuData(): MenuState {
                 >
                   <FileIcon
                     size={15}
-                    style={{ color: hasAccentColor(catalog.type) ? accentColor : void 0 }}
+                    style={{ color: hasAccentColor(catalog.type) ? accentColor : undefined }}
                     type={catalog.type}
                   />
                 </span>

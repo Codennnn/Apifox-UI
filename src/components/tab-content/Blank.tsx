@@ -4,8 +4,8 @@ import { ChevronDownIcon, FolderPlusIcon } from 'lucide-react'
 
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { FileIcon } from '@/components/icons/FileIcon'
-import { NewCatalogModal } from '@/components/modals/NewCatalogModal'
-import { apiMenuConfig } from '@/configs/static'
+import { ModalNewCatalog } from '@/components/modals/ModalNewCatalog'
+import { API_MENU_CONFIG } from '@/configs/static'
 import { CatalogType, MenuItemType } from '@/enums'
 import { useHelpers } from '@/hooks/useHelpers'
 
@@ -20,7 +20,7 @@ function NewItem(props: NewItemProps) {
 
   const { catalogType, label, onClick } = props
 
-  const { accentColor } = apiMenuConfig[catalogType]
+  const { accentColor } = API_MENU_CONFIG[catalogType]
 
   return (
     <div
@@ -106,7 +106,7 @@ export function Blank() {
               label: '新建接口目录',
               icon: <FolderPlusIcon size={18} />,
               onClick: () => {
-                void show(NewCatalogModal, { formData: { type: MenuItemType.ApiDetailFolder } })
+                void show(ModalNewCatalog, { formData: { type: MenuItemType.ApiDetailFolder } })
               },
             },
           ],

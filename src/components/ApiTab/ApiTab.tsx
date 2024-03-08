@@ -9,7 +9,7 @@ import type { CatalogId } from '@/components/ApiMenu'
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
 import { FolderIcon } from '@/components/icons/FolderIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
-import { apiMenuConfig } from '@/configs/static'
+import { API_MENU_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { initialCreateApiDetailsData } from '@/data/remote'
 import { getCatalogType, getCreateType, hasAccentColor, isCreateType } from '@/helpers'
@@ -75,8 +75,9 @@ export function ApiTab(props: TabsProps) {
               style={{
                 color:
                   isCreateType(tabItem.contentType) && hasAccentColor(tabItem.contentType)
-                    ? apiMenuConfig[getCatalogType(getCreateType(tabItem.contentType))].accentColor
-                    : void 0,
+                    ? API_MENU_CONFIG[getCatalogType(getCreateType(tabItem.contentType))]
+                        .accentColor
+                    : undefined,
               }}
               type={tabItem.contentType}
             />
@@ -197,7 +198,7 @@ export function ApiTab(props: TabsProps) {
         onEdit={(key, action) => {
           if (action === 'add') {
             addTabItem({
-              key: nanoid(),
+              key: nanoid(6),
               label: '新建...',
               contentType: 'blank',
             })

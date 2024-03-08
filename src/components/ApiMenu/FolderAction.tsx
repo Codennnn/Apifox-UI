@@ -2,7 +2,7 @@ import { Tooltip } from 'antd'
 import { MoreHorizontalIcon, PlusIcon } from 'lucide-react'
 
 import { DropdownActions } from '@/components/ApiMenu/DropdownActions'
-import { apiMenuConfig } from '@/configs/static'
+import { API_MENU_CONFIG } from '@/configs/static'
 import { getCatalogType, getCreateType } from '@/helpers'
 import { useHelpers } from '@/hooks/useHelpers'
 
@@ -16,7 +16,7 @@ export function FolderAction(props: { catalog: ApiMenuData }) {
   const { catalog } = props
 
   const catalogType = getCatalogType(catalog.type)
-  const { tipTitle } = apiMenuConfig[catalogType]
+  const { tipTitle } = API_MENU_CONFIG[catalogType]
 
   const { createTabItem } = useHelpers()
 

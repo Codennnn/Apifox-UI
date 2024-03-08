@@ -3,7 +3,7 @@ import { show } from '@ebay/nice-modal-react'
 import { Button, theme } from 'antd'
 
 import { Logo } from '@/components/icons/Logo'
-import { SettingsModal } from '@/components/modals/SettingsModal'
+import { ModalSettings } from '@/components/modals/ModalSettings'
 
 import { NavMenu } from './NavMenu'
 
@@ -33,7 +33,7 @@ export function SideNav() {
           style={{ color: token.colorTextTertiary }}
           type="text"
           onClick={() => {
-            void show(SettingsModal)
+            void show(ModalSettings)
           }}
         />
       </div>

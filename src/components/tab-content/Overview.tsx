@@ -1,10 +1,10 @@
-import { Col, Row, theme } from 'antd'
+import { Col, Row, Skeleton, theme } from 'antd'
 
 export function Overview() {
   const { token } = theme.useToken()
 
   return (
-    <Row className="p-tabContent">
+    <Row className="w-full overflow-hidden p-tabContent" gutter={[token.padding, token.padding]}>
       <Col span={24}>
         <div
           style={{
@@ -46,6 +46,30 @@ export function Overview() {
               </div>
             </div>
           </div>
+        </div>
+      </Col>
+
+      <Col span={16}>
+        <div
+          style={{
+            border: `1px solid ${token.colorBorderSecondary}`,
+            borderRadius: token.borderRadius,
+            padding: token.padding,
+          }}
+        >
+          <Skeleton />
+        </div>
+      </Col>
+
+      <Col span={8}>
+        <div
+          style={{
+            border: `1px solid ${token.colorBorderSecondary}`,
+            borderRadius: token.borderRadius,
+            padding: token.padding,
+          }}
+        >
+          <Skeleton />
         </div>
       </Col>
     </Row>
