@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { App } from 'antd'
 
 import { AntdStyleProvider } from '@/components/AntdStyleProvider'
@@ -9,12 +9,15 @@ import { getPageTitle } from '../utils'
 import '@/styles/globals.css'
 
 export const metadata: Metadata = {
-  colorScheme: 'light',
   icons: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
   title: getPageTitle(),
   description: '使用 Next.js + Antd 仿制 Apifox。',
   authors: [{ name: '陈梓聪 LeoKu', url: 'https://github.com/Codennnn' }],
   manifest: '/manifest.webmanifest',
+}
+
+export const viewport: Viewport = {
+  colorScheme: 'light',
 }
 
 export default function RootLayout(props: React.PropsWithChildren) {

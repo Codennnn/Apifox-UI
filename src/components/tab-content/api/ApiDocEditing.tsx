@@ -275,62 +275,64 @@ export function ApiDocEditing() {
                       label: `${resp.name}(${resp.code})`,
                       children: (
                         <div className="p-tabContent">
-                          <div className="mb-tabContent flex flex-wrap items-center gap-6">
-                            <Form.Item
-                              label="HTTP 状态码"
-                              name={['responses', idx, 'code']}
-                              style={{ marginBottom: 0 }}
-                            >
-                              <Select
-                                optionRender={({ label, data }) => (
-                                  <span className="group flex items-center">
-                                    {label}
-                                    <span className="ml-3 font-normal opacity-65">
-                                      {data.text as string}
+                          <div className="mb-tabContent flex gap-6">
+                            <div className="flex flex-wrap items-center gap-6">
+                              <Form.Item
+                                label="HTTP 状态码"
+                                name={['responses', idx, 'code']}
+                                style={{ marginBottom: 0 }}
+                              >
+                                <Select
+                                  optionRender={({ label, data }) => (
+                                    <span className="group flex items-center">
+                                      {label}
+                                      <span className="ml-3 font-normal opacity-65">
+                                        {data.text as string}
+                                      </span>
+                                      <Tooltip title={`${data.desc as string}。`}>
+                                        <InfoIcon
+                                          className="ml-auto mr-1 opacity-0 transition-opacity group-hover:opacity-100"
+                                          size={14}
+                                        />
+                                      </Tooltip>
                                     </span>
-                                    <Tooltip title={`${data.desc as string}。`}>
-                                      <InfoIcon
-                                        className="ml-auto mr-1 opacity-0 transition-opacity group-hover:opacity-100"
-                                        size={14}
-                                      />
-                                    </Tooltip>
-                                  </span>
-                                )}
-                                options={httpCodeOptions}
-                                popupClassName="min-w-[350px]"
-                              />
-                            </Form.Item>
-                            <Form.Item
-                              label="名称"
-                              name={['responses', idx, 'name']}
-                              style={{ marginBottom: 0 }}
-                            >
-                              <Input style={{ width: '88px' }} />
-                            </Form.Item>
-                            <Form.Item
-                              label="内容格式"
-                              name={['responses', idx, 'contentType']}
-                              style={{ marginBottom: 0 }}
-                            >
-                              <Select options={contentTypeOptions} style={{ width: '130px' }} />
-                            </Form.Item>
-                            <Form.Item
-                              dependencies={['responses', idx, 'contentType']}
-                              label="Content-Type"
-                              style={{ marginBottom: 0 }}
-                            >
-                              {({ getFieldValue: getFieldValue1 }) => {
-                                const contentType: ContentType = getFieldValue1([
-                                  'responses',
-                                  idx,
-                                  'contentType',
-                                ])
+                                  )}
+                                  options={httpCodeOptions}
+                                  popupClassName="min-w-[350px]"
+                                />
+                              </Form.Item>
+                              <Form.Item
+                                label="名称"
+                                name={['responses', idx, 'name']}
+                                style={{ marginBottom: 0 }}
+                              >
+                                <Input style={{ width: '88px' }} />
+                              </Form.Item>
+                              <Form.Item
+                                label="内容格式"
+                                name={['responses', idx, 'contentType']}
+                                style={{ marginBottom: 0 }}
+                              >
+                                <Select options={contentTypeOptions} style={{ width: '130px' }} />
+                              </Form.Item>
+                              <Form.Item
+                                dependencies={['responses', idx, 'contentType']}
+                                label="Content-Type"
+                                style={{ marginBottom: 0 }}
+                              >
+                                {({ getFieldValue: getFieldValue1 }) => {
+                                  const contentType: ContentType = getFieldValue1([
+                                    'responses',
+                                    idx,
+                                    'contentType',
+                                  ])
 
-                                return <span>{getContentTypeString(contentType)}</span>
-                              }}
-                            </Form.Item>
+                                  return <span>{getContentTypeString(contentType)}</span>
+                                }}
+                              </Form.Item>
+                            </div>
 
-                            <div className="ml-auto">
+                            <div className="ml-auto pt-1">
                               <Popconfirm
                                 title="确定删除吗？"
                                 onConfirm={() => {
