@@ -85,7 +85,6 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
               onChange?.(JSON.parse(editorValue) as JsonSchema)
               setSchemaModalOpen(false)
             } catch (err) {
-              console.log(err)
               if (err instanceof SyntaxError) {
                 messageApi.error('JSON Schema 格式校验不通过，请检查！')
               }
