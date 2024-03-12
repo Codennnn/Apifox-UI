@@ -132,42 +132,32 @@ export function ApiTab(props: TabsProps) {
   }, [tabItems, menuRawList, confirmKey, handleItemRemove])
 
   const renderTabBar: TabsProps['renderTabBar'] = (tabBarProps, DefaultTabBar) => (
-    <div className="app-tabs-wrap flex select-none items-center">
-      <DefaultTabBar {...tabBarProps}>
-        {(node) => (
-          <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
-            {node}
-          </Dropdown>
-        )}
-      </DefaultTabBar>
-    </div>
+    <DefaultTabBar {...tabBarProps} className="app-tabs-nav">
+      {(node) => (
+        <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
+          {node}
+        </Dropdown>
+      )}
+    </DefaultTabBar>
   )
 
   const { styles } = useStyles(({ token }) => {
     return {
       appTabs: css({
         '&.ant-tabs': {
-          '.app-tabs-wrap': {
-            '.ant-tabs-tab': {
-              '&:not(.ant-tabs-tab-active)': {
+          '.app-tabs-nav': {
+            '&.ant-tabs-nav': {
+              backgroundColor: token.colorFillAlter,
+
+              '.ant-tabs-tab:not(.ant-tabs-tab-active) ': {
+                '.app-tabs-tab-label': {
+                  color: token.colorTextSecondary,
+                },
+
                 '&::before': {
                   backgroundColor: token.colorBorder,
                 },
               },
-            },
-
-            '.ant-tabs-nav': {
-              backgroundColor: token.colorFillAlter,
-
-              '.ant-tabs-tab:not(.ant-tabs-tab-active) .app-tabs-tab-label': {
-                color: token.colorTextSecondary,
-              },
-            },
-          },
-
-          '.ant-tabs-nav': {
-            '.ant-tabs-nav-add': {
-              borderRadius: token.borderRadiusSM,
             },
           },
         },

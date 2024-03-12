@@ -114,7 +114,7 @@
     }
   }
 
-  > .app-tabs-wrap .ant-tabs-nav .ant-tabs-tab {
+  > .app-tabs-nav.ant-tabs-nav .ant-tabs-tab {
     &:hover,
     &.ant-tabs-tab-active {
       color: currentcolor;
@@ -134,10 +134,8 @@
       @apply mt-1 pr-3;
     }
 
-    .app-tabs-wrap {
-      .ant-tabs-nav-wrap {
-        flex: none;
-
+    .app-tabs-nav {
+      > .ant-tabs-nav-wrap {
         .ant-tabs-tab:not(.ant-tabs-tab-active) {
           border-color: transparent;
 

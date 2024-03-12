@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
+import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { App } from 'antd'
 
-import { AntdStyleProvider } from '@/components/AntdStyleProvider'
 import { ThemeProviderClient } from '@/components/ThemeEditor'
 
 import { getPageTitle } from '../utils'
@@ -24,13 +24,13 @@ export default function RootLayout(props: React.PropsWithChildren) {
   return (
     <html className="h-full" lang="zh-Hans-CN">
       <body className="m-0 h-full">
-        <AntdStyleProvider>
+        <AntdRegistry>
           <App className="h-full">
             <ThemeProviderClient autoSaveId="theme:persistence">
               <main className="h-full">{props.children}</main>
             </ThemeProviderClient>
           </App>
-        </AntdStyleProvider>
+        </AntdRegistry>
       </body>
     </html>
   )
