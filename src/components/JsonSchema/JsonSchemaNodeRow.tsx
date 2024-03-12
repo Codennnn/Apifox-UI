@@ -413,20 +413,22 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
       })}
 
       <div className={`${styles.row.col} ${styles.row.actions}`}>
-        <Tooltip title={isRoot ? '添加子节点' : '添加相邻节点'}>
-          <span
-            className={`${styles.row.action} ${styles.row.actionAdd}`}
-            onClick={() => {
-              if (isRoot) {
-                onAddField?.([...fieldPath, properties_key, '0'])
-              } else {
-                onAddField?.(fieldPath)
-              }
-            }}
-          >
-            <PlusCircleOutlined />
-          </span>
-        </Tooltip>
+        {!isItems && (
+          <Tooltip title={isRoot ? '添加子节点' : '添加相邻节点'}>
+            <span
+              className={`${styles.row.action} ${styles.row.actionAdd}`}
+              onClick={() => {
+                if (isRoot) {
+                  onAddField?.([...fieldPath, properties_key, '0'])
+                } else {
+                  onAddField?.(fieldPath)
+                }
+              }}
+            >
+              <PlusCircleOutlined />
+            </span>
+          </Tooltip>
+        )}
 
         {!isRoot && !isItems && (
           <span

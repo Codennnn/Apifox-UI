@@ -94,7 +94,7 @@ export function ApiDocEditing() {
 
   const [form] = Form.useForm<ApiDetails>()
 
-  const { menuRawList, addMenuItem, updateMenuItem, messageApi } = useGlobalContext()
+  const { messageApi, menuRawList, addMenuItem, updateMenuItem } = useGlobalContext()
   const { addTabItem } = useMenuTabHelpers()
   const { tabData } = useTabContentContext()
 

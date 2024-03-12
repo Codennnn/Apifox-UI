@@ -128,7 +128,7 @@ function ApiParameter({ param }: { param: Parameter }) {
 export function ApiDoc() {
   const { token } = theme.useToken()
 
-  const { menuRawList } = useGlobalContext()
+  const { messageApi, menuRawList } = useGlobalContext()
   const { tabData } = useTabContentContext()
 
   const { docValue, methodConfig } = useMemo(() => {
@@ -185,7 +185,15 @@ export function ApiDoc() {
 
           <Space className="opacity-0 group-hover/action:opacity-100" size="small">
             <Tooltip title="复制 ID">
-              <Button size="small" type="link">
+              <Button
+                size="small"
+                type="link"
+                onClick={() => {
+                  navigator.clipboard.writeText(docValue.id).then(() => {
+                    messageApi.success('已复制')
+                  })
+                }}
+              >
                 #{docValue.id}
               </Button>
             </Tooltip>

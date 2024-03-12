@@ -21,7 +21,7 @@ export function Schema() {
 
   const [form] = Form.useForm<ApiSchemaForm>()
 
-  const { menuRawList, addMenuItem, updateMenuItem, removeMenuItem, messageApi } =
+  const { messageApi, menuRawList, addMenuItem, updateMenuItem, removeMenuItem } =
     useGlobalContext()
   const { addTabItem, removeTabItem } = useMenuTabHelpers()
   const { tabData } = useTabContentContext()
