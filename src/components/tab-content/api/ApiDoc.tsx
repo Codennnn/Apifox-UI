@@ -232,7 +232,7 @@ export function ApiDoc() {
           {docValue.tags?.map((tag, idx) => {
             return (
               <span
-                key={`${idx}`}
+                key={`${idx}${tag}`}
                 className="px-2 py-1 text-xs"
                 style={{
                   color: token.colorPrimary,

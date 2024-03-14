@@ -68,7 +68,7 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
     >
       <colgroup>
         {columns?.map((col, idx) => {
-          return <col key={`${idx}`} width={col.width} />
+          return <col key={`${idx}${col.dataIndex || ''}`} width={col.width} />
         })}
       </colgroup>
 
@@ -76,7 +76,11 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
         <tr>
           {columns?.map((col, idx) => {
             return (
-              <th key={`${idx}`} className={`p-1 text-left font-normal ${styles.th}`} scope="col">
+              <th
+                key={`${idx}${col.dataIndex || ''}`}
+                className={`p-1 text-left font-normal ${styles.th}`}
+                scope="col"
+              >
                 {col.title}
               </th>
             )
