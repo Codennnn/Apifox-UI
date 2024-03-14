@@ -229,10 +229,10 @@ export function ApiDoc() {
 
       <div className="mb-3">
         <Space>
-          {docValue.tags?.map((tag, idx) => {
+          {docValue.tags?.map((tag) => {
             return (
               <span
-                key={`${idx}${tag}`}
+                key={tag}
                 className="px-2 py-1 text-xs"
                 style={{
                   color: token.colorPrimary,
