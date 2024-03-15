@@ -131,7 +131,7 @@ function HomeContent() {
               </ConfigProvider>
             </Flex>
 
-            <div className="app-menu flex-1 overflow-y-auto">
+            <div className="ui-menu flex-1 overflow-y-auto">
               <ApiMenuContextProvider>
                 <ApiMenu />
               </ApiMenuContextProvider>

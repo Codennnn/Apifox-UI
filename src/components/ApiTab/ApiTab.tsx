@@ -58,7 +58,7 @@ export function ApiTab(props: TabsProps) {
       const menuData = menuRawList?.find((it) => it.id === tabItem.key)
 
       const label = (
-        <span className="app-tabs-tab-label flex items-center gap-1">
+        <span className="ui-tabs-tab-label flex items-center gap-1">
           {menuData?.type === MenuItemType.ApiDetail ||
           menuData?.type === MenuItemType.HttpRequest ? (
             <span className="mr-1 font-semibold">
@@ -132,7 +132,7 @@ export function ApiTab(props: TabsProps) {
   }, [tabItems, menuRawList, confirmKey, handleItemRemove])
 
   const renderTabBar: TabsProps['renderTabBar'] = (tabBarProps, DefaultTabBar) => (
-    <DefaultTabBar {...tabBarProps} className="app-tabs-nav">
+    <DefaultTabBar {...tabBarProps} className="ui-tabs-nav">
       {(node) => (
         <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
           {node}
@@ -145,12 +145,12 @@ export function ApiTab(props: TabsProps) {
     return {
       appTabs: css({
         '&.ant-tabs': {
-          '.app-tabs-nav': {
+          '.ui-tabs-nav': {
             '&.ant-tabs-nav': {
               backgroundColor: token.colorFillAlter,
 
               '.ant-tabs-tab:not(.ant-tabs-tab-active) ': {
-                '.app-tabs-tab-label': {
+                '.ui-tabs-tab-label': {
                   color: token.colorTextSecondary,
                 },
 
@@ -179,7 +179,7 @@ export function ApiTab(props: TabsProps) {
       <Tabs
         hideAdd
         activeKey={activeTabKey}
-        className={`app-tabs ${styles.appTabs}`}
+        className={`ui-tabs ${styles.appTabs}`}
         items={items}
         renderTabBar={renderTabBar}
         tabBarExtraContent={<ApiTabAction />}

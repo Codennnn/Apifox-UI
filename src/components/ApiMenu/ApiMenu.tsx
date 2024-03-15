@@ -103,7 +103,7 @@ export function ApiMenu() {
         },
 
         ':hover': {
-          '.app-menu-controls': {
+          '.ui-menu-controls': {
             display: 'inline-flex',
           },
         },

@@ -64,7 +64,7 @@
 使用了 `tailwindcss/nesting` 预处理 CSS Nesting，参考：https://tailwindcss.com/docs/using-with-preprocessors#nesting
 */
 
-.app-menu {
+.ui-menu {
   .ant-tree.ant-tree-directory {
     .ant-tree-switcher {
       @apply flex justify-center items-center w-[15px];
@@ -114,7 +114,7 @@
     }
   }
 
-  > .app-tabs-nav.ant-tabs-nav .ant-tabs-tab {
+  > .ui-tabs-nav.ant-tabs-nav .ant-tabs-tab {
     &:hover,
     &.ant-tabs-tab-active {
       color: currentcolor;
@@ -126,16 +126,18 @@
   }
 }
 
-.app-tabs {
+.ui-tabs {
   &.ant-tabs {
     @apply h-full;
 
     .ant-tabs-nav {
-      @apply mt-1 pr-3;
+      @apply pr-3;
     }
 
-    .app-tabs-nav {
+    .ui-tabs-nav {
       > .ant-tabs-nav-wrap {
+        @apply mt-2;
+
         .ant-tabs-tab:not(.ant-tabs-tab-active) {
           border-color: transparent;
 
