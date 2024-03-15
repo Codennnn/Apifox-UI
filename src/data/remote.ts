@@ -162,7 +162,7 @@ export const apiDirectoryData: ApiMenuData[] = [
               {
                 name: 'data',
                 type: SchemaType.Refer,
-                $ref: '#/definitions/1501168',
+                $ref: MenuId.SchemaPet,
                 description: '宠物信息',
               },
             ],
@@ -266,7 +266,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     },
   },
   {
-    id: MenuId.Pet,
+    id: MenuId.SchemaPet,
     parentId: MenuId.宠物店S,
     name: 'Pet',
     type: MenuItemType.ApiSchema,
@@ -282,7 +282,7 @@ export const apiDirectoryData: ApiMenuData[] = [
           {
             name: 'category',
             type: SchemaType.Refer,
-            $ref: '#/definitions/1501169',
+            $ref: MenuId.SchemaCategory,
             description: '分组',
           },
           {
@@ -308,7 +308,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     },
   },
   {
-    id: MenuId.Category,
+    id: MenuId.SchemaCategory,
     parentId: MenuId.宠物店S,
     name: 'Category',
     type: MenuItemType.ApiSchema,
@@ -331,7 +331,7 @@ export const apiDirectoryData: ApiMenuData[] = [
     },
   },
   {
-    id: MenuId.Tag,
+    id: MenuId.SchemaTag,
     parentId: MenuId.宠物店S,
     name: 'Tag',
     type: MenuItemType.ApiSchema,
@@ -398,7 +398,7 @@ export const apiDirectoryData: ApiMenuData[] = [
               {
                 name: 'data',
                 type: SchemaType.Refer,
-                $ref: '#/definitions/1501168',
+                $ref: MenuId.SchemaPet,
                 description: '宠物信息',
               },
             ],
@@ -510,7 +510,7 @@ export const initialTabItems: ApiTabItem[] = (() => {
           id === MenuId.示例接口 ||
           id === MenuId.宠物店 ||
           id === MenuId.查询宠物详情 ||
-          id === MenuId.Pet ||
+          id === MenuId.SchemaPet ||
           id === MenuId.引用模型
         )
       })

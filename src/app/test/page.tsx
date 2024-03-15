@@ -87,9 +87,10 @@ export default function TestPage() {
         extraColumns={[
           {
             key: 'extra',
-            render: (value, _, { fieldPath }) => {
+            render: (value, _, { disabled, fieldPath }) => {
               return (
                 <Input
+                  disabled={disabled}
                   placeholder="自定义"
                   value={typeof value === 'string' ? value : undefined}
                   onChange={(ev) => {

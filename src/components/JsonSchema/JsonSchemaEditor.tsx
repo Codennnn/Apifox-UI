@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { produce } from 'immer'
 import { get, set } from 'lodash'
 
-import { defaultFieldData, items_key, properties_key, SchemaType } from './constants'
+import { defaultFieldData, KEY_ITEMS, KEY_PROPERTIES, SchemaType } from './constants'
 import { JsonSchemaContextProvider } from './JsonSchema.context'
 import type { ArraySchema, ColumnType, FieldPath, JsonSchema } from './JsonSchema.type'
 import { JsonSchemaNode, type JsonSchemaNodeProps } from './JsonSchemaNode'
@@ -12,7 +12,7 @@ import { getAllExpandedKeys } from './utils'
 export interface JsonSchemaEditorProps extends Pick<JsonSchemaNodeProps, 'value' | 'onChange'> {
   defaultExpandAll?: boolean
 
-  readonly?: boolean
+  readOnly?: boolean
   expandedKeys?: string[]
   onExpand?: (
     expandedKeys: JsonSchemaEditorProps['expandedKeys'],
@@ -48,8 +48,8 @@ export function JsonSchemaEditor(props: JsonSchemaEditorProps) {
     }
 
     const newJsonSchema = produce(value, (draft) => {
-      const shouldAddToProperties = targetPath.at(-2) === properties_key
-      const shouldAddToItems = targetPath.at(-1) === items_key
+      const shouldAddToProperties = targetPath.at(-2) === KEY_PROPERTIES
+      const shouldAddToItems = targetPath.at(-1) === KEY_ITEMS
 
       if (shouldAddToProperties) {
         // 根据目标字段路径获取到目标字段的 schema。
@@ -92,7 +92,7 @@ export function JsonSchemaEditor(props: JsonSchemaEditorProps) {
 
   const handleRemoveField = (targetPath: FieldPath[]) => {
     const newData = produce(value, (draft) => {
-      if (targetPath.at(-2) === properties_key) {
+      if (targetPath.at(-2) === KEY_PROPERTIES) {
         const propertyIdx = Number(targetPath.pop())
 
         if (propertyIdx >= 0) {

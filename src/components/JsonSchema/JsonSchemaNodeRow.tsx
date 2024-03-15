@@ -1,5 +1,5 @@
 import { CaretRightOutlined, MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { Dropdown, Input, theme, Tooltip } from 'antd'
+import { Dropdown, Input, Tooltip } from 'antd'
 import { omit } from 'lodash'
 
 import { useStyles } from '@/hooks/useStyle'
@@ -8,8 +8,8 @@ import {
   columnHeight,
   defaultSchemaTypeConfig,
   INDENT,
-  items_key,
-  properties_key,
+  KEY_ITEMS,
+  KEY_PROPERTIES,
   SchemaType,
   SEPARATOR,
 } from './constants'
@@ -28,11 +28,11 @@ export interface JsonSchemaNodeRowProps {
   onRemoveField?: (fieldPath: NonNullable<JsonSchemaNodeRowProps['fieldPath']>) => void
   /** 标记是否为引用模型 */
   fromRef?: RefSchema['$ref']
+  /** 是否禁止编辑。 */
+  disabled?: boolean
 }
 
 export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
-  const { token } = theme.useToken()
-
   const {
     value,
     onChange: triggerChange,
@@ -40,6 +40,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
     onAddField,
     onRemoveField,
     fromRef,
+    disabled = false,
   } = props
 
   const { styles } = useStyles(({ token }) => {
@@ -51,17 +52,10 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
           borderRadius: '3px',
           cursor: 'default',
           userSelect: 'none',
+          color: token.colorPrimary,
+          backgroundColor: token.colorPrimaryBg,
         },
         { label: 'tag' }
-      ),
-
-      colHover: css(
-        {
-          '&:hover, &:focus-within': {
-            borderColor: token.colorPrimary,
-          },
-        },
-        { label: 'col-hover' }
       ),
 
       row: {
@@ -83,7 +77,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             alignItems: 'center',
             margin: '0 3px',
             fontSize: '13px',
-            cursor: 'default',
+            cursor: disabled ? 'not-allowed' : 'default',
             borderBottom: `1px solid ${token.colorFillQuaternary}`,
             transition: 'border-color 0.2s',
 
@@ -95,12 +89,25 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               fontSize: 'inherit',
               backgroundColor: 'transparent',
 
+              '&.ant-input-disabled': {
+                color: 'currentcolor',
+              },
+
               '&:focus': {
                 boxShadow: 'none',
               },
             },
           },
           { label: 'col' }
+        ),
+
+        colHover: css(
+          {
+            '&:hover, &:focus-within': {
+              borderColor: disabled ? undefined : token.colorPrimary,
+            },
+          },
+          { label: 'col-hover' }
         ),
 
         expandIcon: css(
@@ -152,12 +159,6 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
           {
             width: '100%',
             height: '100%',
-            borderBottom: '1px solid transparent',
-            transition: 'border-color 0.2s',
-
-            '&:hover, &:focus-within': {
-              borderColor: token.colorPrimary,
-            },
           },
           { label: 'name-content' }
         ),
@@ -247,7 +248,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
     }
   })
 
-  const { readonly, expandedKeys, onExpand, extraColumns } = useJsonSchemaContext()
+  const { readOnly, expandedKeys, onExpand, extraColumns } = useJsonSchemaContext()
 
   if (!value) {
     return null
@@ -258,7 +259,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
   const { indentWidth } = getNodeLevelInfo(fieldPath)
 
   const isRoot = fieldPath.length === 0
-  const isItems = fieldPath.at(-1) === items_key
+  const isItems = fieldPath.at(-1) === KEY_ITEMS
   const isCustom = !isRoot || !isItems
 
   const showExpandIcon =
@@ -293,20 +294,18 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
           <span style={{ width: INDENT }} />
         )}
 
-        <span className={`${styles.row.nameInner} ${isCustom ? styles.colHover : ''}`}>
+        <span
+          className={`${styles.row.nameInner} ${styles.row.col} ${isCustom ? styles.row.colHover : ''}`}
+        >
           {isRoot || isItems ? (
-            <span
-              className={styles.tag}
-              style={{ color: token.colorPrimary, backgroundColor: token.colorPrimaryBg }}
-            >
-              {isItems ? 'ITEMS' : '根节点'}
-            </span>
+            <span className={styles.tag}>{isItems ? 'ITEMS' : '根节点'}</span>
           ) : (
             <span className={styles.row.nameContent}>
-              {readonly ? (
+              {readOnly ? (
                 name
               ) : (
                 <Input
+                  disabled={disabled}
                   placeholder="字段名"
                   value={name}
                   onChange={(ev) => {
@@ -319,9 +318,10 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         </span>
       </div>
 
-      <div className={`${styles.row.col} ${styles.row.type} ${styles.colHover}`}>
+      <div className={`${styles.row.col} ${styles.row.type} ${styles.row.colHover}`}>
         <Dropdown
           arrow
+          disabled={disabled}
           menu={{
             onClick: (menuInfo) => {
               const type = menuInfo.key as SchemaType
@@ -335,14 +335,14 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               switch (value.type) {
                 case SchemaType.Object: {
                   if (type !== SchemaType.Object) {
-                    triggerChange?.(omit(newValue, properties_key) as JsonSchema)
+                    triggerChange?.(omit(newValue, KEY_PROPERTIES) as JsonSchema)
                   }
                   break
                 }
 
                 case SchemaType.Array: {
                   if (type !== SchemaType.Array) {
-                    triggerChange?.(omit(newValue, items_key) as JsonSchema)
+                    triggerChange?.(omit(newValue, KEY_ITEMS) as JsonSchema)
                   }
                   break
                 }
@@ -372,7 +372,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
           trigger={['click']}
         >
           <span
-            className={readonly ? '' : styles.typeSelect}
+            className={readOnly ? undefined : styles.typeSelect}
             style={{ color: `var(${defaultSchemaTypeConfig[type].varColor})` }}
           >
             {defaultSchemaTypeConfig[type].text}
@@ -380,8 +380,9 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         </Dropdown>
       </div>
 
-      <div className={`${styles.row.col} ${styles.row.title} ${styles.colHover}`}>
+      <div className={`${styles.row.col} ${styles.row.title} ${styles.row.colHover}`}>
         <Input
+          disabled={disabled}
           placeholder="中文名"
           value={displayName}
           onChange={(ev) => {
@@ -390,8 +391,9 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         />
       </div>
 
-      <div className={`${styles.row.col} ${styles.row.description} ${styles.colHover}`}>
+      <div className={`${styles.row.col} ${styles.row.description} ${styles.row.colHover}`}>
         <Input
+          disabled={disabled}
           placeholder="说明"
           value={description}
           onChange={(ev) => {
@@ -404,10 +406,10 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         return (
           <div
             key={column.key}
-            className={`${styles.row.col} ${styles.colHover} ${column.colClassName ?? ''}`}
+            className={`${styles.row.col} ${styles.row.colHover} ${column.colClassName ?? ''}`}
             style={column.colStyle}
           >
-            {column.render?.(value[column.key as 'type'], value, { fieldPath })}
+            {column.render?.(value[column.key as 'type'], value, { disabled, fieldPath })}
           </div>
         )
       })}
@@ -419,7 +421,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               className={`${styles.row.action} ${styles.row.actionAdd}`}
               onClick={() => {
                 if (isRoot) {
-                  onAddField?.([...fieldPath, properties_key, '0'])
+                  onAddField?.([...fieldPath, KEY_PROPERTIES, '0'])
                 } else {
                   onAddField?.(fieldPath)
                 }

@@ -1,4 +1,7 @@
-import { INDENT, items_key, properties_key, SchemaType, SEPARATOR } from './constants'
+import type { ApiMenuData } from '@/components/ApiMenu'
+import { MenuItemType } from '@/enums'
+
+import { INDENT, KEY_ITEMS, KEY_PROPERTIES, SchemaType, SEPARATOR } from './constants'
 import type { FieldPath, JsonSchema } from './JsonSchema.type'
 
 /**
@@ -21,12 +24,12 @@ export function getAllExpandedKeys(
     }
 
     jsonSchema.properties?.forEach((js, i) => {
-      const newPath = [...path, properties_key, `${i}`]
+      const newPath = [...path, KEY_PROPERTIES, `${i}`]
       keys.push(newPath.join(SEPARATOR))
       getAllExpandedKeys(js, newPath, keys)
     })
   } else if (jsonSchema.type === SchemaType.Array) {
-    const newPath = [...path, items_key]
+    const newPath = [...path, KEY_ITEMS]
     keys.push(newPath.join(SEPARATOR))
     getAllExpandedKeys(jsonSchema.items, newPath, keys)
   }
@@ -39,7 +42,7 @@ export function getAllExpandedKeys(
  */
 export function getNodeLevelInfo(fieldPath: FieldPath[]): { level: number; indentWidth: number } {
   const level = fieldPath.filter(
-    (pathName) => pathName === properties_key || pathName === items_key
+    (pathName) => pathName === KEY_PROPERTIES || pathName === KEY_ITEMS
   ).length
 
   const indentWidth = level * INDENT
@@ -47,72 +50,14 @@ export function getNodeLevelInfo(fieldPath: FieldPath[]): { level: number; inden
   return { level, indentWidth }
 }
 
-export function getRefDataModel(modelId: string): JsonSchema | undefined {
-  const json1: JsonSchema = {
-    type: SchemaType.Object,
-    properties: [
-      {
-        name: 'ref1',
-        type: SchemaType.Integer,
-        displayName: 'aa',
-        description: 'aaa',
-      },
-      // {
-      //   name: 'B',
-      //   type: SchemaType.Object,
-      //   properties: [
-      //     {
-      //       name: 'B1',
-      //       type: SchemaType.String,
-      //     },
-      //   ],
-      //   displayName: 'bb',
-      //   description: 'bbb',
-      // },
-      // {
-      //   name: 'C',
-      //   type: SchemaType.Array,
-      //   items: {
-      //     type: SchemaType.Object,
-      //     properties: [
-      //       {
-      //         name: 'C1',
-      //         type: SchemaType.String,
-      //       },
-      //     ],
-      //   },
-      //   displayName: 'cc',
-      // },
-      {
-        name: 'D',
-        type: SchemaType.Refer,
-        $ref: 'json2',
-        displayName: 'cc',
-      },
-    ],
-    displayName: '对象',
-    description: '说明',
-  }
+export function getRefJsonSchema(
+  menuRawList: ApiMenuData[],
+  modelId: string
+): JsonSchema | undefined {
+  const menuData = menuRawList.find(({ id }) => id === modelId)
 
-  const json2: JsonSchema = {
-    type: SchemaType.Object,
-    properties: [
-      {
-        name: 'ref2',
-        type: SchemaType.Integer,
-        displayName: 'aa',
-        description: 'aaa',
-      },
-    ],
-    displayName: '对象',
-    description: '说明',
-  }
+  const jsonSchema =
+    menuData?.type === MenuItemType.ApiSchema ? menuData.data?.jsonSchema : undefined
 
-  if (modelId === 'json1') {
-    return json1
-  }
-
-  if (modelId === 'json2') {
-    return json2
-  }
+  return jsonSchema
 }

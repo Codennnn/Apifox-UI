@@ -43,6 +43,7 @@ export interface ColumnType {
     text: React.ReactNode,
     record: JsonSchema,
     extraData: {
+      disabled?: boolean
       fieldPath: FieldPath[]
     }
   ) => React.ReactNode

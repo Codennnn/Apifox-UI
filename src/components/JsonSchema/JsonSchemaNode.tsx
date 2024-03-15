@@ -1,28 +1,45 @@
 import { theme } from 'antd'
 
+import { useGlobalContext } from '@/contexts/global'
 import { useStyles } from '@/hooks/useStyle'
 
-import { columnHeight, INDENT, items_key, properties_key, SchemaType, SEPARATOR } from './constants'
+import { columnHeight, INDENT, KEY_ITEMS, KEY_PROPERTIES, SchemaType, SEPARATOR } from './constants'
 import { useJsonSchemaContext } from './JsonSchema.context'
-import type { JsonSchema, ObjectSchema, PrimitiveSchema } from './JsonSchema.type'
+import type { ObjectSchema, PrimitiveSchema } from './JsonSchema.type'
 import { JsonSchemaNodeRow, type JsonSchemaNodeRowProps } from './JsonSchemaNodeRow'
-import { getNodeLevelInfo, getRefDataModel } from './utils'
+import { JsonSchemaNodeWrapper } from './JsonSchemaNodeWrapper'
+import { getNodeLevelInfo, getRefJsonSchema } from './utils'
 
 import { css } from '@emotion/css'
 
-const NodeWrapper = (
-  props: React.PropsWithChildren<
-    React.ComponentProps<'div'> & { shouldExpand: boolean; isRefModel?: boolean }
-  >
-) => {
-  const { children, shouldExpand, isRefModel, className = '', style, ...rest } = props
+export type JsonSchemaNodeProps = JsonSchemaNodeRowProps
+
+export function JsonSchemaNode(props: JsonSchemaNodeProps) {
+  const { token } = theme.useToken()
+
+  const { value, onChange, fieldPath = [], onAddField, ...restProps } = props
+
+  const { menuRawList } = useGlobalContext()
+
+  const { expandedKeys } = useJsonSchemaContext()
 
   const { styles } = useStyles(({ token }) => {
+    const unbind = css({
+      display: 'none',
+      position: 'absolute',
+      top: 0,
+      left: '50%',
+      transform: 'translate(-50%, -100%)',
+      backgroundColor: token.colorPrimaryBorderHover,
+      padding: '2px 15px',
+      borderTopLeftRadius: '5px',
+      borderTopRightRadius: '5px',
+      cursor: 'default',
+    })
+
     const ref = css(
       {
-        position: 'absolute',
-        inset: 0,
-        pointerEvents: 'none',
+        position: 'relative',
       },
       { label: 'ref-object' }
     )
@@ -33,45 +50,20 @@ const NodeWrapper = (
 
         '&:hover': {
           [`> .${ref}`]: {
-            border: `1px solid ${token.colorPrimary}`,
+            outline: `1px solid ${token.colorPrimaryBorderHover}`,
+            borderRadius: token.borderRadiusSM,
+
+            [`> .${unbind}`]: {
+              display: 'flex',
+            },
           },
         },
       },
       { label: 'node' }
     )
 
-    return { node, ref }
+    return { unbind, node, ref }
   })
-
-  return (
-    <div
-      {...rest}
-      className={`${styles.node} ${className}`}
-      style={{ display: shouldExpand ? 'block' : 'none', ...style }}
-    >
-      {children}
-
-      <div
-        className={styles.ref}
-        style={{
-          display: isRefModel ? 'block' : 'none',
-        }}
-      />
-    </div>
-  )
-}
-
-export interface JsonSchemaNodeProps extends Omit<JsonSchemaNodeRowProps, 'value' | 'onChange'> {
-  value?: JsonSchema
-  onChange?: (value: JsonSchemaNodeProps['value']) => void
-}
-
-export function JsonSchemaNode(props: JsonSchemaNodeProps) {
-  const { token } = theme.useToken()
-
-  const { value, onChange, fieldPath = [], onAddField, ...restProps } = props
-
-  const { expandedKeys } = useJsonSchemaContext()
 
   if (!value) {
     return null
@@ -101,16 +93,16 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
       if (value.type === SchemaType.Object) {
         return (
           <>
-            <JsonSchemaNodeRow {...rowProps} />
+            {!restProps.fromRef && <JsonSchemaNodeRow {...rowProps} />}
 
             {Array.isArray(value.properties) && value.properties.length > 0 ? (
-              <NodeWrapper shouldExpand={shouldExpand}>
+              <JsonSchemaNodeWrapper shouldExpand={!!restProps.fromRef || shouldExpand}>
                 {value.properties.map((propSchema, i) => {
                   return (
                     <JsonSchemaNode
                       {...renderProps}
                       key={`${propSchema.type}_${i}`}
-                      fieldPath={[...fieldPath, properties_key, `${i}`]}
+                      fieldPath={[...fieldPath, KEY_PROPERTIES, `${i}`]}
                       value={propSchema}
                       onChange={(changValue) => {
                         const newProperties = value.properties!.map((prop, idx) => {
@@ -125,7 +117,7 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
                     />
                   )
                 })}
-              </NodeWrapper>
+              </JsonSchemaNodeWrapper>
             ) : (
               <div
                 className={css({
@@ -135,7 +127,7 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
                 })}
                 style={{
                   paddingLeft:
-                    getNodeLevelInfo([...fieldPath, properties_key, '0']).indentWidth + INDENT,
+                    getNodeLevelInfo([...fieldPath, KEY_PROPERTIES, '0']).indentWidth + INDENT,
                 }}
               >
                 <span style={{ color: token.colorTextTertiary }}>
@@ -143,7 +135,7 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
                   <span
                     className={css({ color: token.colorPrimary, cursor: 'pointer' })}
                     onClick={() => {
-                      onAddField?.([...fieldPath, properties_key, '0'])
+                      onAddField?.([...fieldPath, KEY_PROPERTIES, '0'])
                     }}
                   >
                     添加
@@ -160,10 +152,10 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
           <>
             <JsonSchemaNodeRow {...rowProps} />
 
-            <NodeWrapper shouldExpand={shouldExpand}>
+            <JsonSchemaNodeWrapper shouldExpand={shouldExpand}>
               <JsonSchemaNode
                 {...renderProps}
-                fieldPath={[...fieldPath, items_key]}
+                fieldPath={[...fieldPath, KEY_ITEMS]}
                 value={value.items}
                 onChange={(changValue) => {
                   onChange?.({
@@ -172,31 +164,51 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
                   })
                 }}
               />
-            </NodeWrapper>
+            </JsonSchemaNodeWrapper>
           </>
         )
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (value.type === SchemaType.Refer) {
-        const { $ref } = value
+        const { $ref, ...restValue } = value
 
-        const refDataModel = getRefDataModel($ref)
+        if (menuRawList) {
+          const refJsonSchema = getRefJsonSchema(menuRawList, $ref)
 
-        // 为了避免循环引用，需要判断一下，如果是同一个引用，就不再往下展示了。
-        if ($ref !== restProps.fromRef) {
-          return (
-            <>
-              <JsonSchemaNodeRow {...rowProps} />
-              <NodeWrapper isRefModel shouldExpand={shouldExpand}>
-                <JsonSchemaNode
-                  fieldPath={[$ref, ...fieldPath]}
-                  fromRef={$ref}
-                  value={refDataModel}
-                />
-              </NodeWrapper>
-            </>
-          )
+          // 为了避免循环引用，需要判断一下，如果是同一个引用，就不再往下展示了。
+          if ($ref !== restProps.fromRef) {
+            return (
+              <>
+                <JsonSchemaNodeRow {...rowProps} />
+
+                <JsonSchemaNodeWrapper className={styles.node} shouldExpand={shouldExpand}>
+                  <div className={styles.ref}>
+                    <div
+                      className={styles.unbind}
+                      onClick={() => {
+                        if (refJsonSchema) {
+                          onChange?.({
+                            ...restValue,
+                            ...refJsonSchema,
+                          })
+                        }
+                      }}
+                    >
+                      解除关联
+                    </div>
+
+                    <JsonSchemaNode
+                      disabled
+                      fieldPath={[$ref, ...fieldPath]}
+                      fromRef={$ref}
+                      value={refJsonSchema}
+                    />
+                  </div>
+                </JsonSchemaNodeWrapper>
+              </>
+            )
+          }
         }
       }
 

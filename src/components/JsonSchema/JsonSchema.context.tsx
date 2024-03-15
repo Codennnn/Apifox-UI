@@ -4,7 +4,7 @@ import type { JsonSchemaEditorProps } from './JsonSchemaEditor'
 
 type JsonSchemaContextData = Pick<
   JsonSchemaEditorProps,
-  'readonly' | 'expandedKeys' | 'onExpand' | 'extraColumns'
+  'readOnly' | 'expandedKeys' | 'onExpand' | 'extraColumns'
 >
 
 const JsonSchemaContext = createContext({} as JsonSchemaContextData)

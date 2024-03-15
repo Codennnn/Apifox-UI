@@ -1,7 +1,7 @@
 import type { JsonSchema } from './JsonSchema.type'
 
-export const properties_key = 'properties'
-export const items_key = 'items'
+export const KEY_PROPERTIES = 'properties'
+export const KEY_ITEMS = 'items'
 
 /** 字段名路径分隔符。 */
 export const SEPARATOR = '.'
@@ -20,15 +20,6 @@ export const enum SchemaType {
   Object = 'object',
   Array = 'array',
   Refer = 'ref',
-}
-
-export const enum Color {
-  Primary = '#3b82f6',
-  Warning = '#f59e0b',
-  Success = '#10b981',
-  Error = '#ef4444',
-  Border = '#efefef',
-  RowBackground = '#efefef44',
 }
 
 export const defaultSchemaTypeConfig = {
