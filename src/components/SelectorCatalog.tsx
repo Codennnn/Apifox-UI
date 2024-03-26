@@ -52,7 +52,14 @@ export function SelectorCatalog(props: SelectorCatalogProps) {
                       color: token.colorPrimary,
                     }}
                     onClick={() => {
-                      void show(ModalNewCatalog)
+                      if (type) {
+                        void show(ModalNewCatalog, {
+                          formData: {
+                            parentId: ROOT_CATALOG,
+                            type: type,
+                          },
+                        })
+                      }
                     }}
                   >
                     新建目录
