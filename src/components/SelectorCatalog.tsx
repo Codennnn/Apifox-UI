@@ -58,6 +58,7 @@ export function SelectorCatalog(props: SelectorCatalogProps) {
                             parentId: ROOT_CATALOG,
                             type: type,
                           },
+                          zIndex: Infinity, // <- 防止层级被覆盖。
                         })
                       }
                     }}
