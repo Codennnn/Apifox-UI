@@ -76,44 +76,40 @@ export function GlobalContextProvider(
       },
 
       removeMenuItem: ({ id }) => {
-        setMenuRawList((rawList) =>
-          rawList?.filter((item) => {
-            const shouldRemove = item.id === id || item.parentId === id
+        const newMenuRawList = menuRawList?.filter((item) => {
+          const shouldRemove = item.id === id || item.parentId === id
 
-            if (shouldRemove) {
-              setRecyleRawData((d) =>
-                d
-                  ? produce(d, (draft) => {
-                      let catalogType = getCatalogType(item.type)
+          if (shouldRemove) {
+            setRecyleRawData((d) =>
+              d
+                ? produce(d, (draft) => {
+                    let catalogType = getCatalogType(item.type)
 
-                      if (catalogType === CatalogType.Markdown) {
-                        catalogType = CatalogType.Http
-                      }
+                    if (catalogType === CatalogType.Markdown) {
+                      catalogType = CatalogType.Http
+                    }
 
-                      if (
-                        catalogType === CatalogType.Http ||
-                        catalogType === CatalogType.Schema ||
-                        catalogType === CatalogType.Request
-                      ) {
-                        const list = draft[catalogType].list
+                    if (
+                      catalogType === CatalogType.Http ||
+                      catalogType === CatalogType.Schema ||
+                      catalogType === CatalogType.Request
+                    ) {
+                      const list = draft[catalogType].list
 
-                        const exists = list?.findIndex((it) => it.deletedItem.id === id) !== -1
+                      draft[catalogType].list = [
+                        { id: nanoid(6), expiredAt: '30天', creator, deletedItem: item },
+                        ...(list || []),
+                      ]
+                    }
+                  })
+                : d
+            )
+          }
 
-                        if (!exists) {
-                          draft[catalogType].list = [
-                            { id: nanoid(6), expiredAt: '30天', creator, deletedItem: item },
-                            ...list,
-                          ]
-                        }
-                      }
-                    })
-                  : d
-              )
-            }
+          return !shouldRemove
+        })
 
-            return !shouldRemove
-          })
-        )
+        setMenuRawList(newMenuRawList)
       },
 
       updateMenuItem: ({ id, ...rest }) => {
@@ -133,33 +129,27 @@ export function GlobalContextProvider(
       },
 
       restoreMenuItem: ({ restoreId, catalogType }) => {
-        setRecyleRawData((d) =>
-          produce(d, (draft) => {
-            if (draft) {
-              const list = draft[catalogType].list
+        const newRecyleRawData = produce(recyleRawData, (draft) => {
+          if (draft) {
+            const list = draft[catalogType].list
 
-              draft[catalogType].list = list?.filter((li) => {
-                const shouldRestore = li.id === restoreId
+            draft[catalogType].list = list?.filter((li) => {
+              const shouldRestore = li.id === restoreId
 
-                if (shouldRestore) {
-                  const apiMenuDataItem = current(li).deletedItem
+              if (shouldRestore) {
+                const apiMenuDataItem = current(li).deletedItem
 
-                  setMenuRawList((rawList) => {
-                    const exists = rawList?.findIndex((it) => it.id === apiMenuDataItem.id) !== -1
+                setMenuRawList((rawList = []) => {
+                  return [...rawList, apiMenuDataItem]
+                })
+              }
 
-                    if (exists) {
-                      return rawList
-                    }
+              return !shouldRestore
+            })
+          }
+        })
 
-                    return [...rawList, apiMenuDataItem]
-                  })
-                }
-
-                return !shouldRestore
-              })
-            }
-          })
-        )
+        setRecyleRawData(newRecyleRawData)
       },
 
       moveMenuItem: ({ dragKey, dropKey, dropPosition }) => {
@@ -209,7 +199,7 @@ export function GlobalContextProvider(
         })
       },
     }
-  }, [])
+  }, [menuRawList, recyleRawData])
 
   return (
     <GlobalContext.Provider
