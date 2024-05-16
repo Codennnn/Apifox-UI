@@ -142,11 +142,11 @@
           border-color: transparent;
 
           &::before {
+            content: '';
             position: absolute;
             right: -4px;
             width: 1px;
             height: 24px;
-            content: '';
           }
         }
 
