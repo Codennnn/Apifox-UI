@@ -138,8 +138,8 @@ function HomeContent() {
             </div>
           </Panel>
 
-          <PanelResizeHandle className={`relative basis-[1px] ${styles.resizeHandle}`}>
-            <div className={`h-full w-[1px] ${styles.resizeHandleInner}`} />
+          <PanelResizeHandle className={`relative basis-px ${styles.resizeHandle}`}>
+            <div className={`h-full w-px ${styles.resizeHandleInner}`} />
           </PanelResizeHandle>
 
           <Panel

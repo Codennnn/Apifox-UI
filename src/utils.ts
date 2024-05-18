@@ -9,7 +9,7 @@ export { default as serialize } from 'serialize-javascript'
 
 /** 反序列化，对应 serialize 方法。 */
 export function deserialize<ReturnType = unknown>(data: any): ReturnType {
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval, @typescript-eslint/restrict-plus-operands
   return Function('"use strict";return (' + data + ')')() as ReturnType
 }
 
