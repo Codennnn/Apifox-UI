@@ -1,6 +1,7 @@
 'use client'
 
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
+import { useLayoutEffect, useState } from 'react'
+import { Panel, PanelGroup, type PanelProps, PanelResizeHandle } from 'react-resizable-panels'
 
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
 import { Button, ConfigProvider, Dropdown, Flex, message, Modal, theme, Tooltip } from 'antd'
@@ -59,92 +60,116 @@ function HomeContent() {
     }
   })
 
+  const [defaultSize, setDefaultSize] = useState<PanelProps['defaultSize']>()
+  const [minSize, setMinSize] = useState<PanelProps['minSize']>()
+
+  useLayoutEffect(() => {
+    const panelGroup = document.querySelector('#panel-group')
+
+    if (panelGroup instanceof HTMLElement) {
+      setDefaultSize((280 / panelGroup.offsetWidth) * 100)
+      setMinSize((200 / panelGroup.offsetWidth) * 100)
+    }
+  }, [])
+
   return (
     <div className="flex h-full" style={{ backgroundColor: token.colorBgContainer }}>
       <SideNav />
 
       <div className="relative w-full overflow-hidden">
-        <PanelGroup direction="horizontal">
-          <Panel
-            ref={panelRef}
-            collapsible
-            className="flex h-full flex-col overflow-hidden py-2"
-            defaultSize={15}
-            minSize={15}
-            style={{ backgroundColor: token.colorFillAlter }}
-            onCollapse={() => {
-              setIsSideMenuCollapsed(true)
-            }}
-            onExpand={() => {
-              setIsSideMenuCollapsed(false)
-            }}
-          >
-            <Flex gap={token.paddingXXS} style={{ padding: token.paddingXS }}>
-              <InputSearch />
-
-              <ConfigProvider
-                theme={{
-                  components: {
-                    Button: {
-                      paddingInline: token.paddingXS,
-                      defaultBg: token.colorFillTertiary,
-                      defaultBorderColor: token.colorFillTertiary,
-                    },
-                  },
+        <PanelGroup direction="horizontal" id="panel-group">
+          {!!defaultSize && !!minSize && (
+            <>
+              <Panel
+                ref={panelRef}
+                collapsible
+                className="flex h-full flex-col overflow-hidden py-2"
+                defaultSize={defaultSize}
+                id="side"
+                maxSize={50}
+                minSize={minSize}
+                order={1}
+                style={{ backgroundColor: token.colorFillAlter }}
+                onCollapse={() => {
+                  setIsSideMenuCollapsed(true)
+                }}
+                onExpand={() => {
+                  setIsSideMenuCollapsed(false)
                 }}
               >
-                <Tooltip title="显示筛选条件">
-                  <Button>
-                    <IconText icon={<FilterIcon size={16} />} />
-                  </Button>
-                </Tooltip>
+                <Flex gap={token.paddingXXS} style={{ padding: token.paddingXS }}>
+                  <InputSearch />
 
-                <Dropdown
-                  menu={{
-                    items: [
-                      ...[
-                        MenuItemType.ApiDetail,
-                        MenuItemType.HttpRequest,
-                        MenuItemType.Doc,
-                        MenuItemType.ApiSchema,
-                      ].map((t) => {
-                        const { newLabel } = API_MENU_CONFIG[getCatalogType(t)]
+                  <ConfigProvider
+                    theme={{
+                      components: {
+                        Button: {
+                          paddingInline: token.paddingXS,
+                          defaultBg: token.colorFillTertiary,
+                          defaultBorderColor: token.colorFillTertiary,
+                        },
+                      },
+                    }}
+                  >
+                    <Tooltip title="显示筛选条件">
+                      <Button>
+                        <IconText icon={<FilterIcon size={16} />} />
+                      </Button>
+                    </Tooltip>
 
-                        return {
-                          key: t,
-                          label: t === MenuItemType.Doc ? '新建 Markdown' : newLabel,
-                          icon: (
-                            <FileIcon size={16} style={{ color: token.colorPrimary }} type={t} />
-                          ),
-                          onClick: () => {
-                            createTabItem(t)
-                          },
-                        }
-                      }),
-                    ],
-                  }}
-                >
-                  <Button type="primary">
-                    <IconText icon={<PlusIcon size={18} />} />
-                  </Button>
-                </Dropdown>
-              </ConfigProvider>
-            </Flex>
+                    <Dropdown
+                      menu={{
+                        items: [
+                          ...[
+                            MenuItemType.ApiDetail,
+                            MenuItemType.HttpRequest,
+                            MenuItemType.Doc,
+                            MenuItemType.ApiSchema,
+                          ].map((t) => {
+                            const { newLabel } = API_MENU_CONFIG[getCatalogType(t)]
 
-            <div className="ui-menu flex-1 overflow-y-auto">
-              <ApiMenuContextProvider>
-                <ApiMenu />
-              </ApiMenuContextProvider>
-            </div>
-          </Panel>
+                            return {
+                              key: t,
+                              label: t === MenuItemType.Doc ? '新建 Markdown' : newLabel,
+                              icon: (
+                                <FileIcon
+                                  size={16}
+                                  style={{ color: token.colorPrimary }}
+                                  type={t}
+                                />
+                              ),
+                              onClick: () => {
+                                createTabItem(t)
+                              },
+                            }
+                          }),
+                        ],
+                      }}
+                    >
+                      <Button type="primary">
+                        <IconText icon={<PlusIcon size={18} />} />
+                      </Button>
+                    </Dropdown>
+                  </ConfigProvider>
+                </Flex>
 
-          <PanelResizeHandle className={`relative basis-px ${styles.resizeHandle}`}>
-            <div className={`h-full w-px ${styles.resizeHandleInner}`} />
-          </PanelResizeHandle>
+                <div className="ui-menu flex-1 overflow-y-auto">
+                  <ApiMenuContextProvider>
+                    <ApiMenu />
+                  </ApiMenuContextProvider>
+                </div>
+              </Panel>
+
+              <PanelResizeHandle className={`relative basis-px ${styles.resizeHandle}`}>
+                <div className={`h-full w-px ${styles.resizeHandleInner}`} />
+              </PanelResizeHandle>
+            </>
+          )}
 
           <Panel
             className="relative flex h-full flex-1 flex-col overflow-y-auto overflow-x-hidden"
-            minSize={50}
+            id="main"
+            order={2}
           >
             <div className="flex-1 overflow-auto">
               <ApiTab />
