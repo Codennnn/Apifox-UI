@@ -1,6 +1,14 @@
-import { useMemo, useState } from 'react'
+import { cloneElement, useMemo, useState } from 'react'
 import useEvent from 'react-use-event-hook'
 
+import { DndContext, type DndContextProps, PointerSensor, useSensor } from '@dnd-kit/core'
+import {
+  arrayMove,
+  horizontalListSortingStrategy,
+  SortableContext,
+  useSortable,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { ConfigProvider, Dropdown, Popconfirm, Tabs, type TabsProps } from 'antd'
 import { BadgeInfoIcon, XIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
@@ -25,6 +33,10 @@ import { TabContentProvider } from './TabContentContext'
 
 import { css } from '@emotion/css'
 
+interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
+  'data-node-key': string
+}
+
 /**
  * 菜单内容页签。
  *
@@ -38,7 +50,7 @@ export function ApiTab(props: TabsProps) {
   const [confirmKey, setConfirmKey] = useState<CatalogId>()
 
   const { menuRawList } = useGlobalContext()
-  const { tabItems, activeTabKey } = useMenuTabContext()
+  const { tabItems, setTabItems, activeTabKey } = useMenuTabContext()
   const { activeTabItem, addTabItem, getTabItem, removeTabItem } = useMenuTabHelpers()
   const { menuItems } = useApiTabActions()
 
@@ -131,14 +143,54 @@ export function ApiTab(props: TabsProps) {
     })
   }, [tabItems, menuRawList, confirmKey, handleItemRemove])
 
+  const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
+
+  const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
+    const { isDragging, attributes, listeners, setNodeRef, transform, transition } = useSortable({
+      id: props['data-node-key'],
+    })
+
+    const style: React.CSSProperties = {
+      ...props.style,
+      transform: CSS.Translate.toString(transform),
+      transition,
+      zIndex: isDragging ? 99 : undefined,
+    }
+
+    return cloneElement(props.children as React.ReactElement, {
+      ref: setNodeRef,
+      style,
+      ...attributes,
+      ...listeners,
+    })
+  }
+
+  const handleDragEnd: DndContextProps['onDragEnd'] = ({ active, over }) => {
+    if (active.id !== over?.id) {
+      setTabItems((prev) => {
+        const activeIndex = prev.findIndex((i) => i.key === active.id)
+        const overIndex = prev.findIndex((i) => i.key === over?.id)
+        return arrayMove(prev, activeIndex, overIndex)
+      })
+    }
+  }
+
   const renderTabBar: TabsProps['renderTabBar'] = (tabBarProps, DefaultTabBar) => (
-    <DefaultTabBar {...tabBarProps} className="ui-tabs-nav">
-      {(node) => (
-        <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
-          {node}
-        </Dropdown>
-      )}
-    </DefaultTabBar>
+    <DndContext sensors={[sensor]} onDragEnd={handleDragEnd}>
+      <SortableContext items={items.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
+        <DefaultTabBar {...tabBarProps} className="ui-tabs-nav">
+          {(node) => (
+            <DraggableTabNode {...node.props} key={node.key}>
+              <div>
+                <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
+                  {node}
+                </Dropdown>
+              </div>
+            </DraggableTabNode>
+          )}
+        </DefaultTabBar>
+      </SortableContext>
+    </DndContext>
   )
 
   const { styles } = useStyles(({ token }) => {

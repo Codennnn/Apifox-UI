@@ -115,6 +115,8 @@
   }
 
   > .ui-tabs-nav.ant-tabs-nav .ant-tabs-tab {
+    backdrop-filter: blur(10px);
+
     &:hover,
     &.ant-tabs-tab-active {
       color: currentcolor;
@@ -158,7 +160,7 @@
       }
 
       .ant-tabs-nav-list {
-        @apply ml-2;
+        @apply relative ml-2;
       }
 
       > .ant-tabs-nav {
