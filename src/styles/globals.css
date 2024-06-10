@@ -115,7 +115,7 @@
   }
 
   > .ui-tabs-nav.ant-tabs-nav .ant-tabs-tab {
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(1rem);
 
     &:hover,
     &.ant-tabs-tab-active {
@@ -146,7 +146,7 @@
           &::before {
             content: '';
             position: absolute;
-            right: -4px;
+            right: 0;
             width: 1px;
             height: 24px;
           }

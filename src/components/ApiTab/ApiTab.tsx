@@ -1,7 +1,12 @@
-import { cloneElement, useMemo, useState } from 'react'
+import { cloneElement, type PointerEvent, useMemo, useState } from 'react'
 import useEvent from 'react-use-event-hook'
 
-import { DndContext, type DndContextProps, PointerSensor, useSensor } from '@dnd-kit/core'
+import {
+  DndContext,
+  type DndContextProps,
+  PointerSensor as LibPointerSensor,
+  useSensor,
+} from '@dnd-kit/core'
 import {
   arrayMove,
   horizontalListSortingStrategy,
@@ -32,6 +37,27 @@ import { ApiTabContent } from './ApiTabContent'
 import { TabContentProvider } from './TabContentContext'
 
 import { css } from '@emotion/css'
+
+// Block DnD event propagation if element have "data-no-dnd" attribute.
+const handler = ({ nativeEvent: event }: PointerEvent) => {
+  let cur = event.target as HTMLElement
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  while (cur) {
+    if (cur.dataset.noDnd) {
+      return false
+    }
+    cur = cur.parentElement!
+  }
+
+  return true
+}
+
+class PointerSensor extends LibPointerSensor {
+  static activators = [
+    { eventName: 'onPointerDown', handler },
+  ] as (typeof LibPointerSensor)['activators']
+}
 
 interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
   'data-node-key': string
@@ -124,6 +150,7 @@ export function ApiTab(props: TabsProps) {
                   ? 'changed after:bg-primary-500 group relative overflow-hidden rounded-full after:absolute after:size-2 after:rounded-full after:content-[""] hover:overflow-auto hover:bg-transparent hover:after:hidden'
                   : ''
               }`}
+              data-no-dnd="true"
             >
               <XIcon
                 className={
@@ -145,7 +172,7 @@ export function ApiTab(props: TabsProps) {
 
   const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
 
-  const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
+  const DraggableTabNode = (props: DraggableTabPaneProps) => {
     const { isDragging, attributes, listeners, setNodeRef, transform, transition } = useSortable({
       id: props['data-node-key'],
     })
