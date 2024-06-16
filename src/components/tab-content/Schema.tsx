@@ -122,7 +122,7 @@ export function Schema() {
         </div>
 
         <Form.Item noStyle name="jsonSchema">
-          <JsonSchemaCard />
+          <JsonSchemaCard editorProps={{ defaultExpandAll: true }} />
         </Form.Item>
       </Form>
     </div>

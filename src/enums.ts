@@ -84,3 +84,13 @@ export const enum ContentType {
   Raw = 'raw',
   Binary = 'binary',
 }
+
+export const enum BodyType {
+  None = 'none',
+  FormData = 'multipart/form-data',
+  UrlEncoded = 'application/x-www-form-urlencoded',
+  Json = 'application/json',
+  Xml = 'application/xml',
+  Raw = 'text/plain',
+  Binary = 'application/octet-stream',
+}

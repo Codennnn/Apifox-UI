@@ -1,7 +1,10 @@
-import { Tabs, theme, Typography } from 'antd'
+import { Form, Tabs, theme, Typography } from 'antd'
 
-import { ParamsEditableTable } from '@/components/tab-content/api/ParamsEditableTable'
 import type { ApiDetails } from '@/types'
+
+import { ParamsEditableTable } from '../ParamsEditableTable'
+
+import { ParamsBody } from './ParamsBody'
 
 function BadgeLabel(props: React.PropsWithChildren<{ count?: number }>) {
   const { token } = theme.useToken()
@@ -48,7 +51,7 @@ export function ParamsTab(props: ParamsTabProps) {
           ),
           children: (
             <div>
-              <div className="my-2">
+              <div className="py-2">
                 <Typography.Text type="secondary">Query 参数</Typography.Text>
               </div>
               <ParamsEditableTable
@@ -60,7 +63,7 @@ export function ParamsTab(props: ParamsTabProps) {
 
               {value?.path ? (
                 <>
-                  <div className="my-2">
+                  <div className="py-2">
                     <Typography.Text type="secondary">Path 参数</Typography.Text>
                   </div>
                   <ParamsEditableTable
@@ -76,34 +79,41 @@ export function ParamsTab(props: ParamsTabProps) {
             </div>
           ),
         },
+
         {
           key: 'body',
           label: 'Body',
-          children: <div>-</div>,
-        },
-        {
-          key: 'cookie',
-          label: 'Cookie',
           children: (
-            <div className="pt-[10px]">
+            <Form.Item noStyle name="requestBody">
+              <ParamsBody />
+            </Form.Item>
+          ),
+        },
+
+        {
+          key: 'headers',
+          label: 'Headers',
+          children: (
+            <div className="pt-2">
               <ParamsEditableTable
-                value={value?.cookie}
-                onChange={(cookie) => {
-                  onChange?.({ ...value, cookie })
+                value={value?.header}
+                onChange={(header) => {
+                  onChange?.({ ...value, header })
                 }}
               />
             </div>
           ),
         },
+
         {
-          key: 'headers',
-          label: 'Headers',
+          key: 'cookie',
+          label: 'Cookie',
           children: (
-            <div className="pt-[10px]">
+            <div className="pt-2">
               <ParamsEditableTable
-                value={value?.header}
-                onChange={(header) => {
-                  onChange?.({ ...value, header })
+                value={value?.cookie}
+                onChange={(cookie) => {
+                  onChange?.({ ...value, cookie })
                 }}
               />
             </div>

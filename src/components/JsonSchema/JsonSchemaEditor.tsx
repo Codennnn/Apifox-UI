@@ -11,6 +11,7 @@ import { getAllExpandedKeys } from './utils'
 
 export interface JsonSchemaEditorProps extends Pick<JsonSchemaNodeProps, 'value' | 'onChange'> {
   defaultExpandAll?: boolean
+  defaultValue?: JsonSchemaEditorProps['value']
 
   readOnly?: boolean
   expandedKeys?: string[]
@@ -22,7 +23,13 @@ export interface JsonSchemaEditorProps extends Pick<JsonSchemaNodeProps, 'value'
 }
 
 export function JsonSchemaEditor(props: JsonSchemaEditorProps) {
-  const { defaultExpandAll = false, value, onChange, ...restRenderProps } = props
+  const {
+    defaultExpandAll = false,
+    defaultValue,
+    value = defaultValue,
+    onChange,
+    ...restRenderProps
+  } = props
 
   const [expandedKeys, setExpandedKeys] = useState<JsonSchemaEditorProps['expandedKeys']>()
 

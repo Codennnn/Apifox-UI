@@ -19,30 +19,28 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
   const { value, onChange, autoNewRow = true, removable = true } = props
 
   const handleChange = (v: Partial<Record<keyof Parameter, any>>, idx: number) => {
-    if (value) {
-      const target = value.at(idx)
+    const target = value?.at(idx)
 
-      if (target?.id) {
-        onChange?.(
-          value.map((it, i) => {
-            if (i === idx) {
-              return { ...it, ...v }
-            }
+    if (target?.id) {
+      onChange?.(
+        value?.map((it, i) => {
+          if (i === idx) {
+            return { ...it, ...v }
+          }
 
-            return it
-          })
-        )
-      } else {
-        onChange?.([
-          ...value,
-          {
-            ...target,
-            ...v,
-            type: ParamType.String,
-            id: nanoid(6),
-          },
-        ])
-      }
+          return it
+        })
+      )
+    } else {
+      onChange?.([
+        ...(value || []),
+        {
+          ...target,
+          ...v,
+          type: ParamType.String,
+          id: nanoid(6),
+        },
+      ])
     }
   }
 
@@ -59,7 +57,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
               <div>
                 <Input
                   placeholder="添加参数"
-                  value={typeof text === 'string' ? text : undefined}
+                  value={typeof text === 'string' ? text : ''}
                   variant="borderless"
                   onChange={(ev) => {
                     handleChange({ name: ev.target.value }, idx)
@@ -92,10 +90,10 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                     color:
                       typeof text === 'string'
                         ? `var(${PARAMS_CONFIG[text as ParamType].varColor})`
-                        : undefined,
+                        : '',
                   }}
                   suffixIcon={null}
-                  value={typeof text === 'string' ? text : undefined}
+                  value={typeof text === 'string' ? text : ''}
                   variant="borderless"
                   onChange={(val) => {
                     handleChange({ type: val }, idx)

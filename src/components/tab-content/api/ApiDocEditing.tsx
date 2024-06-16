@@ -38,9 +38,9 @@ import { getContentTypeString } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
+import { ParamsTab } from './params/ParamsTab'
 import { InputDesc } from './InputDesc'
 import { contentTypeOptions, httpCodeOptions, ModalNewResponse } from './ModalNewResponse'
-import { ParamsTab } from './ParamsTab'
 
 import { css } from '@emotion/css'
 
@@ -194,7 +194,7 @@ export function ApiDocEditing() {
           </Space>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-tabContent pt-0">
+        <div className="flex-1 overflow-y-auto p-tabContent">
           <Form.Item noStyle name="name">
             <InputUnderline placeholder={DEFAULT_NAME} />
           </Form.Item>
@@ -257,7 +257,7 @@ export function ApiDocEditing() {
             <ParamsTab />
           </Form.Item>
 
-          <GroupTitle className="mt-8">返回响应</GroupTitle>
+          <GroupTitle className="mb-3 mt-8">返回响应</GroupTitle>
           <Form.Item
             shouldUpdate={(prev: ApiDetails, curr: ApiDetails) => prev.responses !== curr.responses}
           >
@@ -357,7 +357,7 @@ export function ApiDocEditing() {
                           </div>
 
                           <Form.Item noStyle name={['responses', idx, 'jsonSchema']}>
-                            <JsonSchemaCard />
+                            <JsonSchemaCard editorProps={{ defaultExpandAll: true }} />
                           </Form.Item>
 
                           <Form.Item noStyle dependencies={['responseExamples']}>

@@ -14,26 +14,20 @@ import {
   useSortable,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { ConfigProvider, Dropdown, Popconfirm, Tabs, type TabsProps } from 'antd'
+import { ConfigProvider, Dropdown, Popconfirm, Tabs, type TabsProps, theme } from 'antd'
 import { BadgeInfoIcon, XIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
 import type { CatalogId } from '@/components/ApiMenu'
-import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
-import { FolderIcon } from '@/components/icons/FolderIcon'
-import { HttpMethodText } from '@/components/icons/HttpMethodText'
-import { API_MENU_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
-import { initialCreateApiDetailsData } from '@/data/remote'
-import { getCatalogType, getCreateType, hasAccentColor, isCreateType } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
-import { MenuItemType } from '../../enums'
 
 import type { Tab } from './ApiTab.type'
 import { ApiTabAction, useApiTabActions } from './ApiTabAction'
 import { ApiTabContent } from './ApiTabContent'
+import { ApiTabLabel } from './ApiTabLabel'
 import { TabContentProvider } from './TabContentContext'
 
 import { css } from '@emotion/css'
@@ -61,6 +55,29 @@ class PointerSensor extends LibPointerSensor {
 
 interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
   'data-node-key': string
+}
+
+const DraggableTabNode = (props: DraggableTabPaneProps) => {
+  const { token } = theme.useToken()
+
+  const { isDragging, attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: props['data-node-key'],
+  })
+
+  const style: React.CSSProperties = {
+    ...props.style,
+    transform: CSS.Translate.toString(transform),
+    transition,
+    zIndex: isDragging ? 99 : undefined,
+    outline: isDragging ? `1px solid ${token.colorPrimaryBorder}` : undefined,
+  }
+
+  return cloneElement(props.children as React.ReactElement, {
+    ref: setNodeRef,
+    style,
+    ...attributes,
+    ...listeners,
+  })
 }
 
 /**
@@ -95,38 +112,9 @@ export function ApiTab(props: TabsProps) {
     return tabItems.map((tabItem) => {
       const menuData = menuRawList?.find((it) => it.id === tabItem.key)
 
-      const label = (
-        <span className="ui-tabs-tab-label flex items-center gap-1">
-          {menuData?.type === MenuItemType.ApiDetail ||
-          menuData?.type === MenuItemType.HttpRequest ? (
-            <span className="mr-1 font-semibold">
-              <HttpMethodText method={menuData.data?.method} />
-            </span>
-          ) : tabItem.contentType === MenuItemType.ApiDetail &&
-            tabItem.data?.tabStatus === PageTabStatus.Create ? (
-            <span className="mr-1 font-semibold">
-              <HttpMethodText method={initialCreateApiDetailsData.method} />
-            </span>
-          ) : (
-            <FolderIcon
-              size={16}
-              style={{
-                color:
-                  isCreateType(tabItem.contentType) && hasAccentColor(tabItem.contentType)
-                    ? API_MENU_CONFIG[getCatalogType(getCreateType(tabItem.contentType))]
-                        .accentColor
-                    : undefined,
-              }}
-              type={tabItem.contentType}
-            />
-          )}
-          <span>{menuData?.name || tabItem.label}</span>
-        </span>
-      )
-
       return {
         key: tabItem.key,
-        label,
+        label: <ApiTabLabel menuData={menuData} tabItem={tabItem} />,
         className: 'group',
         closeIcon: (
           <Popconfirm
@@ -171,26 +159,6 @@ export function ApiTab(props: TabsProps) {
   }, [tabItems, menuRawList, confirmKey, handleItemRemove])
 
   const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
-
-  const DraggableTabNode = (props: DraggableTabPaneProps) => {
-    const { isDragging, attributes, listeners, setNodeRef, transform, transition } = useSortable({
-      id: props['data-node-key'],
-    })
-
-    const style: React.CSSProperties = {
-      ...props.style,
-      transform: CSS.Translate.toString(transform),
-      transition,
-      zIndex: isDragging ? 99 : undefined,
-    }
-
-    return cloneElement(props.children as React.ReactElement, {
-      ref: setNodeRef,
-      style,
-      ...attributes,
-      ...listeners,
-    })
-  }
 
   const handleDragEnd: DndContextProps['onDragEnd'] = ({ active, over }) => {
     if (active.id !== over?.id) {
@@ -244,6 +212,23 @@ export function ApiTab(props: TabsProps) {
     }
   })
 
+  const handleEdit: TabsProps['onEdit'] = (key, action) => {
+    if (action === 'add') {
+      addTabItem({
+        key: nanoid(6),
+        label: '新建...',
+        contentType: 'blank',
+      })
+    } else if (
+      /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
+      action === 'remove'
+    ) {
+      if (typeof key === 'string') {
+        handleItemRemove(key)
+      }
+    }
+  }
+
   return (
     <ConfigProvider
       theme={{
@@ -258,28 +243,13 @@ export function ApiTab(props: TabsProps) {
       <Tabs
         hideAdd
         activeKey={activeTabKey}
-        className={`ui-tabs ${styles.appTabs}`}
+        className={`ui-tabs main-tabs ${styles.appTabs}`}
         items={items}
         renderTabBar={renderTabBar}
         tabBarExtraContent={<ApiTabAction />}
         tabBarStyle={{ width: '100%', marginBottom: 0 }}
         type="editable-card"
-        onEdit={(key, action) => {
-          if (action === 'add') {
-            addTabItem({
-              key: nanoid(6),
-              label: '新建...',
-              contentType: 'blank',
-            })
-          } else if (
-            /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
-            action === 'remove'
-          ) {
-            if (typeof key === 'string') {
-              handleItemRemove(key)
-            }
-          }
-        }}
+        onEdit={handleEdit}
         onTabClick={(key) => {
           activeTabItem({ key })
         }}

@@ -13,12 +13,15 @@ import { useGlobalContext } from '@/contexts/global'
 
 import { UIButton } from './UIBtn'
 
-type JsonSchemaCardProps = Pick<JsonSchemaEditorProps, 'value' | 'onChange'>
+interface JsonSchemaCardProps
+  extends Pick<JsonSchemaEditorProps, 'value' | 'onChange' | 'defaultValue'> {
+  editorProps?: JsonSchemaEditorProps
+}
 
 export function JsonSchemaCard(props: JsonSchemaCardProps) {
   const { token } = theme.useToken()
 
-  const { value, onChange } = props
+  const { defaultValue, value = defaultValue, onChange, editorProps } = props
 
   const [editorValue, setEditorValue] = useState<string>()
 
@@ -59,7 +62,7 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
         </div>
 
         <div style={{ padding: token.paddingSM }}>
-          <JsonSchemaEditor defaultExpandAll value={value} onChange={onChange} />
+          <JsonSchemaEditor value={value} onChange={onChange} {...editorProps} />
         </div>
       </div>
 

@@ -132,14 +132,16 @@
   &.ant-tabs {
     @apply h-full;
 
-    .ant-tabs-nav {
-      @apply pr-3;
+    &.main-tabs {
+      > .ant-tabs-nav {
+        @apply pr-3;
+      }
     }
 
     .ui-tabs-nav {
-      > .ant-tabs-nav-wrap {
-        @apply mt-2;
+      @apply pt-2;
 
+      > .ant-tabs-nav-wrap {
         .ant-tabs-tab:not(.ant-tabs-tab-active) {
           border-color: transparent;
 

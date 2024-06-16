@@ -92,15 +92,19 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
         {internalDataSource.map((record, ridx) => (
           <tr key={`${ridx}`}>
             {columns?.map((col, cidx) => {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              const tdValue = col.dataIndex ? record[col.dataIndex] : null
+
               return (
                 <td
                   key={`${cidx}`}
                   className={styles.td}
                   style={{ border: internalDataSource.length === ridx + 1 ? 'none' : undefined }}
                 >
-                  {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                  {/* @ts-expect-error */}
-                  {col.render?.(col.dataIndex ? record[col.dataIndex] : null, record, ridx)}
+                  {typeof col.render === 'function'
+                    ? col.render(tdValue, record as RecordType, ridx)
+                    : String(tdValue)}
                 </td>
               )
             })}

@@ -3,6 +3,7 @@ import type { JsonSchema } from '@/components/JsonSchema'
 
 import type {
   ApiStatus,
+  BodyType,
   CatalogType,
   ContentType,
   HttpMethod,
@@ -79,7 +80,9 @@ export interface ApiDetails {
   }
   /** 请求参数 - Body */
   requestBody?: {
-    parameters: Parameter[]
+    type: BodyType
+    parameters?: Parameter[]
+    jsonSchema?: JsonSchema
   }
   /** 返回响应 */
   responses?: ApiDetailsResponse[]
