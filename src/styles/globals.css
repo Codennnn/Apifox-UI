@@ -7,6 +7,8 @@
 }
 
 :root {
+  --layout-header-height: 40px;
+  --p-main: 8px;
   --p-tab-content: 16px;
 }
 
@@ -115,8 +117,6 @@
   }
 
   > .ui-tabs-nav.ant-tabs-nav .ant-tabs-tab {
-    backdrop-filter: blur(1rem);
-
     &:hover,
     &.ant-tabs-tab-active {
       color: currentcolor;

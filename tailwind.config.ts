@@ -8,6 +8,8 @@ export default {
       colors: {},
 
       padding: {
+        layoutHeader: 'var(--layout-header-height)',
+        main: 'var(--p-main)',
         tabContent: 'var(--p-tab-content)',
       },
 

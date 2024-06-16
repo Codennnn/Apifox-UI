@@ -10,6 +10,7 @@ export function InputUnderline(props: InputProps) {
   const { styles } = useStyles(({ token }) => {
     return {
       nameInput: css({
+        color: token.colorTextBase,
         borderBottom: '1px solid transparent',
         padding: `0 ${token.paddingXXS}px`,
 

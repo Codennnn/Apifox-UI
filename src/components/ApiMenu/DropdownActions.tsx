@@ -174,6 +174,10 @@ export function DropdownActions(props: React.PropsWithChildren<DropdownActionsPr
     <Dropdown
       menu={{
         items: isFolder ? folderActionMenu : fileActionMenu,
+        onContextMenu: (ev) => {
+          ev.preventDefault()
+          ev.stopPropagation()
+        },
       }}
       {...dropdownProps}
     >

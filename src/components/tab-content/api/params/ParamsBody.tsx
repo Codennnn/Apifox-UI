@@ -1,4 +1,4 @@
-import { Tag } from 'antd'
+import { Flex, Tag } from 'antd'
 
 import { SchemaType } from '@/components/JsonSchema'
 import { JsonSchemaCard } from '@/components/JsonSchemaCard'
@@ -84,7 +84,7 @@ export function ParamsBody(props: ParamsBodyProps) {
 
   return (
     <div>
-      <div className="flex flex-wrap gap-1 p-2">
+      <Flex wrap className="p-2" gap={8}>
         {types.map(({ name, type }) => {
           return (
             <Tag.CheckableTag
@@ -100,7 +100,7 @@ export function ParamsBody(props: ParamsBodyProps) {
             </Tag.CheckableTag>
           )
         })}
-      </div>
+      </Flex>
 
       <div>
         <BodyComp value={value || { type: BodyType.None }} onChange={onChange} />

@@ -194,15 +194,13 @@ export function ApiTab(props: TabsProps) {
         '&.ant-tabs': {
           '.ui-tabs-nav': {
             '&.ant-tabs-nav': {
-              backgroundColor: token.colorFillAlter,
-
               '.ant-tabs-tab:not(.ant-tabs-tab-active) ': {
                 '.ui-tabs-tab-label': {
                   color: token.colorTextSecondary,
                 },
 
                 '&::before': {
-                  backgroundColor: token.colorBorder,
+                  backgroundColor: token.colorBorderSecondary,
                 },
               },
             },

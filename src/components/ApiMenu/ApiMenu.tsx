@@ -48,10 +48,6 @@ export function ApiMenu() {
     const menuId = node.key
 
     if (typeof menuId === 'string') {
-      if (!node.isLeaf) {
-        switchExpandedKeys(menuId)
-      }
-
       const isTabPresent = tabItems.some(({ key }) => key === menuId)
 
       if (isTabPresent) {
@@ -98,7 +94,7 @@ export function ApiMenu() {
 
         '&.ant-tree-treenode-selected': {
           '::before, :hover::before': {
-            backgroundColor: token.colorPrimaryBg,
+            backgroundColor: token.colorFillTertiary,
           },
         },
 

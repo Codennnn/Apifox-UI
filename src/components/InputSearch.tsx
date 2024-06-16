@@ -23,9 +23,8 @@ export function InputSearch() {
 
   const { styles } = useStyles(({ token }) => {
     const inputBox = css({
-      backgroundColor: token.colorFillTertiary,
       borderRadius: token.borderRadius,
-      border: `1px solid ${token.colorFillTertiary}`,
+      border: `1px solid ${token.colorBorderSecondary}`,
 
       '&:hover': {
         borderColor: token.colorPrimary,
