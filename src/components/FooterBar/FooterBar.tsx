@@ -1,6 +1,6 @@
 import { show } from '@ebay/nice-modal-react'
 import { Button, type ButtonProps, Space } from 'antd'
-import { ChevronsLeftIcon, ChevronsRightIcon, GithubIcon, ShirtIcon } from 'lucide-react'
+import { ArrowLeftToLine, ArrowRightToLine, GithubIcon, ShirtIcon } from 'lucide-react'
 
 import { IconText } from '@/components/IconText'
 import { ModalSettings } from '@/components/modals/ModalSettings'
@@ -25,7 +25,7 @@ export function FooterBar() {
             panelRef.current?.expand()
           }}
         >
-          <IconText icon={<ChevronsRightIcon size={18} />} />
+          <IconText icon={<ArrowRightToLine size={18} />} />
         </SmallButton>
       ) : (
         <SmallButton
@@ -33,7 +33,7 @@ export function FooterBar() {
             panelRef.current?.collapse()
           }}
         >
-          <IconText icon={<ChevronsLeftIcon size={18} />} />
+          <IconText icon={<ArrowLeftToLine size={18} />} />
         </SmallButton>
       )}
 
