@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import Link from 'next/link'
 import { PlusOutlined } from '@ant-design/icons'
 import {
   Button,
-  Col,
   Form,
   type FormProps,
   Input,
   Popconfirm,
-  Row,
   Select,
   type SelectProps,
   Space,
@@ -27,19 +24,18 @@ import { IconText } from '@/components/IconText'
 import { InputUnderline } from '@/components/InputUnderline'
 import { JsonSchemaCard } from '@/components/JsonSchemaCard'
 import { JsonViewer } from '@/components/JsonViewer'
-import { SelectorService } from '@/components/SelectorService'
 import { ApiRemoveButton } from '@/components/tab-content/api/ApiRemoveButton'
-import { API_STATUS_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
+import { HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
-import { creator, initialCreateApiDetailsData } from '@/data/remote'
+import { initialCreateApiDetailsData } from '@/data/remote'
 import { type ContentType, MenuItemType } from '@/enums'
 import { getContentTypeString } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
+import { BaseFormItems } from './components/BaseFormItems'
 import { ParamsTab } from './params/ParamsTab'
-import { InputDesc } from './InputDesc'
 import { contentTypeOptions, httpCodeOptions, ModalNewResponse } from './ModalNewResponse'
 
 import { css } from '@emotion/css'
@@ -53,23 +49,6 @@ const methodOptions: SelectProps['options'] = Object.entries(HTTP_METHOD_CONFIG)
       label: (
         <span className="font-semibold" style={{ color: `var(${color})` }}>
           {method}
-        </span>
-      ),
-    }
-  }
-)
-
-const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).map(
-  ([method, { text, color }]) => {
-    return {
-      value: method,
-      label: (
-        <span className="flex items-center">
-          <span
-            className="mr-2 inline-block size-[6px] rounded-full"
-            style={{ backgroundColor: `var(${color})` }}
-          />
-          <span>{text}</span>
         </span>
       ),
     }
@@ -200,56 +179,7 @@ export function ApiDocEditing() {
           </Form.Item>
 
           <div className="pt-2">
-            <Row gutter={16}>
-              <Col lg={12} xl={6}>
-                <Form.Item
-                  label="状态"
-                  labelCol={{ span: 24 }}
-                  name="status"
-                  rules={[{ required: true }]}
-                >
-                  <Select options={statusOptions} />
-                </Form.Item>
-              </Col>
-
-              <Col lg={12} xl={6}>
-                <Form.Item label="责任人" labelCol={{ span: 24 }} name="responsibleId">
-                  <Select
-                    options={[
-                      { label: `${creator.name}（@${creator.username}）`, value: creator.id },
-                    ]}
-                  />
-                </Form.Item>
-              </Col>
-
-              <Col lg={12} xl={6}>
-                <Form.Item label="标签" labelCol={{ span: 24 }} name="tags">
-                  <Select mode="tags" placeholder="查找或回车创建标签" />
-                </Form.Item>
-              </Col>
-
-              <Col lg={12} xl={6}>
-                <Form.Item
-                  label="服务（前置 URL）"
-                  labelCol={{ span: 24 }}
-                  name="serverId"
-                  tooltip={
-                    <span>
-                      指定服务后，该接口运行时会使用该服务对应的<b>前置 URL</b>（在
-                      <Link href="/">环境</Link>里设置）。
-                    </span>
-                  }
-                >
-                  <SelectorService />
-                </Form.Item>
-              </Col>
-
-              <Col span={24}>
-                <Form.Item label="说明" labelCol={{ span: 24 }} name="description">
-                  <InputDesc />
-                </Form.Item>
-              </Col>
-            </Row>
+            <BaseFormItems />
           </div>
 
           <GroupTitle className="mt-2">请求参数</GroupTitle>

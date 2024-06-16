@@ -41,7 +41,8 @@
     "react-resizable-panels": "^2.0.19",
     "react-use-event-hook": "^0.9.6",
     "react18-json-view": "^0.2.8",
-    "serialize-javascript": "^6.0.2"
+    "serialize-javascript": "^6.0.2",
+    "use-resize-observer": "^9.1.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.5",
