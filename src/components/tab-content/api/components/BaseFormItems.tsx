@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
+import Link from 'next/link'
 import { Col, Form, Row, Select, type SelectProps } from 'antd'
-import { Link } from 'lucide-react'
 import useResizeObserver from 'use-resize-observer'
 
 import { SelectorService } from '@/components/SelectorService'
