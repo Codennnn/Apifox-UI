@@ -53,7 +53,7 @@ export function isMenuFolder(type: MenuItemType): boolean {
   )
 }
 
-/** 判断是否为可创建菜单类型。 */
+/** 判断给定的类型是否属于可创建菜单类型。 */
 export function isCreateType(
   type: any
 ): type is
@@ -66,6 +66,18 @@ export function isCreateType(
     type === MenuItemType.ApiSchema ||
     type === MenuItemType.HttpRequest ||
     type === MenuItemType.Doc
+  )
+}
+
+/** 判断给定的类型是否属于顶部菜单类型。 */
+export function isTopMenuType(
+  type: any
+): type is CatalogType.Overview | CatalogType.Http | CatalogType.Schema | CatalogType.Recycle {
+  return (
+    type === CatalogType.Overview ||
+    type === CatalogType.Http ||
+    type === CatalogType.Schema ||
+    type === CatalogType.Recycle
   )
 }
 

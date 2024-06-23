@@ -5,7 +5,7 @@ import { ConfigProvider, Tree, type TreeProps } from 'antd'
 import { API_MENU_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
 import { CatalogType, MenuItemType } from '@/enums'
-import { isMenuSameGroup } from '@/helpers'
+import { isMenuSameGroup, isTopMenuType } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
@@ -48,6 +48,10 @@ export function ApiMenu() {
     const menuId = node.key
 
     if (typeof menuId === 'string') {
+      if (!node.isLeaf && isTopMenuType(node.key)) {
+        switchExpandedKeys(menuId)
+      }
+
       const isTabPresent = tabItems.some(({ key }) => key === menuId)
 
       if (isTabPresent) {
