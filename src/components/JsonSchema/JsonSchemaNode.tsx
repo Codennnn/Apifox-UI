@@ -98,10 +98,12 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
             {Array.isArray(value.properties) && value.properties.length > 0 ? (
               <JsonSchemaNodeWrapper shouldExpand={!!restProps.fromRef || shouldExpand}>
                 {value.properties.map((propSchema, i) => {
+                  const key = `${propSchema.type}_${propSchema.name || ''}_${i}_${fieldPath.join('_')}`
+
                   return (
                     <JsonSchemaNode
                       {...renderProps}
-                      key={`${propSchema.type}_${i}`}
+                      key={key}
                       fieldPath={[...fieldPath, KEY_PROPERTIES, `${i}`]}
                       value={propSchema}
                       onChange={(changValue) => {

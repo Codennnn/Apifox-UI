@@ -26,7 +26,7 @@ export function FooterBar() {
             panelRef.current?.expand()
           }}
         >
-          <IconText icon={<ArrowRightToLine size={18} />} />
+          <IconText icon={<ArrowRightToLine size={14} />} />
         </SmallButton>
       ) : (
         <SmallButton
@@ -34,7 +34,7 @@ export function FooterBar() {
             panelRef.current?.collapse()
           }}
         >
-          <IconText icon={<ArrowLeftToLine size={18} />} />
+          <IconText icon={<ArrowLeftToLine size={14} />} />
         </SmallButton>
       )}
 

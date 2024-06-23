@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 
-import { PlusOutlined } from '@ant-design/icons'
 import {
   Button,
   Form,
@@ -14,7 +13,7 @@ import {
   theme,
   Tooltip,
 } from 'antd'
-import { InfoIcon, TrashIcon } from 'lucide-react'
+import { InfoIcon, PlusIcon, TrashIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
@@ -339,7 +338,7 @@ export function ApiDocEditing() {
                   tabBarExtraContent={
                     <>
                       <Button
-                        icon={<PlusOutlined style={{ fontSize: '12px' }} />}
+                        icon={<PlusIcon size={16} />}
                         type="text"
                         onClick={() => {
                           setModalOpen(true)

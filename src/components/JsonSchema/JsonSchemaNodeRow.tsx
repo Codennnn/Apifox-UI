@@ -1,7 +1,9 @@
-import { CaretRightOutlined, MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { CaretRightOutlined } from '@ant-design/icons'
 import { Dropdown, Input, Tooltip } from 'antd'
 import { omit } from 'lodash'
+import { CirclePlusIcon } from 'lucide-react'
 
+import { DoubleCheckRemoveBtn } from '@/components/DoubleCheckRemoveBtn'
 import { useStyles } from '@/hooks/useStyle'
 
 import {
@@ -212,6 +214,8 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
 
         action: css(
           {
+            display: 'inline-flex',
+            alignItems: 'center',
             fontSize: '12px',
             cursor: 'pointer',
             userSelect: 'none',
@@ -227,10 +231,6 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
 
         actionAdd: css({
           color: token.colorSuccessActive,
-        }),
-
-        actionRemove: css({
-          color: token.colorError,
         }),
       },
 
@@ -269,6 +269,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
   const pathString = fieldPath.join(SEPARATOR)
 
   const shouldExpand = expandedKeys?.includes(pathString) || false
+  const removable = !isRoot && !isItems
 
   return (
     <div className={styles.row.main}>
@@ -427,20 +428,18 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
                 }
               }}
             >
-              <PlusCircleOutlined />
+              <CirclePlusIcon size={13} />
             </span>
           </Tooltip>
         )}
 
-        {!isRoot && !isItems && (
-          <span
-            className={`${styles.row.action} ${styles.row.actionRemove}`}
-            onClick={() => {
+        {removable && (
+          <DoubleCheckRemoveBtn
+            className={styles.row.action}
+            onRemove={() => {
               onRemoveField?.(fieldPath)
             }}
-          >
-            <MinusCircleOutlined />
-          </span>
+          />
         )}
       </div>
     </div>

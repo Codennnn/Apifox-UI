@@ -12,6 +12,7 @@ interface ColumnType<RecordType> {
 }
 
 export interface EditableTableProps<RecordType = any> {
+  rowKey?: string
   columns?: ColumnType<RecordType>[]
   dataSource?: RecordType[]
   /** 是否自动展示新增行。 */
@@ -22,7 +23,7 @@ export interface EditableTableProps<RecordType = any> {
 export function EditableTable<RecordType = any>(props: EditableTableProps<RecordType>) {
   const { token } = theme.useToken()
 
-  const { columns, dataSource = [], autoNewRow, newRowRecord } = props
+  const { rowKey = 'id', columns, dataSource = [], autoNewRow, newRowRecord } = props
 
   const { styles } = useStyles(({ token }) => {
     const th = css({
@@ -90,7 +91,9 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
 
       <tbody>
         {internalDataSource.map((record, ridx) => (
-          <tr key={`${ridx}`}>
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          <tr key={`${ridx}_${String(record[rowKey])}`}>
             {columns?.map((col, cidx) => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-expect-error
@@ -98,7 +101,7 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
 
               return (
                 <td
-                  key={`${cidx}`}
+                  key={`${cidx}_${String(col.dataIndex)}`}
                   className={styles.td}
                   style={{ border: internalDataSource.length === ridx + 1 ? 'none' : undefined }}
                 >
