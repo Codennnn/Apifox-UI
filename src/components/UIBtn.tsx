@@ -7,7 +7,7 @@ interface UIBtnProps extends React.PropsWithChildren, React.ComponentProps<'butt
 }
 
 export function UIButton(props: UIBtnProps) {
-  const { children, primary, ...rest } = props
+  const { children, primary, className = '', ...rest } = props
 
   const { styles } = useStyles(({ token }) => ({
     btn: css({
@@ -24,9 +24,9 @@ export function UIButton(props: UIBtnProps) {
 
   return (
     <button
-      className={`cursor-pointer border-none text-xs outline-none ${styles.btn}`}
       type="button"
       {...rest}
+      className={`cursor-pointer border-none text-xs outline-none ${styles.btn} ${className}`}
     >
       {children}
     </button>

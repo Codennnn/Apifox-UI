@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { Modal, Space, theme } from 'antd'
-import { BracesIcon, CopyIcon } from 'lucide-react'
+import { BracesIcon, CopyIcon, ScanTextIcon } from 'lucide-react'
 
 import {
   type JsonSchema,
@@ -44,7 +44,10 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
             borderBottom: `1px solid ${token.colorBorderSecondary}`,
           }}
         >
-          <UIButton primary>通过 JSON 生成</UIButton>
+          <UIButton primary className="inline-flex items-center">
+            <ScanTextIcon size={14} />
+            <span className="ml-1">通过 JSON 生成</span>
+          </UIButton>
 
           <div className="ml-auto">
             <Space>
