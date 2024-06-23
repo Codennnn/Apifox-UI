@@ -1,6 +1,6 @@
 import { theme } from 'antd'
 
-import { Logo } from '@/components/icons/Logo'
+import { IconLogo } from '@/components/icons/IconLogo'
 
 import { NavMenu } from './NavMenu'
 
@@ -13,7 +13,7 @@ export function SideNav() {
         className="mb-5 mt-2 size-10 rounded-xl p-[6px]"
         style={{ color: token.colorText, border: `1px solid ${token.colorBorder}` }}
       >
-        <Logo />
+        <IconLogo />
       </div>
 
       <NavMenu />

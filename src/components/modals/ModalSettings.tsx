@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Viewer } from '@bytemd/react'
 import { create, useModal } from '@ebay/nice-modal-react'
@@ -7,7 +7,7 @@ import { InfoIcon, ShirtIcon } from 'lucide-react'
 
 import { ThemeEditor, useThemeContext } from '@/components/ThemeEditor'
 
-const enum SettingsMenuKey {
+export const enum SettingsMenuKey {
   Appearance = '0',
   About = '1',
 }
@@ -55,18 +55,33 @@ const renderMenuContent = (props: { menuKey: SettingsMenuKey }) => {
   }
 }
 
-type ModalSettingsProps = Omit<ModalProps, 'open' | 'footer'>
+interface ModalSettingsProps extends Omit<ModalProps, 'open' | 'footer'> {
+  defaultSelectedKey?: SettingsMenuKey
+  selectedKey?: SettingsMenuKey
+}
 
 export const ModalSettings = create((props: ModalSettingsProps) => {
   const { token } = theme.useToken()
 
+  const { selectedKey, defaultSelectedKey, ...restModalProps } = props
+
   const modal = useModal()
 
-  const [selectedKeys, setSelectedKeys] = useState<[SettingsMenuKey]>([SettingsMenuKey.Appearance])
+  const [selectedKeys, setSelectedKeys] = useState<[SettingsMenuKey]>()
+
+  useEffect(() => {
+    if (selectedKey) {
+      setSelectedKeys([selectedKey])
+    } else {
+      setSelectedKeys([defaultSelectedKey || SettingsMenuKey.Appearance])
+    }
+  }, [selectedKey, defaultSelectedKey])
 
   const selectedMenuItem = useMemo(() => {
-    return settingMenuItems.find((item) => item.key === selectedKeys[0])
+    return settingMenuItems.find((item) => item.key === selectedKeys?.at(0))
   }, [selectedKeys])
+
+  const renderMenuKey = selectedKeys?.at(0)
 
   return (
     <ConfigProvider
@@ -81,7 +96,7 @@ export const ModalSettings = create((props: ModalSettingsProps) => {
     >
       <Modal
         width={950}
-        {...props}
+        {...restModalProps}
         footer={false}
         open={modal.visible}
         onCancel={(...parmas) => {
@@ -136,7 +151,7 @@ export const ModalSettings = create((props: ModalSettingsProps) => {
               {selectedMenuItem?.label}
             </div>
 
-            {renderMenuContent({ menuKey: selectedKeys[0] })}
+            {!!renderMenuKey && renderMenuContent({ menuKey: renderMenuKey })}
           </div>
         </div>
       </Modal>

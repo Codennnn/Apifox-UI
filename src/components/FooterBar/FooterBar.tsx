@@ -4,6 +4,7 @@ import { ArrowLeftToLine, ArrowRightToLine, GithubIcon, ShirtIcon } from 'lucide
 
 import { IconText } from '@/components/IconText'
 import { ModalSettings } from '@/components/modals/ModalSettings'
+import { GitHubRepo } from '@/constants'
 import { useLayoutContext } from '@/contexts/layout-settings'
 
 function SmallButton({ children, ...props }: React.PropsWithChildren<ButtonProps>) {
@@ -46,7 +47,7 @@ export function FooterBar() {
           <IconText icon={<ShirtIcon size={14} />} />
         </SmallButton>
 
-        <SmallButton href="https://github.com/Codennnn/Apifox-UI" target="_blank">
+        <SmallButton href={GitHubRepo} target="_blank">
           <IconText icon={<GithubIcon size={14} />} />
         </SmallButton>
       </Space>
