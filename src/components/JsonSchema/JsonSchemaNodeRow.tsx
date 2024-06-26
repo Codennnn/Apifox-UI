@@ -296,7 +296,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         )}
 
         <span
-          className={`${styles.row.nameInner} ${styles.row.col} ${isCustom ? styles.row.colHover : ''}`}
+          className={`${styles.row.nameInner} ${styles.row.col} ${!isRoot && isCustom ? styles.row.colHover : ''}`}
         >
           {isRoot || isItems ? (
             <span className={styles.tag}>{isItems ? 'ITEMS' : '根节点'}</span>

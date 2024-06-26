@@ -23,9 +23,11 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
 
   const { defaultValue, value = defaultValue, onChange, editorProps } = props
 
-  const [editorValue, setEditorValue] = useState<string>()
+  const [jsonStr, setJsonStr] = useState<string>()
+  const [jsonSchemeStr, setJsonSchemeStr] = useState<string>()
 
   const { messageApi } = useGlobalContext()
+  const [jsonModalOpen, setJsonModalOpen] = useState(false)
   const [schemaModalOpen, setSchemaModalOpen] = useState(false)
 
   return (
@@ -44,7 +46,13 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
             borderBottom: `1px solid ${token.colorBorderSecondary}`,
           }}
         >
-          <UIButton primary className="inline-flex items-center">
+          <UIButton
+            primary
+            className="inline-flex items-center"
+            onClick={() => {
+              setJsonModalOpen(true)
+            }}
+          >
             <ScanTextIcon size={14} />
             <span className="ml-1">通过 JSON 生成</span>
           </UIButton>
@@ -72,9 +80,67 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
       <Modal
         afterOpenChange={(opened) => {
           if (opened) {
-            setEditorValue(JSON.stringify(value, null, 2))
+            setJsonStr(JSON.stringify(value, null, 2))
           } else {
-            setEditorValue(undefined)
+            setJsonStr(undefined)
+          }
+        }}
+        maskClosable={false}
+        okText="保存"
+        open={jsonModalOpen}
+        title="JSON Schema"
+        width={800}
+        onCancel={() => {
+          setJsonModalOpen(false)
+        }}
+        onOk={() => {
+          if (jsonSchemeStr) {
+            try {
+              setJsonModalOpen(false)
+            } catch (err) {
+              if (err instanceof SyntaxError) {
+                messageApi.error('JSON Schema 格式校验不通过，请检查！')
+              }
+            }
+          }
+        }}
+      >
+        <div
+          style={{
+            borderRadius: token.borderRadius,
+            border: `1px solid ${token.colorBorderSecondary}`,
+          }}
+        >
+          <div
+            style={{
+              padding: `${token.paddingXS}px ${token.paddingSM}px`,
+              borderBottom: `1px solid ${token.colorBorderSecondary}`,
+            }}
+          >
+            输入 JSON
+          </div>
+
+          <MonacoEditor
+            className="h-[350px]"
+            language="json"
+            value={jsonStr}
+            onChange={(val) => {
+              if (typeof val === 'string') {
+                setJsonStr(val)
+              } else {
+                setJsonStr(JSON.stringify(val, null, 2))
+              }
+            }}
+          />
+        </div>
+      </Modal>
+
+      <Modal
+        afterOpenChange={(opened) => {
+          if (opened) {
+            setJsonSchemeStr(JSON.stringify(value, null, 2))
+          } else {
+            setJsonSchemeStr(undefined)
           }
         }}
         maskClosable={false}
@@ -86,9 +152,9 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
           setSchemaModalOpen(false)
         }}
         onOk={() => {
-          if (editorValue) {
+          if (jsonSchemeStr) {
             try {
-              onChange?.(JSON.parse(editorValue) as JsonSchema)
+              onChange?.(JSON.parse(jsonSchemeStr) as JsonSchema)
               setSchemaModalOpen(false)
             } catch (err) {
               if (err instanceof SyntaxError) {
@@ -124,15 +190,16 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
               </span>
             </UIButton>
           </div>
+
           <MonacoEditor
             className="h-[350px]"
             language="json"
-            value={editorValue}
+            value={jsonSchemeStr}
             onChange={(val) => {
               if (typeof val === 'string') {
-                setEditorValue(val)
+                setJsonSchemeStr(val)
               } else {
-                setEditorValue(JSON.stringify(val, null, 2))
+                setJsonSchemeStr(JSON.stringify(val, null, 2))
               }
             }}
           />
