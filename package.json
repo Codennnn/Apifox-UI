@@ -14,7 +14,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@ant-design/cssinjs": "^1.20.0",
+    "@ant-design/cssinjs": "^1.21.0",
     "@ant-design/icons": "^5.3.7",
     "@ant-design/nextjs-registry": "^1.0.0",
     "@bytemd/plugin-gfm": "^1.21.0",
@@ -25,14 +25,14 @@
     "@ebay/nice-modal-react": "^1.2.13",
     "@emotion/css": "^11.11.2",
     "@monaco-editor/react": "^4.6.0",
-    "antd": "^5.18.1",
+    "antd": "^5.18.3",
     "array-to-tree": "^3.3.2",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.11",
     "foxact": "^0.2.35",
     "immer": "^10.1.1",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.395.0",
+    "lucide-react": "^0.399.0",
     "nanoid": "^5.0.7",
     "next": "^14.2.4",
     "react": "18.3.1",
@@ -45,18 +45,18 @@
     "use-resize-observer": "^9.1.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.5",
-    "@types/node": "20.14.2",
+    "@types/lodash": "^4.17.6",
+    "@types/node": "20.14.9",
     "@types/react": "18.3.3",
     "@types/react-resizable": "^3.0.7",
     "@types/serialize-javascript": "^5.0.4",
     "autoprefixer": "^10.4.19",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.38",
-    "prefer-code-style": "2.1.4",
+    "prefer-code-style": "2.1.5",
     "stylelint": "^16.6.1",
     "tailwindcss": "^3.4.4",
-    "typescript": "5.4.5"
+    "typescript": "5.5.2"
   },
   "engines": {
     "node": ">=18",
