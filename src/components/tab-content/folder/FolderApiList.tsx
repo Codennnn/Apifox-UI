@@ -28,7 +28,12 @@ export function FolderApiList() {
               .map((it) => it.name)
               .join(' / ')
 
-          return { ...(item.data as ApiDetails), groupPath }
+          if (item.data) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            return { ...(item.data as ApiDetails), groupPath }
+          }
+
+          throw Error()
         })
     }
   }, [menuRawList, tabData])
