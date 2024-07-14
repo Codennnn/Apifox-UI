@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
 import { getPageTitle } from '../utils'
-
-import { HomePage } from './home-page'
 
 export const metadata: Metadata = {
   title: getPageTitle(),
 }
 
 export default function Page() {
-  return <HomePage />
+  return redirect('/home')
 }

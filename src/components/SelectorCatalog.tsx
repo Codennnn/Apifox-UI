@@ -72,7 +72,7 @@ export function SelectorCatalog(props: SelectorCatalogProps) {
       expandTrigger="hover"
       options={catalogOptions}
       value={internalValue}
-      onChange={(val) => {
+      onChange={(val: unknown[]) => {
         const lastOne = val.at(-1)
 
         if (typeof lastOne === 'string') {
