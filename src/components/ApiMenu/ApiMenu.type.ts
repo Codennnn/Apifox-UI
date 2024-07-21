@@ -44,7 +44,7 @@ export type ApiMenuData =
   | ApiMenuRequest
   | ApiMenuInterfaceFolder
 
-export type TreeDataNode = NonNullable<TreeProps['treeData']>[0]
+export type TreeDataNode = NonNullable<TreeProps['treeData']>[number]
 
 export type CatalogDataNode = Omit<TreeDataNode, 'key'> & {
   key: string

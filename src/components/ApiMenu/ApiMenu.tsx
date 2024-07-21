@@ -163,23 +163,26 @@ export function ApiMenu() {
           expandedKeys={expandedMenuKeys}
           rootClassName={styles.menuTree}
           selectedKeys={selectedKeys}
-          switcherIcon={
-            ((node) => {
-              const hasChildren = node.data?.children?.length
+          switcherIcon={(node) => {
+            const nodeData = node.data as CatalogDataNode | undefined
+            const hasChildren = nodeData?.children?.length
 
-              return hasChildren ? (
+            if (hasChildren) {
+              return (
                 <SwitcherIcon
                   onClick={() => {
-                    const menuId = node.data?.key
+                    const menuId = nodeData.key
 
                     if (typeof menuId === 'string') {
                       switchExpandedKeys(menuId)
                     }
                   }}
                 />
-              ) : null
-            }) as CatalogDataNode['switcherIcon']
-          }
+              )
+            }
+
+            return null
+          }}
           treeData={menuTree}
           onDrop={handleDrop}
           onSelect={handleMenuSelect}
