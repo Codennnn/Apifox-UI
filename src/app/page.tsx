@@ -7,6 +7,6 @@ export const metadata: Metadata = {
   title: getPageTitle(),
 }
 
-export default function Page() {
+export default function RootPage() {
   return redirect('/home')
 }

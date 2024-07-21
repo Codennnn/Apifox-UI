@@ -16,7 +16,7 @@ import { AppMenuControls } from '@/components/ApiMenu/AppMenuControls'
 import { FileIcon } from '@/components/icons/FileIcon'
 import { ModalNewCatalog } from '@/components/modals/ModalNewCatalog'
 import { API_MENU_CONFIG, ROOT_CATALOG } from '@/configs/static'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { CatalogType, MenuItemType } from '@/enums'
 import { getCreateType, isMenuFolder } from '@/helpers'
 import { useHelpers } from '@/hooks/useHelpers'
@@ -39,7 +39,7 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
 
   const { topMenuType, extraDropdownMenuItems = [] } = props
 
-  const { apiDetailDisplay, setApiDetailDisplay } = useGlobalContext()
+  const { apiDetailDisplay, setApiDetailDisplay } = useMenuHelpersContext()
 
   const {
     groupedMenus,

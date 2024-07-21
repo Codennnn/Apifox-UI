@@ -6,12 +6,12 @@ import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { SelectorCatalog } from '@/components/SelectorCatalog'
 import { SelectorService } from '@/components/SelectorService'
 import { ROOT_CATALOG, SERVER_INHERIT } from '@/configs/static'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { MenuItemType } from '@/enums'
 import type { ApiFolder } from '@/types'
 
 export function FolderSetting() {
-  const { menuRawList, updateMenuItem } = useGlobalContext()
+  const { menuRawList, updateMenuItem } = useMenuHelpersContext()
   const { tabData } = useTabContentContext()
 
   const [form] = Form.useForm<ApiFolder>()

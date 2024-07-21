@@ -19,7 +19,7 @@ import { BadgeInfoIcon, XIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
 import type { CatalogId } from '@/components/ApiMenu'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { useMenuTabContext, useMenuTabHelpers } from '../../contexts/menu-tab-settings'
@@ -92,7 +92,7 @@ const DraggableTabNode = (props: DraggableTabPaneProps) => {
 export function ApiTab(props: TabsProps) {
   const [confirmKey, setConfirmKey] = useState<CatalogId>()
 
-  const { menuRawList } = useGlobalContext()
+  const { menuRawList } = useMenuHelpersContext()
   const { tabItems, setTabItems, activeTabKey } = useMenuTabContext()
   const { activeTabItem, addTabItem, getTabItem, removeTabItem } = useMenuTabHelpers()
   const { menuItems } = useApiTabActions()

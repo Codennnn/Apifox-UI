@@ -3,7 +3,7 @@ import { Button, ConfigProvider, Popconfirm, Table, Tabs, theme, Tooltip } from 
 import { FileIcon } from '@/components/icons/FileIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
 import { API_MENU_CONFIG } from '@/configs/static'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { CatalogType, MenuItemType } from '@/enums'
 import { hasAccentColor } from '@/helpers'
 import type { RecycleCatalogType, RecycleDataItem } from '@/types'
@@ -17,7 +17,7 @@ function RecycleTable(props: RecycleTableProps) {
 
   const { catalogType } = props
 
-  const { recyleRawData, restoreMenuItem } = useGlobalContext()
+  const { recyleRawData, restoreMenuItem } = useMenuHelpersContext()
 
   return (
     <Table<RecycleDataItem>

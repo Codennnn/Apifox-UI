@@ -9,6 +9,7 @@ import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { InputUnderline } from '@/components/InputUnderline'
 import { JsonSchemaCard } from '@/components/JsonSchemaCard'
 import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
 import { initialCreateApiSchemaData } from '@/data/remote'
 import { MenuItemType } from '@/enums'
@@ -21,8 +22,8 @@ export function Schema() {
 
   const [form] = Form.useForm<ApiSchemaForm>()
 
-  const { messageApi, menuRawList, addMenuItem, updateMenuItem, removeMenuItem } =
-    useGlobalContext()
+  const { messageApi } = useGlobalContext()
+  const { menuRawList, addMenuItem, updateMenuItem, removeMenuItem } = useMenuHelpersContext()
   const { addTabItem, removeTabItem } = useMenuTabHelpers()
   const { tabData } = useTabContentContext()
 

@@ -10,6 +10,7 @@ import { ModalNewCatalog } from '@/components/modals/ModalNewCatalog'
 import { ModalRename } from '@/components/modals/ModalRename'
 import { API_MENU_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { MenuItemType } from '@/enums'
 import { getCatalogType, getCreateType } from '@/helpers'
 import { useHelpers } from '@/hooks/useHelpers'
@@ -27,7 +28,8 @@ export function DropdownActions(props: React.PropsWithChildren<DropdownActionsPr
 
   const { children, catalog, isFolder = false, ...dropdownProps } = props
 
-  const { modal, addMenuItem, removeMenuItem } = useGlobalContext()
+  const { modal } = useGlobalContext()
+  const { addMenuItem, removeMenuItem } = useMenuHelpersContext()
   const { createTabItem } = useHelpers()
 
   const { tipTitle } = API_MENU_CONFIG[getCatalogType(catalog.type)]

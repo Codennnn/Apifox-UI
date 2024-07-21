@@ -5,7 +5,7 @@ import arrayToTree from 'array-to-tree'
 
 import type { ApiMenuData } from '@/components/ApiMenu'
 import { ROOT_CATALOG } from '@/configs/static'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import type { MenuItemType } from '@/enums'
 import { isMenuFolder } from '@/helpers'
 
@@ -26,7 +26,7 @@ export interface UseCatalogParmas {
 export function useCatalog({ type, exclued }: UseCatalogParmas): {
   catalogOptions: CascaderOptions
 } {
-  const { menuRawList } = useGlobalContext()
+  const { menuRawList } = useMenuHelpersContext()
 
   const catalogOptions = useMemo<CascaderOptions>(() => {
     const menuList = menuRawList

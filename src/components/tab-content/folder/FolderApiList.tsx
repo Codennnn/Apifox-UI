@@ -4,7 +4,7 @@ import { Table } from 'antd'
 
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { MenuItemType } from '@/enums'
 import { findChildrenById, findFolders } from '@/helpers'
 import type { ApiDetails } from '@/types'
@@ -14,7 +14,7 @@ interface DataSource extends ApiDetails {
 }
 
 export function FolderApiList() {
-  const { menuRawList } = useGlobalContext()
+  const { menuRawList } = useMenuHelpersContext()
   const { tabData } = useTabContentContext()
 
   const dataSource = useMemo(() => {

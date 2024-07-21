@@ -4,7 +4,7 @@ import { create, useModal } from '@ebay/nice-modal-react'
 import { Form, Input, type InputRef, Modal, type ModalProps } from 'antd'
 
 import type { ApiMenuData } from '@/components/ApiMenu/ApiMenu.type'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 
 interface ModalRenameProps extends Omit<ModalProps, 'open' | 'onOk'> {
   formData?: Pick<ApiMenuData, 'id' | 'name'>
@@ -23,7 +23,7 @@ export const ModalRename = create(({ formData, ...props }: ModalRenameProps) => 
     }
   }, [form, formData])
 
-  const { updateMenuItem } = useGlobalContext()
+  const { updateMenuItem } = useMenuHelpersContext()
 
   const handleHide = () => {
     form.resetFields()

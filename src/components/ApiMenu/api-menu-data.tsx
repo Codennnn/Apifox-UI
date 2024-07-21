@@ -8,7 +8,7 @@ import { FileIcon } from '@/components/icons/FileIcon'
 import { FolderIcon } from '@/components/icons/FolderIcon'
 import { HttpMethodText } from '@/components/icons/HttpMethodText'
 import { API_MENU_CONFIG } from '@/configs/static'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { CatalogType, MenuItemType } from '@/enums'
 import { getCatalogType, hasAccentColor, isMenuFolder } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
@@ -76,7 +76,7 @@ export interface MenuState {
 }
 
 export function useMenuData(): MenuState {
-  const { menuRawList, menuSearchWord, apiDetailDisplay } = useGlobalContext()
+  const { menuRawList, menuSearchWord, apiDetailDisplay } = useMenuHelpersContext()
 
   /**
    * 简单的菜单数据，可以被序列化存储。

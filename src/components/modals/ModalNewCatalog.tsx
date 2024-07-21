@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid'
 import type { ApiMenuData } from '@/components/ApiMenu/ApiMenu.type'
 import { SelectorCatalog } from '@/components/SelectorCatalog'
 import { ROOT_CATALOG } from '@/configs/static'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 
 interface ModalNewCatalogProps extends Omit<ModalProps, 'open' | 'onOk'> {
   formData?: Pick<ApiMenuData, 'parentId' | 'type'>
@@ -26,7 +26,7 @@ export const ModalNewCatalog = create(({ formData, ...props }: ModalNewCatalogPr
     }
   }, [form, formData])
 
-  const { addMenuItem } = useGlobalContext()
+  const { addMenuItem } = useMenuHelpersContext()
 
   const handleHide = () => {
     form.resetFields()

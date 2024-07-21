@@ -10,6 +10,7 @@ import { IconText } from '@/components/IconText'
 import { ApiRemoveButton } from '@/components/tab-content/api/ApiRemoveButton'
 import { API_STATUS_CONFIG, HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { creator } from '@/data/remote'
 import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails, Parameter } from '@/types'
@@ -128,7 +129,8 @@ function ApiParameter({ param }: { param: Parameter }) {
 export function ApiDoc() {
   const { token } = theme.useToken()
 
-  const { messageApi, menuRawList } = useGlobalContext()
+  const { messageApi } = useGlobalContext()
+  const { menuRawList } = useMenuHelpersContext()
   const { tabData } = useTabContentContext()
 
   const { docValue, methodConfig } = useMemo(() => {

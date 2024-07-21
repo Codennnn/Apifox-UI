@@ -6,7 +6,7 @@ import { Cascader, type CascaderProps, Divider, theme } from 'antd'
 import type { ApiMenuBase } from '@/components/ApiMenu/ApiMenu.type'
 import { ModalNewCatalog } from '@/components/modals/ModalNewCatalog'
 import { ROOT_CATALOG } from '@/configs/static'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { findFolders } from '@/helpers'
 import { useCatalog, type UseCatalogParmas } from '@/hooks/useCatalog'
 
@@ -21,7 +21,7 @@ export function SelectorCatalog(props: SelectorCatalogProps) {
 
   const { value, onChange, type, exclued, hideCreateNew, ...rest } = props
 
-  const { menuRawList } = useGlobalContext()
+  const { menuRawList } = useMenuHelpersContext()
   const { catalogOptions } = useCatalog({ type, exclued })
 
   const internalValue = useMemo(() => {

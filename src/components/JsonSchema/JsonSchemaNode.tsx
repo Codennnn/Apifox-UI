@@ -1,6 +1,6 @@
 import { theme } from 'antd'
 
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { columnHeight, INDENT, KEY_ITEMS, KEY_PROPERTIES, SchemaType, SEPARATOR } from './constants'
@@ -19,7 +19,7 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
 
   const { value, onChange, fieldPath = [], onAddField, ...restProps } = props
 
-  const { menuRawList } = useGlobalContext()
+  const { menuRawList } = useMenuHelpersContext()
 
   const { expandedKeys } = useJsonSchemaContext()
 

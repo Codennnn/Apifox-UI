@@ -9,6 +9,7 @@ import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { InputUnderline } from '@/components/InputUnderline'
 import { MarkdownEditor } from '@/components/MarkdownEditor'
 import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
 import { MenuItemType } from '@/enums'
 import type { ApiDoc } from '@/types'
@@ -18,7 +19,8 @@ const DEFAULT_DOC_NAME = '未命名文档'
 export function Doc() {
   const { token } = theme.useToken()
 
-  const { messageApi, menuRawList, addMenuItem, updateMenuItem } = useGlobalContext()
+  const { messageApi } = useGlobalContext()
+  const { menuRawList, addMenuItem, updateMenuItem } = useMenuHelpersContext()
   const { addTabItem } = useMenuTabHelpers()
   const { tabData } = useTabContentContext()
 

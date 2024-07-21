@@ -3,7 +3,7 @@ import useEvent from 'react-use-event-hook'
 import { ConfigProvider, Tree, type TreeProps } from 'antd'
 
 import { API_MENU_CONFIG } from '@/configs/static'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { CatalogType, MenuItemType } from '@/enums'
 import { isMenuSameGroup, isTopMenuType } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
@@ -27,7 +27,7 @@ type TreeOnSelect = NonNullable<TreeProps['onSelect']>
  * - 文件夹可以包含文件和另一个文件夹，包含的关系以层级递进的形式展示。
  */
 export function ApiMenu() {
-  const { moveMenuItem } = useGlobalContext()
+  const { moveMenuItem } = useMenuHelpersContext()
   const { expandedMenuKeys, addExpandedMenuKeys, removeExpandedMenuKeys, menuTree } =
     useApiMenuContext()
 

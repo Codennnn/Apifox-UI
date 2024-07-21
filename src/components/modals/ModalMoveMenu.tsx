@@ -5,7 +5,7 @@ import { Form, Input, Modal, type ModalProps } from 'antd'
 
 import type { ApiMenuData } from '@/components/ApiMenu/ApiMenu.type'
 import { SelectorCatalog } from '@/components/SelectorCatalog'
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { MenuItemType } from '@/enums'
 
 interface ModalMoveMenuProps extends Omit<ModalProps, 'open' | 'onOk'> {
@@ -26,7 +26,7 @@ export const ModalMoveMenu = create(({ menuItemType, formData, ...props }: Modal
     }
   }, [form, formData])
 
-  const { updateMenuItem } = useGlobalContext()
+  const { updateMenuItem } = useMenuHelpersContext()
 
   const handleHide = () => {
     form.resetFields()

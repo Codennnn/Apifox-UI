@@ -26,6 +26,7 @@ import { JsonViewer } from '@/components/JsonViewer'
 import { ApiRemoveButton } from '@/components/tab-content/api/ApiRemoveButton'
 import { HTTP_METHOD_CONFIG } from '@/configs/static'
 import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
 import { initialCreateApiDetailsData } from '@/data/remote'
 import { type ContentType, MenuItemType } from '@/enums'
@@ -72,7 +73,8 @@ export function ApiDocEditing() {
 
   const [form] = Form.useForm<ApiDetails>()
 
-  const { messageApi, menuRawList, addMenuItem, updateMenuItem } = useGlobalContext()
+  const { messageApi } = useGlobalContext()
+  const { menuRawList, addMenuItem, updateMenuItem } = useMenuHelpersContext()
   const { addTabItem } = useMenuTabHelpers()
   const { tabData } = useTabContentContext()
 

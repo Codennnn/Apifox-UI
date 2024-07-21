@@ -4,13 +4,13 @@ import { Input } from 'antd'
 import { useCompositionInput } from 'foxact/use-composition-input'
 import { SearchIcon } from 'lucide-react'
 
-import { useGlobalContext } from '@/contexts/global'
+import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { css } from '@emotion/css'
 
 export function InputSearch() {
-  const { setMenuSearchWord } = useGlobalContext()
+  const { setMenuSearchWord } = useMenuHelpersContext()
 
   const inputProps = useCompositionInput(
     useCallback(

@@ -3,8 +3,7 @@
 import { useLayoutEffect, useState } from 'react'
 import { Panel, PanelGroup, type PanelProps, PanelResizeHandle } from 'react-resizable-panels'
 
-import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-import { Button, ConfigProvider, Dropdown, Flex, message, Modal, theme, Tooltip } from 'antd'
+import { Button, ConfigProvider, Dropdown, Flex, theme, Tooltip } from 'antd'
 import { ChevronRightIcon, FilterIcon, PlusIcon } from 'lucide-react'
 
 import { ApiMenu } from '@/components/ApiMenu'
@@ -15,8 +14,8 @@ import { FileIcon } from '@/components/icons/FileIcon'
 import { IconText } from '@/components/IconText'
 import { InputSearch } from '@/components/InputSearch'
 import { API_MENU_CONFIG } from '@/configs/static'
-import { GlobalContextProvider } from '@/contexts/global'
-import { LayoutProvider, useLayoutContext } from '@/contexts/layout-settings'
+import { useLayoutContext } from '@/contexts/layout-settings'
+import { MenuHelpersContextProvider } from '@/contexts/menu-helpers'
 import { MenuTabProvider } from '@/contexts/menu-tab-settings'
 import { MenuItemType } from '@/enums'
 import { getCatalogType } from '@/helpers'
@@ -188,21 +187,11 @@ function HomeContent() {
 }
 
 export default function HomePage() {
-  const [modal, modalContextHolder] = Modal.useModal()
-  const [messageApi, messageContextHolder] = message.useMessage({ duration: 1 })
-
   return (
-    <LayoutProvider>
-      <GlobalContextProvider messageApi={messageApi} modal={modal}>
-        <NiceModalProvider>
-          <MenuTabProvider>
-            <HomeContent />
-
-            {modalContextHolder}
-            {messageContextHolder}
-          </MenuTabProvider>
-        </NiceModalProvider>
-      </GlobalContextProvider>
-    </LayoutProvider>
+    <MenuHelpersContextProvider>
+      <MenuTabProvider>
+        <HomeContent />
+      </MenuTabProvider>
+    </MenuHelpersContextProvider>
   )
 }
