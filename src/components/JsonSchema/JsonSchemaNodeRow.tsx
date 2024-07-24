@@ -16,7 +16,7 @@ import {
   SEPARATOR,
 } from './constants'
 import { useJsonSchemaContext } from './JsonSchema.context'
-import type { FieldPath, JsonSchema, RefSchema } from './JsonSchema.type'
+import type { ArraySchema, FieldPath, JsonSchema, RefSchema } from './JsonSchema.type'
 import { getNodeLevelInfo } from './utils'
 
 import { css } from '@emotion/css'
@@ -262,7 +262,9 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
   const isItems = fieldPath.at(-1) === KEY_ITEMS
   const isCustom = !isRoot || !isItems
 
-  const showExpandIcon = (type === SchemaType.Object || type === SchemaType.Refer) && !isItems
+  const showExpandIcon =
+    (type === SchemaType.Object || type === SchemaType.Array || type === SchemaType.Refer) &&
+    !isItems
 
   const pathString = fieldPath.join(SEPARATOR)
 
@@ -294,7 +296,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
         )}
 
         <span
-          className={`${styles.row.nameInner} ${styles.row.col} ${!isRoot && isCustom ? styles.row.colHover : ''}`}
+          className={`${styles.row.nameInner} ${styles.row.col} ${!isRoot && !isItems && isCustom ? styles.row.colHover : ''}`}
         >
           {isRoot || isItems ? (
             <span className={styles.tag}>{isItems ? 'ITEMS' : '根节点'}</span>
@@ -323,24 +325,28 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
           disabled={disabled}
           menu={{
             onClick: (menuInfo) => {
-              const type = menuInfo.key as SchemaType
+              const newType = menuInfo.key as SchemaType
+              const oldType = value.type
+              let newValue = { ...value, type: newType } as JsonSchema
 
-              const newValue = { ...value, type } as JsonSchema
+              if (newType === SchemaType.Array) {
+                newValue = { ...newValue, items: { type: SchemaType.String } } as ArraySchema
+              }
 
-              if (value.type === type) {
+              if (oldType === newType) {
                 return
               }
 
-              switch (value.type) {
+              switch (oldType) {
                 case SchemaType.Object: {
-                  if (type !== SchemaType.Object) {
+                  if (newType !== SchemaType.Object) {
                     triggerChange?.(omit(newValue, KEY_PROPERTIES) as JsonSchema)
                   }
                   break
                 }
 
                 case SchemaType.Array: {
-                  if (type !== SchemaType.Array) {
+                  if (newType !== SchemaType.Array) {
                     triggerChange?.(omit(newValue, KEY_ITEMS) as JsonSchema)
                   }
                   break

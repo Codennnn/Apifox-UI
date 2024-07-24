@@ -22,7 +22,7 @@ export interface ObjectSchema extends BaseSchema {
 
 export interface ArraySchema extends BaseSchema {
   type: SchemaType.Array
-  items: PrimitiveSchema | ObjectSchema
+  items: PrimitiveSchema | ObjectSchema | ArraySchema
 }
 
 export interface RefSchema extends BaseSchema {
