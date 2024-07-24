@@ -262,9 +262,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
   const isItems = fieldPath.at(-1) === KEY_ITEMS
   const isCustom = !isRoot || !isItems
 
-  const showExpandIcon =
-    (type === SchemaType.Object || type === SchemaType.Array || type === SchemaType.Refer) &&
-    !isItems
+  const showExpandIcon = (type === SchemaType.Object || type === SchemaType.Refer) && !isItems
 
   const pathString = fieldPath.join(SEPARATOR)
 
