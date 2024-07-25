@@ -263,8 +263,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
   const isCustom = !isRoot || !isItems
 
   const showExpandIcon =
-    (type === SchemaType.Object || type === SchemaType.Array || type === SchemaType.Refer) &&
-    !isItems
+    type === SchemaType.Object || type === SchemaType.Array || type === SchemaType.Refer
 
   const pathString = fieldPath.join(SEPARATOR)
 
@@ -285,8 +284,8 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
                 ? expandedKeys?.filter((key) => key !== pathString)
                 : [...(expandedKeys || []), pathString]
 
-              // 当点击展开按钮时，会触发 onExpand 方法，这个方法会返回最新的 expandedKeys。
-              onExpand?.(newExpandedKeys, { expanded: !shouldExpand })
+              // 当点击展开按钮时，会触发 onExpand 方法。
+              onExpand?.(newExpandedKeys)
             }}
           >
             <CaretRightOutlined />
@@ -329,10 +328,6 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               const oldType = value.type
               let newValue = { ...value, type: newType } as JsonSchema
 
-              if (newType === SchemaType.Array) {
-                newValue = { ...newValue, items: { type: SchemaType.String } } as ArraySchema
-              }
-
               if (oldType === newType) {
                 return
               }
@@ -353,6 +348,11 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
                 }
 
                 default: {
+                  if (newType === SchemaType.Array) {
+                    newValue = { ...newValue, items: { type: SchemaType.String } } as ArraySchema
+                    onExpand?.(expandedKeys ? [...expandedKeys, pathString] : [pathString])
+                  }
+
                   triggerChange?.(newValue)
                 }
               }

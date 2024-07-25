@@ -5,7 +5,7 @@ import { useStyles } from '@/hooks/useStyle'
 
 import { columnHeight, INDENT, KEY_ITEMS, KEY_PROPERTIES, SchemaType, SEPARATOR } from './constants'
 import { useJsonSchemaContext } from './JsonSchema.context'
-import type { ObjectSchema, PrimitiveSchema } from './JsonSchema.type'
+import type { ArraySchema } from './JsonSchema.type'
 import { JsonSchemaNodeRow, type JsonSchemaNodeRowProps } from './JsonSchemaNodeRow'
 import { JsonSchemaNodeWrapper } from './JsonSchemaNodeWrapper'
 import { getNodeLevelInfo, getRefJsonSchema } from './utils'
@@ -160,10 +160,12 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
                 fieldPath={[...fieldPath, KEY_ITEMS]}
                 value={value.items}
                 onChange={(changValue) => {
-                  onChange?.({
-                    ...value,
-                    items: changValue as ObjectSchema | PrimitiveSchema,
-                  })
+                  if (changValue) {
+                    onChange?.({
+                      ...value,
+                      items: changValue as ArraySchema['items'],
+                    })
+                  }
                 }}
               />
             </JsonSchemaNodeWrapper>

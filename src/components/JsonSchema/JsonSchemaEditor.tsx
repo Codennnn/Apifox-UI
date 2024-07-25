@@ -15,10 +15,7 @@ export interface JsonSchemaEditorProps extends Pick<JsonSchemaNodeProps, 'value'
 
   readOnly?: boolean
   expandedKeys?: string[]
-  onExpand?: (
-    expandedKeys: JsonSchemaEditorProps['expandedKeys'],
-    expandData: { expanded: boolean }
-  ) => void
+  onExpand?: (expandedKeys: JsonSchemaEditorProps['expandedKeys']) => void
   extraColumns?: ColumnType[]
 }
 
