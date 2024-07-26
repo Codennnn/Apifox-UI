@@ -1,4 +1,5 @@
-import { Input, Select, Tooltip } from 'antd'
+import { CloseCircleFilled } from '@ant-design/icons'
+import { Input, Select, theme, Tooltip } from 'antd'
 import { nanoid } from 'nanoid'
 
 import { DoubleCheckRemoveBtn } from '@/components/DoubleCheckRemoveBtn'
@@ -15,6 +16,8 @@ interface ParamsEditableTableProps extends Pick<EditableTableProps, 'autoNewRow'
 }
 
 export function ParamsEditableTable(props: ParamsEditableTableProps) {
+  const { token } = theme.useToken()
+
   const {
     value,
     onChange,
@@ -57,21 +60,32 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       dataIndex: 'name',
       width: '25%',
       render: (text, record, idx) => {
+        const isNewRow = !record.id || record.id === newRowRecordId
+
         return (
           <div>
             <Tooltip
               open={isPathParamsTable ? undefined : false}
               title="自动提取接口路径里的 {param} 形式参数，请在接口路径中修改。"
             >
-              <Input
-                placeholder="添加参数"
-                readOnly={isPathParamsTable}
-                value={typeof text === 'string' ? text : ''}
-                variant="borderless"
-                onChange={(ev) => {
-                  handleChange({ id: record.id, name: ev.target.value }, idx)
-                }}
-              />
+              <div className="flex items-center">
+                <Input
+                  placeholder="添加参数"
+                  readOnly={isPathParamsTable}
+                  value={typeof text === 'string' ? text : ''}
+                  variant="borderless"
+                  onChange={(ev) => {
+                    handleChange({ id: record.id, name: ev.target.value }, idx)
+                  }}
+                />
+                {!text && !isNewRow && (
+                  <Tooltip title="参数名不能为空">
+                    <span className="pr-1">
+                      <CloseCircleFilled style={{ color: token.colorErrorText }} />
+                    </span>
+                  </Tooltip>
+                )}
+              </div>
             </Tooltip>
           </div>
         )
