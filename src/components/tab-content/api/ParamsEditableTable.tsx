@@ -15,12 +15,20 @@ interface ParamsEditableTableProps extends Pick<EditableTableProps, 'autoNewRow'
 }
 
 export function ParamsEditableTable(props: ParamsEditableTableProps) {
-  const { value, onChange, autoNewRow = true, removable = true, isPathParamsTable = false } = props
+  const {
+    value,
+    onChange,
+    isPathParamsTable = false,
+    autoNewRow = !isPathParamsTable,
+    removable = true,
+  } = props
+
+  const newRowRecordId = nanoid(6)
 
   const handleChange = (v: Partial<Record<keyof Parameter, any>>, idx: number) => {
     const target = value?.at(idx)
 
-    if (target?.id) {
+    if (target?.id && target.id !== newRowRecordId) {
       onChange?.(
         value?.map((it, i) => {
           if (i === idx) {
@@ -34,10 +42,10 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       onChange?.([
         ...(value || []),
         {
+          id: '',
           ...target,
           ...v,
           type: ParamType.String,
-          id: nanoid(6),
         },
       ])
     }
@@ -48,7 +56,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       title: '参数名',
       dataIndex: 'name',
       width: '25%',
-      render: (text, _, idx) => {
+      render: (text, record, idx) => {
         return (
           <div>
             <Tooltip
@@ -61,7 +69,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                 value={typeof text === 'string' ? text : ''}
                 variant="borderless"
                 onChange={(ev) => {
-                  handleChange({ name: ev.target.value }, idx)
+                  handleChange({ id: record.id, name: ev.target.value }, idx)
                 }}
               />
             </Tooltip>
@@ -74,7 +82,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       dataIndex: 'type',
       width: 90,
       render: (text, record, idx) => {
-        const isNewRow = !record.id
+        const isNewRow = !record.id || record.id === newRowRecordId
 
         return (
           <div className={isNewRow ? 'opacity-0 hover:opacity-100' : ''}>
@@ -148,7 +156,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
     {
       width: 90,
       render: (_, record, idx) => {
-        const isNewRow = !record.id
+        const isNewRow = !record.id || record.id === newRowRecordId
 
         if (!isNewRow && removable) {
           return (
@@ -171,6 +179,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       columns={columns}
       dataSource={value}
       newRowRecord={{
+        id: newRowRecordId,
         type: ParamType.String,
       }}
     />
