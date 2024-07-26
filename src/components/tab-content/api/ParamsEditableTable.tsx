@@ -1,4 +1,4 @@
-import { Input, Select } from 'antd'
+import { Input, Select, Tooltip } from 'antd'
 import { nanoid } from 'nanoid'
 
 import { DoubleCheckRemoveBtn } from '@/components/DoubleCheckRemoveBtn'
@@ -11,10 +11,11 @@ interface ParamsEditableTableProps extends Pick<EditableTableProps, 'autoNewRow'
   value?: Parameter[]
   onChange?: (value: ParamsEditableTableProps['value']) => void
   removable?: boolean
+  isPathParamsTable?: boolean
 }
 
 export function ParamsEditableTable(props: ParamsEditableTableProps) {
-  const { value, onChange, autoNewRow = true, removable = true } = props
+  const { value, onChange, autoNewRow = true, removable = true, isPathParamsTable = false } = props
 
   const handleChange = (v: Partial<Record<keyof Parameter, any>>, idx: number) => {
     const target = value?.at(idx)
@@ -50,14 +51,20 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       render: (text, _, idx) => {
         return (
           <div>
-            <Input
-              placeholder="添加参数"
-              value={typeof text === 'string' ? text : ''}
-              variant="borderless"
-              onChange={(ev) => {
-                handleChange({ name: ev.target.value }, idx)
-              }}
-            />
+            <Tooltip
+              open={isPathParamsTable ? undefined : false}
+              title="自动提取接口路径里的 {param} 形式参数，请在接口路径中修改。"
+            >
+              <Input
+                placeholder="添加参数"
+                readOnly={isPathParamsTable}
+                value={typeof text === 'string' ? text : ''}
+                variant="borderless"
+                onChange={(ev) => {
+                  handleChange({ name: ev.target.value }, idx)
+                }}
+              />
+            </Tooltip>
           </div>
         )
       },
@@ -78,8 +85,8 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                 { label: 'integer', value: ParamType.Integer },
                 { label: 'boolean', value: ParamType.Boolean },
                 { label: 'number', value: ParamType.Number },
-                { label: 'array', value: ParamType.Array },
-              ]}
+                { label: 'array', value: ParamType.Array, hidden: isPathParamsTable },
+              ].filter((it) => !it.hidden)}
               popupClassName="min-w-[90px]"
               style={{
                 color:

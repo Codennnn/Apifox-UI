@@ -29,7 +29,7 @@ import { useGlobalContext } from '@/contexts/global'
 import { useMenuHelpersContext } from '@/contexts/menu-helpers'
 import { useMenuTabHelpers } from '@/contexts/menu-tab-settings'
 import { initialCreateApiDetailsData } from '@/data/remote'
-import { type ContentType, MenuItemType } from '@/enums'
+import { type ContentType, MenuItemType, ParamType } from '@/enums'
 import { getContentTypeString } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
@@ -143,6 +143,51 @@ export function ApiDocEditing() {
         form={form}
         onFinish={(values) => {
           handleFinish(values)
+        }}
+        onValuesChange={(changedValues: Partial<ApiDetails>) => {
+          const { path } = changedValues
+
+          if (typeof path === 'string') {
+            const regex = /\{([^}]+)\}/g
+
+            let match: RegExpExecArray | null
+            const pathParams: string[] = []
+
+            while ((match = regex.exec(path)) !== null) {
+              // match[1] 是第一个捕获组的值，即参数名。
+              pathParams.push(match[1])
+            }
+
+            const oldParameters = form.getFieldValue('parameters') as ApiDetails['parameters']
+            const oldPath = oldParameters?.path
+
+            const newPath =
+              pathParams.length >= (oldPath?.length || 0)
+                ? pathParams.reduce(
+                    (acc, cur, curIdx) => {
+                      const target = oldPath?.at(curIdx)
+
+                      if (target) {
+                        acc.splice(curIdx, 1, { ...target, name: cur })
+                      } else {
+                        acc.push({
+                          id: nanoid(4),
+                          name: cur,
+                          type: ParamType.String,
+                          required: true,
+                        })
+                      }
+
+                      return acc
+                    },
+                    [...(oldPath || [])]
+                  )
+                : oldPath?.slice(0, pathParams.length)
+
+            const newParameters: ApiDetails['parameters'] = { ...oldParameters, path: newPath }
+
+            form.setFieldValue('parameters', newParameters)
+          }
         }}
       >
         <div className="flex items-center px-tabContent py-3">

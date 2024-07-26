@@ -67,6 +67,7 @@ export function ParamsTab(props: ParamsTabProps) {
                     <Typography.Text type="secondary">Path 参数</Typography.Text>
                   </div>
                   <ParamsEditableTable
+                    isPathParamsTable
                     autoNewRow={false}
                     removable={false}
                     value={value.path}
