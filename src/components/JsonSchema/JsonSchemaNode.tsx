@@ -181,11 +181,11 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
           const refJsonSchema = getRefJsonSchema(menuRawList, $ref)
 
           // 为了避免循环引用，需要判断一下，如果是同一个引用，就不再往下展示了。
-          if ($ref !== restProps.fromRef) {
-            return (
-              <>
-                <JsonSchemaNodeRow {...rowProps} />
+          return (
+            <>
+              <JsonSchemaNodeRow {...rowProps} />
 
+              {$ref !== restProps.fromRef && (
                 <JsonSchemaNodeWrapper className={styles.node} shouldExpand={shouldExpand}>
                   <div className={styles.ref}>
                     <div
@@ -210,9 +210,9 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
                     />
                   </div>
                 </JsonSchemaNodeWrapper>
-              </>
-            )
-          }
+              )}
+            </>
+          )
         }
       }
 
