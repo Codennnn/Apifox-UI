@@ -1,20 +1,13 @@
 import { CaretRightOutlined } from '@ant-design/icons'
-import { Dropdown, Input, Tooltip } from 'antd'
+import { Input, Tooltip } from 'antd'
 import { omit } from 'lodash'
 import { CirclePlusIcon } from 'lucide-react'
 
+import { DataTypeSelect } from '@/components/DataTypeSelect'
 import { DoubleCheckRemoveBtn } from '@/components/DoubleCheckRemoveBtn'
 import { useStyles } from '@/hooks/useStyle'
 
-import {
-  columnHeight,
-  defaultSchemaTypeConfig,
-  INDENT,
-  KEY_ITEMS,
-  KEY_PROPERTIES,
-  SchemaType,
-  SEPARATOR,
-} from './constants'
+import { columnHeight, INDENT, KEY_ITEMS, KEY_PROPERTIES, SchemaType, SEPARATOR } from './constants'
 import { useJsonSchemaContext } from './JsonSchema.context'
 import type { ArraySchema, FieldPath, JsonSchema, RefSchema } from './JsonSchema.type'
 import { getNodeLevelInfo } from './utils'
@@ -319,70 +312,44 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
       </div>
 
       <div className={`${styles.row.col} ${styles.row.type} ${styles.row.colHover}`}>
-        <Dropdown
-          arrow
+        <DataTypeSelect
           disabled={disabled}
-          menu={{
-            onClick: (menuInfo) => {
-              const newType = menuInfo.key as SchemaType
-              const oldType = value.type
-              let newValue = { ...value, type: newType } as JsonSchema
+          readOnly={readOnly}
+          type={type}
+          onTypeSelect={(newType) => {
+            const oldType = value.type
+            let newValue = { ...value, type: newType } as JsonSchema
 
-              if (oldType === newType) {
-                return
+            if (oldType === newType) {
+              return
+            }
+
+            switch (oldType) {
+              case SchemaType.Object: {
+                if (newType !== SchemaType.Object) {
+                  triggerChange?.(omit(newValue, KEY_PROPERTIES) as JsonSchema)
+                }
+                break
               }
 
-              switch (oldType) {
-                case SchemaType.Object: {
-                  if (newType !== SchemaType.Object) {
-                    triggerChange?.(omit(newValue, KEY_PROPERTIES) as JsonSchema)
-                  }
-                  break
+              case SchemaType.Array: {
+                if (newType !== SchemaType.Array) {
+                  triggerChange?.(omit(newValue, KEY_ITEMS) as JsonSchema)
                 }
-
-                case SchemaType.Array: {
-                  if (newType !== SchemaType.Array) {
-                    triggerChange?.(omit(newValue, KEY_ITEMS) as JsonSchema)
-                  }
-                  break
-                }
-
-                default: {
-                  if (newType === SchemaType.Array) {
-                    newValue = { ...newValue, items: { type: SchemaType.String } } as ArraySchema
-                    onExpand?.(expandedKeys ? [...expandedKeys, pathString] : [pathString])
-                  }
-
-                  triggerChange?.(newValue)
-                }
+                break
               }
-            },
-            items: [
-              { key: SchemaType.Refer, label: defaultSchemaTypeConfig[SchemaType.Refer].label },
-              { key: SchemaType.Void, label: defaultSchemaTypeConfig[SchemaType.Void].text },
-              {
-                key: SchemaType.Integer,
-                label: defaultSchemaTypeConfig[SchemaType.Integer].text,
-              },
-              { key: SchemaType.Double, label: defaultSchemaTypeConfig[SchemaType.Double].text },
-              { key: SchemaType.String, label: defaultSchemaTypeConfig[SchemaType.String].text },
-              {
-                key: SchemaType.Boolean,
-                label: defaultSchemaTypeConfig[SchemaType.Boolean].text,
-              },
-              { key: SchemaType.Object, label: defaultSchemaTypeConfig[SchemaType.Object].text },
-              { key: SchemaType.Array, label: defaultSchemaTypeConfig[SchemaType.Array].text },
-            ],
+
+              default: {
+                if (newType === SchemaType.Array) {
+                  newValue = { ...newValue, items: { type: SchemaType.String } } as ArraySchema
+                  onExpand?.(expandedKeys ? [...expandedKeys, pathString] : [pathString])
+                }
+
+                triggerChange?.(newValue)
+              }
+            }
           }}
-          trigger={['click']}
-        >
-          <span
-            className={readOnly ? undefined : styles.typeSelect}
-            style={{ color: `var(${defaultSchemaTypeConfig[type].varColor})` }}
-          >
-            {defaultSchemaTypeConfig[type].text}
-          </span>
-        </Dropdown>
+        />
       </div>
 
       <div className={`${styles.row.col} ${styles.row.title} ${styles.row.colHover}`}>
