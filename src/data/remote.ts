@@ -14,10 +14,25 @@ import {
   ParamType,
 } from '@/enums'
 import { findFolders } from '@/helpers'
-import type { ApiDetails, ApiSchema, Creator, RecycleData } from '@/types'
+import type { ApiDetails, ApiDetailsResponse, ApiSchema, Creator, RecycleData } from '@/types'
 
 const RESPONSE_ID_1 = nanoid(6)
 const RESPONSE_ID_2 = nanoid(6)
+
+const defaultResponse = (): ApiDetailsResponse => {
+  const id = nanoid(6)
+
+  return {
+    id,
+    code: 200,
+    name: '成功',
+    contentType: ContentType.JSON,
+    jsonSchema: {
+      type: SchemaType.Object,
+      properties: [],
+    },
+  }
+}
 
 export const creator: Creator = {
   id: nanoid(6),
@@ -63,18 +78,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       status: ApiStatus.Released,
       responsibleId: creator.id,
       serverId: SERVER_INHERIT,
-      responses: [
-        {
-          id: nanoid(6),
-          code: 200,
-          name: '成功',
-          contentType: ContentType.JSON,
-          jsonSchema: {
-            type: SchemaType.Object,
-            properties: [],
-          },
-        },
-      ],
+      responses: [defaultResponse()],
     },
   },
   {
@@ -90,6 +94,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       status: ApiStatus.Released,
       responsibleId: creator.id,
       serverId: SERVER_INHERIT,
+      responses: [defaultResponse()],
     },
   },
   {
@@ -243,6 +248,7 @@ export const apiDirectoryData: ApiMenuData[] = [
       responsibleId: creator.id,
       tags: ['宠物'],
       serverId: SERVER_INHERIT,
+      responses: [defaultResponse()],
     },
   },
   {

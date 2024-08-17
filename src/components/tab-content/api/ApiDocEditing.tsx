@@ -246,6 +246,8 @@ export function ApiDocEditing() {
                   animated={false}
                   className={styles.tabWithBorder}
                   items={responses?.map((resp, idx) => {
+                    const onlyOneRes = responses.length === 1
+
                     return {
                       key: resp.id,
                       label: `${resp.name}(${resp.code})`,
@@ -308,28 +310,34 @@ export function ApiDocEditing() {
                               </Form.Item>
                             </div>
 
-                            <div className="ml-auto pt-1">
-                              <Popconfirm
-                                title="确定删除吗？"
-                                onConfirm={() => {
-                                  const newResponses = responses.filter((_, i) => i !== idx)
+                            {!onlyOneRes && (
+                              <div className="ml-auto pt-1">
+                                <Popconfirm
+                                  title={
+                                    <span>
+                                      确定删除？确定后点击右上角<strong>保存</strong>按钮生效
+                                    </span>
+                                  }
+                                  onConfirm={() => {
+                                    const newResponses = responses.filter((_, i) => i !== idx)
 
-                                  form.setFieldValue('responses', newResponses)
+                                    form.setFieldValue('responses', newResponses)
 
-                                  setActiveResTabKey(newResponses.at(0)?.id)
-                                }}
-                              >
-                                <Button
-                                  size="small"
-                                  style={{
-                                    color: token.colorTextSecondary,
+                                    setActiveResTabKey(newResponses.at(0)?.id)
                                   }}
-                                  type="text"
                                 >
-                                  <IconText icon={<TrashIcon size={14} />} />
-                                </Button>
-                              </Popconfirm>
-                            </div>
+                                  <Button
+                                    size="small"
+                                    style={{
+                                      color: token.colorTextSecondary,
+                                    }}
+                                    type="text"
+                                  >
+                                    <IconText icon={<TrashIcon size={14} />} />
+                                  </Button>
+                                </Popconfirm>
+                              </div>
+                            )}
                           </div>
 
                           <Form.Item noStyle name={['responses', idx, 'jsonSchema']}>

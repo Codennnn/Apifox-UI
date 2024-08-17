@@ -134,12 +134,6 @@
   &.ant-tabs {
     @apply h-full;
 
-    &.main-tabs {
-      > .ant-tabs-nav {
-        @apply pr-3;
-      }
-    }
-
     .ui-tabs-nav {
       @apply pt-2;
 
@@ -172,6 +166,16 @@
 
         > .ant-tabs-nav-wrap {
           @apply mt-2;
+        }
+      }
+    }
+
+    &.main-tabs {
+      > .ant-tabs-nav {
+        @apply pr-3;
+
+        > .ant-tabs-nav-wrap {
+          @apply h-10;
         }
       }
     }
