@@ -1,9 +1,11 @@
+import type { ReactNode } from 'react'
+
 import { CaretRightOutlined } from '@ant-design/icons'
 import { Input, Tooltip } from 'antd'
 import { omit } from 'lodash'
 import { CirclePlusIcon } from 'lucide-react'
 
-import { DataTypeSelect } from '@/components/DataTypeSelect'
+import { cssSchemaType, DataTypeSelect } from '@/components/DataTypeSelect'
 import { DoubleCheckRemoveBtn } from '@/components/DoubleCheckRemoveBtn'
 import { useStyles } from '@/hooks/useStyle'
 
@@ -60,6 +62,10 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
 
             '&:hover': {
               backgroundColor: token.colorFillQuaternary,
+
+              [`.${cssSchemaType}`]: {
+                display: 'inline-flex',
+              },
             },
           },
           { label: 'row' }
@@ -313,6 +319,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
 
       <div className={`${styles.row.col} ${styles.row.type} ${styles.row.colHover}`}>
         <DataTypeSelect
+          $ref={type === SchemaType.Refer ? value.$ref : undefined}
           disabled={disabled}
           readOnly={readOnly}
           type={type}
@@ -381,7 +388,10 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             className={`${styles.row.col} ${styles.row.colHover} ${column.colClassName ?? ''}`}
             style={column.colStyle}
           >
-            {column.render?.(value[column.key as 'type'], value, { disabled, fieldPath })}
+            {column.render?.(value[column.key as 'type'] as ReactNode, value, {
+              disabled,
+              fieldPath,
+            })}
           </div>
         )
       })}

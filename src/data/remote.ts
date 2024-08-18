@@ -556,18 +556,7 @@ export const initialCreateApiDetailsData: ApiDetails = {
   method: HttpMethod.Get,
   status: ApiStatus.Developing,
   serverId: SERVER_INHERIT,
-  responses: [
-    {
-      id: nanoid(6),
-      code: 200,
-      name: '成功',
-      contentType: ContentType.JSON,
-      jsonSchema: {
-        type: SchemaType.Object,
-        properties: [],
-      },
-    },
-  ],
+  responses: [defaultResponse()],
 }
 
 export const initialCreateApiSchemaData: ApiSchema = {

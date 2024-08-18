@@ -219,9 +219,9 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
       return null
     }
 
-    case SchemaType.Void:
+    case SchemaType.Null:
     case SchemaType.Boolean:
-    case SchemaType.Double:
+    case SchemaType.Number:
     case SchemaType.Integer:
     case SchemaType.String: {
       return <JsonSchemaNodeRow {...rowProps} />

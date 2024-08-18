@@ -9,10 +9,10 @@ export interface BaseSchema {
 export interface PrimitiveSchema extends BaseSchema {
   type:
     | SchemaType.Boolean
-    | SchemaType.Double
+    | SchemaType.Number
     | SchemaType.Integer
     | SchemaType.String
-    | SchemaType.Void
+    | SchemaType.Null
 }
 
 export interface ObjectSchema extends BaseSchema {
