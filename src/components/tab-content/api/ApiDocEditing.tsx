@@ -35,7 +35,7 @@ import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
 import { BaseFormItems } from './components/BaseFormItems'
-import { PathInput } from './components/PathInput'
+import { PathInput, type PathInputProps } from './components/PathInput'
 import { ParamsTab } from './params/ParamsTab'
 import { contentTypeOptions, httpCodeOptions, ModalNewResponse } from './ModalNewResponse'
 
@@ -183,6 +183,31 @@ export function ApiDocEditing() {
     }
   }
 
+  const handleParseQueryParams: PathInputProps['onParseQueryParams'] = (newParams) => {
+    if (Array.isArray(newParams)) {
+      const currentParmas = form.getFieldValue(['parameters', 'query']) as NonNullable<
+        ApiDetails['parameters']
+      >['query']
+
+      if (Array.isArray(currentParmas)) {
+        form.setFieldValue(
+          ['parameters', 'query'],
+          newParams.reduce((acc, item) => {
+            const target = acc.find(({ name }) => name === item.name)
+
+            if (!target) {
+              acc.push(item)
+            }
+
+            return acc
+          }, currentParmas)
+        )
+      } else {
+        form.setFieldValue(['parameters', 'query'], newParams)
+      }
+    }
+  }
+
   return (
     <>
       <Form<ApiDetails>
@@ -204,7 +229,7 @@ export function ApiDocEditing() {
               />
             </Form.Item>
             <Form.Item noStyle name="path">
-              <PathInput />
+              <PathInput onParseQueryParams={handleParseQueryParams} />
             </Form.Item>
           </Space.Compact>
 

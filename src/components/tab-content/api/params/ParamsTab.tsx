@@ -61,7 +61,7 @@ export function ParamsTab(props: ParamsTabProps) {
                 }}
               />
 
-              {value?.path ? (
+              {value?.path && value.path.length > 0 ? (
                 <>
                   <div className="py-2">
                     <Typography.Text type="secondary">Path 参数</Typography.Text>
