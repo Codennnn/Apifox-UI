@@ -35,6 +35,7 @@ import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
 import { BaseFormItems } from './components/BaseFormItems'
+import { PathInput } from './components/PathInput'
 import { ParamsTab } from './params/ParamsTab'
 import { contentTypeOptions, httpCodeOptions, ModalNewResponse } from './ModalNewResponse'
 
@@ -136,6 +137,52 @@ export function ApiDocEditing() {
   const [modalOpen, setModalOpen] = useState(false)
   const [activeResTabKey, setActiveResTabKey] = useState<string>()
 
+  const handleValuesChange = (changedValues: Partial<ApiDetails>) => {
+    const { path } = changedValues
+
+    if (typeof path === 'string') {
+      const regex = /\{([^}]+)\}/g
+
+      let match: RegExpExecArray | null
+      const pathParams: string[] = []
+
+      while ((match = regex.exec(path)) !== null) {
+        // match[1] 是第一个捕获组的值，即参数名。
+        pathParams.push(match[1])
+      }
+
+      const oldParameters = form.getFieldValue('parameters') as ApiDetails['parameters']
+      const oldPath = oldParameters?.path
+
+      const newPath =
+        pathParams.length >= (oldPath?.length || 0)
+          ? pathParams.reduce(
+              (acc, cur, curIdx) => {
+                const target = oldPath?.at(curIdx)
+
+                if (target) {
+                  acc.splice(curIdx, 1, { ...target, name: cur })
+                } else {
+                  acc.push({
+                    id: nanoid(4),
+                    name: cur,
+                    type: ParamType.String,
+                    required: true,
+                  })
+                }
+
+                return acc
+              },
+              [...(oldPath || [])]
+            )
+          : oldPath?.slice(0, pathParams.length)
+
+      const newParameters: ApiDetails['parameters'] = { ...oldParameters, path: newPath }
+
+      form.setFieldValue('parameters', newParameters)
+    }
+  }
+
   return (
     <>
       <Form<ApiDetails>
@@ -144,51 +191,7 @@ export function ApiDocEditing() {
         onFinish={(values) => {
           handleFinish(values)
         }}
-        onValuesChange={(changedValues: Partial<ApiDetails>) => {
-          const { path } = changedValues
-
-          if (typeof path === 'string') {
-            const regex = /\{([^}]+)\}/g
-
-            let match: RegExpExecArray | null
-            const pathParams: string[] = []
-
-            while ((match = regex.exec(path)) !== null) {
-              // match[1] 是第一个捕获组的值，即参数名。
-              pathParams.push(match[1])
-            }
-
-            const oldParameters = form.getFieldValue('parameters') as ApiDetails['parameters']
-            const oldPath = oldParameters?.path
-
-            const newPath =
-              pathParams.length >= (oldPath?.length || 0)
-                ? pathParams.reduce(
-                    (acc, cur, curIdx) => {
-                      const target = oldPath?.at(curIdx)
-
-                      if (target) {
-                        acc.splice(curIdx, 1, { ...target, name: cur })
-                      } else {
-                        acc.push({
-                          id: nanoid(4),
-                          name: cur,
-                          type: ParamType.String,
-                          required: true,
-                        })
-                      }
-
-                      return acc
-                    },
-                    [...(oldPath || [])]
-                  )
-                : oldPath?.slice(0, pathParams.length)
-
-            const newParameters: ApiDetails['parameters'] = { ...oldParameters, path: newPath }
-
-            form.setFieldValue('parameters', newParameters)
-          }
-        }}
+        onValuesChange={handleValuesChange}
       >
         <div className="flex items-center px-tabContent py-3">
           <Space.Compact className="flex-1">
@@ -201,7 +204,7 @@ export function ApiDocEditing() {
               />
             </Form.Item>
             <Form.Item noStyle name="path">
-              <Input placeholder="接口路径，“/”起始" />
+              <PathInput />
             </Form.Item>
           </Space.Compact>
 
