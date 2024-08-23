@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   Button,
@@ -75,6 +75,8 @@ export function ApiDocEditing() {
   const [form] = Form.useForm<ApiDetails>()
 
   const { messageApi } = useGlobalContext()
+  const msgKey = useRef<string>()
+
   const { menuRawList, addMenuItem, updateMenuItem } = useMenuHelpersContext()
   const { addTabItem } = useMenuTabHelpers()
   const { tabData } = useTabContentContext()
@@ -183,28 +185,45 @@ export function ApiDocEditing() {
     }
   }
 
-  const handleParseQueryParams: PathInputProps['onParseQueryParams'] = (newParams) => {
-    if (Array.isArray(newParams)) {
-      const currentParmas = form.getFieldValue(['parameters', 'query']) as NonNullable<
-        ApiDetails['parameters']
-      >['query']
+  const handleParseQueryParams: PathInputProps['onParseQueryParams'] = (parsedParams) => {
+    if (Array.isArray(parsedParams)) {
+      type Param = NonNullable<ApiDetails['parameters']>['query']
+
+      const currentParmas = form.getFieldValue(['parameters', 'query']) as Param
+
+      let newQueryParmas: Param = parsedParams
 
       if (Array.isArray(currentParmas)) {
-        form.setFieldValue(
-          ['parameters', 'query'],
-          newParams.reduce((acc, item) => {
-            const target = acc.find(({ name }) => name === item.name)
+        newQueryParmas = parsedParams.reduce((acc, item) => {
+          const target = acc.find(({ name }) => name === item.name)
 
-            if (!target) {
-              acc.push(item)
-            }
+          if (!target) {
+            acc.push(item)
+          }
 
-            return acc
-          }, currentParmas)
-        )
-      } else {
-        form.setFieldValue(['parameters', 'query'], newParams)
+          return acc
+        }, currentParmas)
       }
+
+      form.setFieldValue(['parameters', 'query'], newQueryParmas)
+
+      if (!msgKey.current) {
+        msgKey.current = '__'
+      }
+
+      messageApi.info({
+        key: msgKey.current,
+        content: (
+          <span>
+            路径中&nbsp;Query&nbsp;参数已自动提取，并填充到下方<strong>请求参数</strong>的&nbsp;
+            <strong>Param</strong>&nbsp;中
+          </span>
+        ),
+        duration: 3,
+        onClose: () => {
+          msgKey.current = undefined
+        },
+      })
     }
   }
 

@@ -22,27 +22,42 @@ export function PathInput(props: PathInputProps) {
     const val = ev.target.value
 
     if (val.endsWith('?')) {
-      msgKey.current = '_'
-
-      if (msgKey.current) {
-        messageApi.info({
-          key: msgKey.current, // 用户可能会重复键入 “?”，因此需要避免重复显示提示。
-          content: (
-            <span>
-              Query 参数请在下方<strong>请求参数</strong>中填写
-            </span>
-          ),
-          duration: 3,
-          onClose: () => {
-            msgKey.current = undefined
-          },
-        })
+      if (!msgKey.current) {
+        msgKey.current = '_'
       }
+
+      messageApi.info({
+        key: msgKey.current, // 用户可能会重复键入 “?”，因此需要避免重复显示提示。
+        content: (
+          <span>
+            Query&nbsp;参数请在下方<strong>请求参数</strong>中填写
+          </span>
+        ),
+        duration: 3,
+        onClose: () => {
+          msgKey.current = undefined
+        },
+      })
 
       // 移除掉末尾的 “?”。
       onChange?.(val.slice(0, val.length - 1))
+    } else if (val.endsWith('#')) {
+      if (!msgKey.current) {
+        msgKey.current = '_'
+      }
+
+      messageApi.info({
+        key: msgKey.current,
+        content: <span>接口路径不支持填写&nbsp;URL&nbsp;hash(#)</span>,
+        duration: 3,
+        onClose: () => {
+          msgKey.current = undefined
+        },
+      })
+
+      onChange?.(val.slice(0, val.length - 1))
     } else {
-      const finalVal = val
+      let finalVal = val
 
       const queryParams: Parameter[] = []
 
@@ -61,7 +76,7 @@ export function PathInput(props: PathInputProps) {
           onParseQueryParams?.(queryParams)
         }
 
-        // finalVal = Url.origin + Url.pathname
+        finalVal = val.replace(Url.search, '').replace(Url.hash, '')
       } catch {
         //
       }
