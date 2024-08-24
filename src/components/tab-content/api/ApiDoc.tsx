@@ -36,7 +36,7 @@ const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).
 
 function GroupTitle(props: React.PropsWithChildren<{ className?: string }>) {
   return (
-    <h2 className={`text-base font-normal opacity-80 ${props.className ?? ''}`}>
+    <h2 className={`text-base font-semibold opacity-80 ${props.className ?? ''}`}>
       {props.children}
     </h2>
   )

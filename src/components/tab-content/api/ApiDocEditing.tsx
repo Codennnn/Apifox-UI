@@ -17,7 +17,6 @@ import { InfoIcon, PlusIcon, TrashIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
 import { PageTabStatus } from '@/components/ApiTab/ApiTab.enum'
-import { GroupTitle } from '@/components/ApiTab/GroupTitle'
 import { useTabContentContext } from '@/components/ApiTab/TabContentContext'
 import { IconText } from '@/components/IconText'
 import { InputUnderline } from '@/components/InputUnderline'
@@ -35,6 +34,7 @@ import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
 import { BaseFormItems } from './components/BaseFormItems'
+import { GroupTitle } from './components/GroupTitle'
 import { PathInput, type PathInputProps } from './components/PathInput'
 import { ParamsTab } from './params/ParamsTab'
 import { contentTypeOptions, httpCodeOptions, ModalNewResponse } from './ModalNewResponse'
@@ -56,6 +56,9 @@ const methodOptions: SelectProps['options'] = Object.entries(HTTP_METHOD_CONFIG)
   }
 )
 
+/**
+ * API 「修改文档」部分。
+ */
 export function ApiDocEditing() {
   const { token } = theme.useToken()
 

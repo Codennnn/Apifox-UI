@@ -27,7 +27,7 @@ const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).
 )
 
 export function BaseFormItems() {
-  const [containerSize, setContainerSize] = useState<'sm' | 'md' | 'lg'>()
+  const [containerSize, setContainerSize] = useState<'xs' | 'sm' | 'md' | 'lg'>()
 
   const { ref } = useResizeObserver<HTMLDivElement>({
     onResize: ({ width }) => {
@@ -40,16 +40,19 @@ export function BaseFormItems() {
           if (containerSize !== 'md') {
             setContainerSize('md')
           }
-        } else {
+        } else if (width >= 500) {
           if (containerSize !== 'sm') {
             setContainerSize('sm')
           }
+        } else {
+          setContainerSize('xs')
         }
       }
     },
   })
 
-  const colSpan = containerSize === 'lg' ? 6 : containerSize === 'md' ? 12 : 24
+  const colSpan =
+    containerSize === 'lg' || containerSize === 'md' ? 6 : containerSize === 'sm' ? 12 : 24
 
   return (
     <div ref={ref}>
