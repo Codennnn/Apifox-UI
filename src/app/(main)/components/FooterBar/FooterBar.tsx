@@ -3,7 +3,7 @@ import { Button, type ButtonProps, Space } from 'antd'
 import { ArrowLeftToLine, ArrowRightToLine, GithubIcon, ShirtIcon } from 'lucide-react'
 
 import { IconText } from '@/components/IconText'
-import { ModalSettings } from '@/components/modals/ModalSettings'
+import { ModalSettings, SettingsMenuKey } from '@/components/modals/ModalSettings'
 import { GitHubRepo } from '@/constants'
 import { useLayoutContext } from '@/contexts/layout-settings'
 
@@ -41,7 +41,7 @@ export function FooterBar() {
       <Space className="ml-auto flex items-center" size={0}>
         <SmallButton
           onClick={() => {
-            void show(ModalSettings)
+            void show(ModalSettings, { selectedKey: SettingsMenuKey.Appearance })
           }}
         >
           <IconText icon={<ShirtIcon size={14} />} />
