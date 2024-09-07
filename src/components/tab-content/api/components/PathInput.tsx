@@ -9,17 +9,20 @@ import type { Parameter } from '@/types'
 export interface PathInputProps {
   value?: string
   onChange?: (value: PathInputProps['value']) => void
+  onValueChange?: (value: PathInputProps['value']) => void
   onParseQueryParams?: (queryParams?: Parameter[]) => void
 }
 
 export function PathInput(props: PathInputProps) {
-  const { value, onChange, onParseQueryParams } = props
+  const { value, onChange, onValueChange, onParseQueryParams } = props
 
   const { messageApi } = useGlobalContext()
   const msgKey = useRef<string>()
 
   const handleInputChange: InputProps['onChange'] = (ev) => {
     const val = ev.target.value
+
+    onValueChange?.(val)
 
     if (val.endsWith('?')) {
       if (!msgKey.current) {
