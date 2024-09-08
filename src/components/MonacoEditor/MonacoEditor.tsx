@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 
 import { Editor, type EditorProps } from '@monaco-editor/react'
-import { merge } from 'lodash'
+import { merge } from 'lodash-es'
 
 import { deserialize, isPureObject, serialize } from '@/utils'
 

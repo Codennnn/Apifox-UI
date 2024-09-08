@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { produce } from 'immer'
-import { get, set } from 'lodash'
+import { get, set } from 'lodash-es'
 
 import { defaultFieldData, KEY_ITEMS, KEY_PROPERTIES, SchemaType } from './constants'
 import { JsonSchemaContextProvider } from './JsonSchema.context'

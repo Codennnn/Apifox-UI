@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { Button, Input } from 'antd'
 import { produce } from 'immer'
-import { get, set } from 'lodash'
+import { get, set } from 'lodash-es'
 
 import { type JsonSchema, JsonSchemaEditor, SchemaType } from '@/components/JsonSchema'
 

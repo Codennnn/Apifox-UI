@@ -1,10 +1,18 @@
 'use client'
 
-import { useLayoutEffect, useState } from 'react'
-import { Panel, PanelGroup, type PanelProps, PanelResizeHandle } from 'react-resizable-panels'
+import { useLayoutEffect, useMemo, useState } from 'react'
+import {
+  getPanelGroupElement,
+  Panel,
+  PanelGroup,
+  type PanelProps,
+  PanelResizeHandle,
+} from 'react-resizable-panels'
 
 import { theme } from 'antd'
+import { throttle } from 'lodash-es'
 import { ChevronRightIcon } from 'lucide-react'
+import useResizeObserver from 'use-resize-observer'
 
 import { useLayoutContext } from '@/contexts/layout-settings'
 import { useStyles } from '@/hooks/useStyle'
@@ -12,6 +20,10 @@ import { useStyles } from '@/hooks/useStyle'
 import { FooterBar } from '../components/FooterBar'
 
 import { css } from '@emotion/css'
+
+const SIDE_PANEL_DEFAULT_WIDTH = 280
+const SIDE_PANEL_MIN_WIDTH = 200
+const SIDE_PANEL_MAX_WIDTH = 600
 
 interface PanelLayoutProps {
   layoutName?: string
@@ -54,15 +66,49 @@ export function PanelLayout(props: PanelLayoutProps) {
 
   const [defaultSize, setDefaultSize] = useState<PanelProps['defaultSize']>()
   const [minSize, setMinSize] = useState<PanelProps['minSize']>()
+  const [maxSize, setMaxSize] = useState<PanelProps['maxSize']>()
 
   useLayoutEffect(() => {
-    const panelGroup = document.querySelector('#panel-group')
+    const panelGroup = getPanelGroupElement('panel-group')
 
     if (panelGroup instanceof HTMLElement) {
-      setDefaultSize((280 / panelGroup.offsetWidth) * 100)
-      setMinSize((200 / panelGroup.offsetWidth) * 100)
+      setDefaultSize((SIDE_PANEL_DEFAULT_WIDTH / panelGroup.offsetWidth) * 100)
+      setMinSize((SIDE_PANEL_MIN_WIDTH / panelGroup.offsetWidth) * 100)
+      setMaxSize((SIDE_PANEL_MAX_WIDTH / panelGroup.offsetWidth) * 100)
     }
   }, [])
+
+  // 当 PanelGroup 的宽度不再变化时，将 minSize 和 maxSize 恢复设置为默认值。
+  const handlePanelGroupResizeEnd = useMemo(() => {
+    return throttle(
+      (panelGroupWidth: number) => {
+        setMinSize((SIDE_PANEL_MIN_WIDTH / panelGroupWidth) * 100)
+        setMaxSize((SIDE_PANEL_MAX_WIDTH / panelGroupWidth) * 100)
+      },
+      500,
+      {
+        leading: false,
+        trailing: true,
+      }
+    )
+  }, [])
+
+  useResizeObserver<HTMLDivElement>({
+    ref: getPanelGroupElement('panel-group') as HTMLDivElement | null,
+    onResize: ({ width: panelGroupWidth }) => {
+      if (typeof panelGroupWidth === 'number') {
+        const sidePanelSize = (SIDE_PANEL_DEFAULT_WIDTH / panelGroupWidth) * 100
+
+        setDefaultSize(sidePanelSize)
+
+        // 当 PanelGroup 的宽度发生变化时，将 minSize 和 maxSize 设置为固定值，防止 SidePanel 随着 PanelGroup 的宽度变化而变化。
+        setMinSize(sidePanelSize)
+        setMaxSize(sidePanelSize)
+
+        handlePanelGroupResizeEnd(panelGroupWidth)
+      }
+    },
+  })
 
   return (
     <>
@@ -74,8 +120,7 @@ export function PanelLayout(props: PanelLayoutProps) {
               collapsible
               className="flex h-full flex-col overflow-hidden"
               defaultSize={defaultSize}
-              id="side"
-              maxSize={50}
+              maxSize={maxSize}
               minSize={minSize}
               order={1}
               onCollapse={() => {
@@ -100,7 +145,6 @@ export function PanelLayout(props: PanelLayoutProps) {
 
         <Panel
           className="relative flex h-full flex-1 flex-col overflow-y-auto overflow-x-hidden"
-          id="main"
           order={2}
         >
           <div className="flex-1 overflow-auto">{right}</div>

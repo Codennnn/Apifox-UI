@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import { CaretRightOutlined } from '@ant-design/icons'
 import { Input, Tooltip } from 'antd'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 import { CirclePlusIcon } from 'lucide-react'
 
 import { cssSchemaType, DataTypeSelect } from '@/components/DataTypeSelect'
