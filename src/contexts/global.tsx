@@ -5,6 +5,8 @@ import { createContext, useContext } from 'react'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
 import { message, Modal } from 'antd'
 
+import { MenuHelpersContextProvider } from '@/contexts/menu-helpers'
+
 type ModalHookApi = ReturnType<typeof Modal.useModal>[0]
 type MessageApi = ReturnType<typeof message.useMessage>[0]
 
@@ -22,19 +24,21 @@ export function GlobalContextProvider(props: React.PropsWithChildren) {
   const [messageApi, messageContextHolder] = message.useMessage({ duration: 1 })
 
   return (
-    <NiceModalProvider>
-      <GlobalContext.Provider
-        value={{
-          modal,
-          messageApi,
-        }}
-      >
-        {children}
+    <MenuHelpersContextProvider>
+      <NiceModalProvider>
+        <GlobalContext.Provider
+          value={{
+            modal,
+            messageApi,
+          }}
+        >
+          {children}
 
-        {modalContextHolder}
-        {messageContextHolder}
-      </GlobalContext.Provider>
-    </NiceModalProvider>
+          {modalContextHolder}
+          {messageContextHolder}
+        </GlobalContext.Provider>
+      </NiceModalProvider>
+    </MenuHelpersContextProvider>
   )
 }
 

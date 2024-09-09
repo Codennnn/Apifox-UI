@@ -10,7 +10,6 @@ import { FileIcon } from '@/components/icons/FileIcon'
 import { IconText } from '@/components/IconText'
 import { InputSearch } from '@/components/InputSearch'
 import { API_MENU_CONFIG } from '@/configs/static'
-import { MenuHelpersContextProvider } from '@/contexts/menu-helpers'
 import { MenuTabProvider } from '@/contexts/menu-tab-settings'
 import { MenuItemType } from '@/enums'
 import { getCatalogType } from '@/helpers'
@@ -91,10 +90,8 @@ function HomeContent() {
 
 export default function HomePage() {
   return (
-    <MenuHelpersContextProvider>
-      <MenuTabProvider>
-        <HomeContent />
-      </MenuTabProvider>
-    </MenuHelpersContextProvider>
+    <MenuTabProvider>
+      <HomeContent />
+    </MenuTabProvider>
   )
 }
