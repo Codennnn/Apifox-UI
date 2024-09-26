@@ -42,7 +42,7 @@ export function ApiTabAction() {
   const { menuItems } = useApiTabActions()
 
   return (
-    <div className="ml-2 mt-2 flex gap-x-1">
+    <div className="ml-2 flex gap-x-1">
       <Button
         size="small"
         type="text"

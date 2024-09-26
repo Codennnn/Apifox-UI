@@ -177,6 +177,10 @@
         > .ant-tabs-nav-wrap {
           @apply h-10;
         }
+
+        > .ant-tabs-nav-operations {
+          @apply !w-auto;
+        }
       }
     }
 
