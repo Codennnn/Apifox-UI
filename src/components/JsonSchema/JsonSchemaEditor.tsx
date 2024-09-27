@@ -60,21 +60,14 @@ export function JsonSchemaEditor(props: JsonSchemaEditorProps) {
         const targetSchema: JsonSchema | undefined = get(draft, targetPath)
 
         if (targetSchema) {
-          if (targetSchema.type === SchemaType.Object) {
-            // 如果目标字段是一个对象，则在其 properties 中插入一个字段。
-            targetSchema.properties
-              ? targetSchema.properties.push(defaultFieldData)
-              : (targetSchema.properties = [defaultFieldData])
-          } else {
-            // 否则在相邻的字段后面添加一个字段。
-            const propertyIdx = Number(targetPath.pop())
+          // 在相邻的字段后面添加一个字段。
+          const propertyIdx = Number(targetPath.pop())
 
-            if (propertyIdx >= 0) {
-              const properties = get(draft, targetPath)
+          if (propertyIdx >= 0) {
+            const properties = get(draft, targetPath)
 
-              if (Array.isArray(properties)) {
-                properties.splice(propertyIdx + 1, 0, defaultFieldData)
-              }
+            if (Array.isArray(properties)) {
+              properties.splice(propertyIdx + 1, 0, defaultFieldData)
             }
           }
         } else {
