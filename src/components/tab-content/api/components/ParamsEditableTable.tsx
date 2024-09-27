@@ -33,6 +33,9 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
 
   const newRowRecordId = nanoid(6)
 
+  const testIsNewRow = (target: Parameter | undefined) =>
+    !target?.id || target.id === newRowRecordId
+
   const { styles } = useStyles(({ token }) => {
     const exampleRow = css({
       color: token.colorTextTertiary,
@@ -45,29 +48,31 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
     return { exampleRow }
   })
 
-  const handleChange = (v: Partial<Record<keyof Parameter, any>>, idx: number) => {
-    const target = value?.at(idx)
+  const handleChange = (rowIdx: number, v: Partial<Record<keyof Parameter, any>>) => {
+    const target = value?.at(rowIdx)
 
-    if (target?.id && target.id !== newRowRecordId) {
+    const isNewRow = testIsNewRow(target)
+
+    if (isNewRow) {
+      onChange?.([
+        ...(value || []),
+        {
+          id: newRowRecordId,
+          ...target,
+          ...v,
+          type: ParamType.String,
+        },
+      ])
+    } else {
       onChange?.(
         value?.map((it, i) => {
-          if (i === idx) {
+          if (i === rowIdx) {
             return { ...it, ...v }
           }
 
           return it
         })
       )
-    } else {
-      onChange?.([
-        ...(value || []),
-        {
-          id: '',
-          ...target,
-          ...v,
-          type: ParamType.String,
-        },
-      ])
     }
   }
 
@@ -76,8 +81,8 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       title: '参数名',
       dataIndex: 'name',
       width: '25%',
-      render: (text, record, idx) => {
-        const isNewRow = !record.id || record.id === newRowRecordId
+      render: (text, record, ridx) => {
+        const isNewRow = testIsNewRow(record)
 
         return (
           <ParamsEditableCell>
@@ -93,7 +98,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                   value={typeof text === 'string' ? text : ''}
                   variant="borderless"
                   onChange={(ev) => {
-                    handleChange({ id: record.id, name: ev.target.value }, idx)
+                    handleChange(ridx, { name: ev.target.value })
                   }}
                 />
                 {!text && !isNewRow && (
@@ -113,8 +118,8 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       title: '类型',
       dataIndex: 'type',
       width: 90,
-      render: (text, record, idx) => {
-        const isNewRow = !record.id || record.id === newRowRecordId
+      render: (text, record, ridx) => {
+        const isNewRow = testIsNewRow(record)
 
         return (
           <ParamsEditableCell className={isNewRow ? 'opacity-0 hover:opacity-100' : ''}>
@@ -138,16 +143,13 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
               value={typeof text === 'string' ? text : ''}
               variant="borderless"
               onChange={(paramType) => {
-                handleChange(
-                  {
-                    type: paramType,
-                    example:
-                      paramType === ParamType.Array && !Array.isArray(record.example)
-                        ? [record.example]
-                        : record.example,
-                  },
-                  idx
-                )
+                handleChange(ridx, {
+                  type: paramType,
+                  example:
+                    paramType === ParamType.Array && !Array.isArray(record.example)
+                      ? [record.example]
+                      : record.example,
+                })
               }}
             />
           </ParamsEditableCell>
@@ -158,7 +160,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       title: '示例值',
       dataIndex: 'example',
       width: '25%',
-      render: (exampleVal, record, rowIdx) => {
+      render: (exampleVal, record, ridx) => {
         if (record.type === ParamType.Array) {
           const example: string[] =
             Array.isArray(exampleVal) && exampleVal.length > 0 ? exampleVal : ['']
@@ -176,7 +178,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                         variant="borderless"
                         onChange={(ev) => {
                           const newExample = self.toSpliced(vIdx, 1, ev.target.value)
-                          handleChange({ example: newExample }, rowIdx)
+                          handleChange(ridx, { example: newExample })
                         }}
                       />
                     </ParamsEditableCell>
@@ -186,7 +188,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                         className="cursor-pointer"
                         size={15}
                         onClick={() => {
-                          handleChange({ example: [...example, ''] }, rowIdx)
+                          handleChange(ridx, { example: [...example, ''] })
                         }}
                       />
                     </div>
@@ -195,7 +197,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                       className={`flex items-center pr-2 ${canRemove ? '' : 'pointer-events-auto invisible opacity-0'}`}
                       onClick={() => {
                         if (canRemove) {
-                          handleChange({ example: example.filter((_, i) => i !== vIdx) }, rowIdx)
+                          handleChange(ridx, { example: example.filter((_, i) => i !== vIdx) })
                         }
                       }}
                     >
@@ -214,7 +216,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
               value={typeof exampleVal === 'string' ? exampleVal : undefined}
               variant="borderless"
               onChange={(ev) => {
-                handleChange({ example: ev.target.value }, rowIdx)
+                handleChange(ridx, { example: ev.target.value })
               }}
             />
           </ParamsEditableCell>
@@ -225,7 +227,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       title: '说明',
       dataIndex: 'description',
       width: '40%',
-      render: (text, _, idx) => {
+      render: (text, _, ridx) => {
         return (
           <ParamsEditableCell className="py-0">
             <Input.TextArea
@@ -239,7 +241,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
               value={typeof text === 'string' ? text : undefined}
               variant="borderless"
               onChange={(ev) => {
-                handleChange({ description: ev.target.value }, idx)
+                handleChange(ridx, { description: ev.target.value })
               }}
             />
           </ParamsEditableCell>
@@ -249,7 +251,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
     {
       width: 90,
       render: (_, record, idx) => {
-        const isNewRow = !record.id || record.id === newRowRecordId
+        const isNewRow = testIsNewRow(record)
 
         if (!isNewRow && removable) {
           return (
