@@ -4,6 +4,7 @@ import { Input, type InputProps } from 'antd'
 import { nanoid } from 'nanoid'
 
 import { useGlobalContext } from '@/contexts/global'
+import { ParamType } from '@/enums'
 import type { Parameter } from '@/types'
 
 export interface PathInputProps {
@@ -68,11 +69,28 @@ export function PathInput(props: PathInputProps) {
         const Url = new URL(val.startsWith('http') ? val : `http://xxx.com/${val}`)
 
         Url.searchParams.forEach((value, key) => {
-          queryParams.push({
-            id: nanoid(4),
-            name: key,
-            example: value,
-          })
+          const duplicatedParam = queryParams.find((p) => p.name === key)
+
+          // 如果有重复的参数，则设置为数组类型。
+          if (duplicatedParam) {
+            duplicatedParam.type = ParamType.Array
+
+            if (Array.isArray(duplicatedParam.example)) {
+              duplicatedParam.example.push(value)
+            } else {
+              duplicatedParam.example =
+                typeof duplicatedParam.example === 'string'
+                  ? [duplicatedParam.example, value]
+                  : [value]
+            }
+          } else {
+            queryParams.push({
+              id: nanoid(4),
+              name: key,
+              type: ParamType.String,
+              example: value,
+            })
+          }
         })
 
         if (queryParams.length > 0) {

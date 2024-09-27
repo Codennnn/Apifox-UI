@@ -1,9 +1,11 @@
 import { CloseCircleFilled } from '@ant-design/icons'
 import { Input, Select, theme, Tooltip } from 'antd'
+import { PlusCircleIcon, XCircleIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
 import { DoubleCheckRemoveBtn } from '@/components/DoubleCheckRemoveBtn'
 import { EditableTable, type EditableTableProps } from '@/components/EditableTable'
+import { ParamsEditableCell } from '@/components/tab-content/api/components/ParamsEditableCell'
 import { PARAMS_CONFIG } from '@/configs/static'
 import { ParamType } from '@/enums'
 import type { Parameter } from '@/types'
@@ -63,7 +65,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
         const isNewRow = !record.id || record.id === newRowRecordId
 
         return (
-          <div>
+          <ParamsEditableCell>
             <Tooltip
               open={isPathParamsTable ? undefined : false}
               title="自动提取接口路径里的 {param} 形式参数，请在接口路径中修改。"
@@ -87,7 +89,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                 )}
               </div>
             </Tooltip>
-          </div>
+          </ParamsEditableCell>
         )
       },
     },
@@ -99,7 +101,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
         const isNewRow = !record.id || record.id === newRowRecordId
 
         return (
-          <div className={isNewRow ? 'opacity-0 hover:opacity-100' : ''}>
+          <ParamsEditableCell className={isNewRow ? 'opacity-0 hover:opacity-100' : ''}>
             <Select
               className="w-full [&.ant-select_.ant-select-selector]:text-inherit"
               options={[
@@ -123,7 +125,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                 handleChange({ type: val }, idx)
               }}
             />
-          </div>
+          </ParamsEditableCell>
         )
       },
     },
@@ -131,15 +133,70 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       title: '示例值',
       dataIndex: 'example',
       width: '25%',
-      render: (text, _, idx) => {
+      render: (exampleVal, record, rowIdx) => {
+        if (record.type === ParamType.Array) {
+          const example: string[] =
+            Array.isArray(exampleVal) && exampleVal.length > 0 ? exampleVal : ['']
+
+          return (
+            <div>
+              {example.map((v, vIdx, self) => {
+                const canRemove = self.length > 1
+
+                return (
+                  <div key={vIdx} className="flex items-center">
+                    <ParamsEditableCell>
+                      <Input
+                        value={v}
+                        variant="borderless"
+                        onChange={(ev) => {
+                          const newExample = self.toSpliced(vIdx, 1, ev.target.value)
+                          handleChange({ example: newExample }, rowIdx)
+                        }}
+                      />
+                    </ParamsEditableCell>
+
+                    <div
+                      className="flex items-center px-2"
+                      style={{ color: token.colorTextTertiary }}
+                    >
+                      <PlusCircleIcon
+                        className="cursor-pointer"
+                        size={15}
+                        onClick={() => {
+                          handleChange({ example: [...example, ''] }, rowIdx)
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className={`flex items-center pr-2 ${canRemove ? '' : 'pointer-events-auto invisible opacity-0'}`}
+                      style={{ color: token.colorTextTertiary }}
+                      onClick={() => {
+                        if (canRemove) {
+                          handleChange({ example: example.filter((_, i) => i !== vIdx) }, rowIdx)
+                        }
+                      }}
+                    >
+                      <XCircleIcon className="cursor-pointer" size={15} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )
+        }
+
         return (
-          <Input
-            value={typeof text === 'string' ? text : undefined}
-            variant="borderless"
-            onChange={(ev) => {
-              handleChange({ example: ev.target.value }, idx)
-            }}
-          />
+          <ParamsEditableCell>
+            <Input
+              value={typeof exampleVal === 'string' ? exampleVal : undefined}
+              variant="borderless"
+              onChange={(ev) => {
+                handleChange({ example: ev.target.value }, rowIdx)
+              }}
+            />
+          </ParamsEditableCell>
         )
       },
     },
@@ -149,11 +206,11 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       width: '40%',
       render: (text, _, idx) => {
         return (
-          <div className="py-0">
+          <ParamsEditableCell className="py-0">
             <Input.TextArea
               style={{
                 height: '32px',
-                maxHeight: '100px',
+                maxHeight: '100%',
                 overflowY: 'hidden',
                 resize: 'none',
               }}
@@ -163,7 +220,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                 handleChange({ description: ev.target.value }, idx)
               }}
             />
-          </div>
+          </ParamsEditableCell>
         )
       },
     },

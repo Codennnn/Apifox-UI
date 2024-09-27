@@ -19,16 +19,28 @@ export interface Creator {
   username: string
 }
 
-/** 请求参数信息。 */
-export interface Parameter {
+interface ParameterBase {
   id: string
   name?: string
-  type?: ParamType
+  description?: string
   enable?: boolean
   required?: boolean
-  description?: string
+}
+
+/** 请求参数信息（非数组类型）。 */
+interface NonArrayParameter extends ParameterBase {
+  type: Exclude<ParamType, ParamType.Array>
   example?: string
 }
+
+/** 请求参数信息（数组类型）。 */
+interface ArrayParameter extends ParameterBase {
+  type: ParamType.Array
+  example?: string[]
+}
+
+/** 请求参数信息的联合类型。 */
+export type Parameter = NonArrayParameter | ArrayParameter
 
 export interface ApiDetailsResponse {
   id: string

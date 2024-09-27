@@ -1,5 +1,6 @@
 import { theme } from 'antd'
 
+import { ParamsEditableCell } from '@/components/tab-content/api/components/ParamsEditableCell'
 import { useStyles } from '@/hooks/useStyle'
 
 import { css } from '@emotion/css'
@@ -36,16 +37,10 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
       textAlign: 'left',
       borderBottom: `1px solid ${token.colorBorderSecondary}`,
       overflow: 'hidden',
-
-      '&:not(:last-of-type)': {
-        '&:hover, &:focus-within': {
-          outline: `1px solid ${token.colorPrimary}`,
-          borderColor: 'transparent',
-        },
-      },
+      boxSizing: 'border-box',
 
       '.ant-input': {
-        height: '32px',
+        minHeight: '32px',
         padding: '0 5px',
       },
 
@@ -54,14 +49,21 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
       },
     })
 
-    return { th, td }
+    const editableWrapper = css({
+      '&:hover, &:focus-within': {
+        outline: `1px solid ${token.colorPrimary}`,
+        borderColor: 'transparent',
+      },
+    })
+
+    return { th, td, editableWrapper }
   })
 
   const internalDataSource = autoNewRow ? [...dataSource, { ...newRowRecord }] : dataSource
 
   return (
     <table
-      className="w-full"
+      className="w-full border-spacing-0"
       style={{
         border: `1px solid ${token.colorBorderSecondary}`,
         borderRadius: token.borderRadius,
@@ -105,9 +107,11 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
                   className={styles.td}
                   style={{ border: internalDataSource.length === ridx + 1 ? 'none' : undefined }}
                 >
-                  {typeof col.render === 'function'
-                    ? col.render(tdValue, record as RecordType, ridx)
-                    : String(tdValue)}
+                  {typeof col.render === 'function' ? (
+                    col.render(tdValue, record as RecordType, ridx)
+                  ) : (
+                    <ParamsEditableCell>{String(tdValue)}</ParamsEditableCell>
+                  )}
                 </td>
               )
             })}

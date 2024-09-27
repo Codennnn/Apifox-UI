@@ -79,6 +79,19 @@ export const apiDirectoryData: ApiMenuData[] = [
       responsibleId: creator.id,
       serverId: SERVER_INHERIT,
       responses: [defaultResponse()],
+      parameters: {
+        query: [
+          {
+            id: nanoid(6),
+            name: 'x',
+            type: ParamType.Array,
+            enable: true,
+            required: false,
+            description: '1.xxx\n2.xxx\n3.xxx',
+            example: ['str'],
+          },
+        ],
+      },
     },
   },
   {

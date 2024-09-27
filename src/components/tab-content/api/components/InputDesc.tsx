@@ -6,6 +6,9 @@ import { Maximize2Icon } from 'lucide-react'
 import { IconText } from '@/components/IconText'
 import { MarkdownEditor } from '@/components/MarkdownEditor'
 
+/**
+ * 接口说明输入框组件。
+ */
 export function InputDesc({
   value,
   onChange,

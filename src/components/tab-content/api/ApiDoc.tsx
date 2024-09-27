@@ -179,6 +179,15 @@ export function ApiDoc() {
     return null
   }
 
+  const hasPathParams =
+    Array.isArray(docValue.parameters?.path) && docValue.parameters.path.length > 0
+  const hasQueryParams =
+    Array.isArray(docValue.parameters?.query) && docValue.parameters.query.length > 0
+  const hasParams = hasPathParams || hasQueryParams
+
+  const pathParams = docValue.parameters?.path
+  const queryParams = docValue.parameters?.query
+
   return (
     <div className="h-full overflow-auto p-tabContent">
       <div className="flex items-center">
@@ -268,23 +277,23 @@ export function ApiDoc() {
 
       <div>
         <GroupTitle>请求参数</GroupTitle>
-        {docValue.parameters ? (
+        {hasParams ? (
           <div className="flex flex-col gap-y-4">
-            <Card className={styles.card} title="Path 参数">
-              <div className="flex flex-col gap-3">
-                {docValue.parameters.path?.map((param) => (
-                  <ApiParameter key={param.id} param={param} />
-                ))}
-              </div>
-            </Card>
+            {hasPathParams && (
+              <Card className={styles.card} title="Path 参数">
+                <div className="flex flex-col gap-3">
+                  {pathParams?.map((param) => <ApiParameter key={param.id} param={param} />)}
+                </div>
+              </Card>
+            )}
 
-            <Card className={styles.card} title="Query 参数">
-              <div className="flex flex-col gap-3">
-                {docValue.parameters.query?.map((param) => (
-                  <ApiParameter key={param.id} param={param} />
-                ))}
-              </div>
-            </Card>
+            {hasQueryParams && (
+              <Card className={styles.card} title="Query 参数">
+                <div className="flex flex-col gap-3">
+                  {queryParams?.map((param) => <ApiParameter key={param.id} param={param} />)}
+                </div>
+              </Card>
+            )}
           </div>
         ) : (
           '无'

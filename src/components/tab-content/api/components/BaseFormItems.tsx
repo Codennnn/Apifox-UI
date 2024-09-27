@@ -5,7 +5,7 @@ import { Col, Form, Row, Select, type SelectProps } from 'antd'
 import useResizeObserver from 'use-resize-observer'
 
 import { SelectorService } from '@/components/SelectorService'
-import { InputDesc } from '@/components/tab-content/api/InputDesc'
+import { InputDesc } from '@/components/tab-content/api/components/InputDesc'
 import { API_STATUS_CONFIG } from '@/configs/static'
 import { creator } from '@/data/remote'
 

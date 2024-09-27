@@ -6,7 +6,7 @@ import { BodyType } from '@/enums'
 import { useStyles } from '@/hooks/useStyle'
 import type { ApiDetails } from '@/types'
 
-import { ParamsEditableTable } from '../ParamsEditableTable'
+import { ParamsEditableTable } from '../components/ParamsEditableTable'
 
 const types = [
   { name: 'none', type: BodyType.None },

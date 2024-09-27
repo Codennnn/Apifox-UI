@@ -2,7 +2,7 @@ import { Form, Tabs, theme, Typography } from 'antd'
 
 import type { ApiDetails } from '@/types'
 
-import { ParamsEditableTable } from '../ParamsEditableTable'
+import { ParamsEditableTable } from '../components/ParamsEditableTable'
 
 import { ParamsBody } from './ParamsBody'
 
