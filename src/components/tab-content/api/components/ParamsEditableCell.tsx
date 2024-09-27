@@ -23,5 +23,5 @@ export function ParamsEditableCell(props: ParamsEditableCelllProps) {
     return { editableCell }
   })
 
-  return <div className={`${styles.editableCell} ${className}`}>{children}</div>
+  return <div className={`flex items-center ${styles.editableCell} ${className}`}>{children}</div>
 }

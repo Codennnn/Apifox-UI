@@ -8,7 +8,10 @@ import { EditableTable, type EditableTableProps } from '@/components/EditableTab
 import { ParamsEditableCell } from '@/components/tab-content/api/components/ParamsEditableCell'
 import { PARAMS_CONFIG } from '@/configs/static'
 import { ParamType } from '@/enums'
+import { useStyles } from '@/hooks/useStyle'
 import type { Parameter } from '@/types'
+
+import { css } from '@emotion/css'
 
 interface ParamsEditableTableProps extends Pick<EditableTableProps, 'autoNewRow'> {
   value?: Parameter[]
@@ -29,6 +32,18 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
   } = props
 
   const newRowRecordId = nanoid(6)
+
+  const { styles } = useStyles(({ token }) => {
+    const exampleRow = css({
+      color: token.colorTextTertiary,
+
+      '&:hover': {
+        color: token.colorPrimary,
+      },
+    })
+
+    return { exampleRow }
+  })
 
   const handleChange = (v: Partial<Record<keyof Parameter, any>>, idx: number) => {
     const target = value?.at(idx)
@@ -70,8 +85,9 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
               open={isPathParamsTable ? undefined : false}
               title="自动提取接口路径里的 {param} 形式参数，请在接口路径中修改。"
             >
-              <div className="flex items-center">
+              <div className="flex h-full items-center">
                 <Input
+                  className="h-full"
                   placeholder="添加参数"
                   readOnly={isPathParamsTable}
                   value={typeof text === 'string' ? text : ''}
@@ -121,8 +137,17 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
               suffixIcon={null}
               value={typeof text === 'string' ? text : ''}
               variant="borderless"
-              onChange={(val) => {
-                handleChange({ type: val }, idx)
+              onChange={(paramType) => {
+                handleChange(
+                  {
+                    type: paramType,
+                    example:
+                      paramType === ParamType.Array && !Array.isArray(record.example)
+                        ? [record.example]
+                        : record.example,
+                  },
+                  idx
+                )
               }}
             />
           </ParamsEditableCell>
@@ -144,7 +169,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                 const canRemove = self.length > 1
 
                 return (
-                  <div key={vIdx} className="flex items-center">
+                  <div key={vIdx} className={`flex items-center ${styles.exampleRow}`}>
                     <ParamsEditableCell>
                       <Input
                         value={v}
@@ -156,10 +181,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                       />
                     </ParamsEditableCell>
 
-                    <div
-                      className="flex items-center px-2"
-                      style={{ color: token.colorTextTertiary }}
-                    >
+                    <div className="flex items-center px-2">
                       <PlusCircleIcon
                         className="cursor-pointer"
                         size={15}
@@ -171,7 +193,6 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
 
                     <div
                       className={`flex items-center pr-2 ${canRemove ? '' : 'pointer-events-auto invisible opacity-0'}`}
-                      style={{ color: token.colorTextTertiary }}
                       onClick={() => {
                         if (canRemove) {
                           handleChange({ example: example.filter((_, i) => i !== vIdx) }, rowIdx)
@@ -210,6 +231,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
             <Input.TextArea
               style={{
                 height: '32px',
+                minHeight: '100%',
                 maxHeight: '100%',
                 overflowY: 'hidden',
                 resize: 'none',

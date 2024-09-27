@@ -33,6 +33,7 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
     })
 
     const td = css({
+      height: '0',
       color: token.colorTextSecondary,
       textAlign: 'left',
       borderBottom: `1px solid ${token.colorBorderSecondary}`,
