@@ -172,3 +172,7 @@ export function getContentTypeString(type: ContentType): string {
       return 'text/plain'
   }
 }
+
+export function isFirefox() {
+  return navigator.userAgent.includes('Firefox')
+}

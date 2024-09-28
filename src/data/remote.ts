@@ -88,7 +88,7 @@ export const apiDirectoryData: ApiMenuData[] = [
             enable: true,
             required: false,
             description: '1.xxx\n2.xxx\n3.xxx',
-            example: ['str'],
+            example: ['yyy', 'zzz'],
           },
         ],
       },

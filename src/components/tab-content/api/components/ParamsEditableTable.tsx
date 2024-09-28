@@ -13,6 +13,14 @@ import type { Parameter } from '@/types'
 
 import { css } from '@emotion/css'
 
+const transformExampleValue = ({ type, example }: Pick<Parameter, 'type' | 'example'>) => {
+  return type === ParamType.Array && !Array.isArray(example)
+    ? [example || '']
+    : Array.isArray(example)
+      ? example.join(',')
+      : example
+}
+
 interface ParamsEditableTableProps extends Pick<EditableTableProps, 'autoNewRow'> {
   value?: Parameter[]
   onChange?: (value: ParamsEditableTableProps['value']) => void
@@ -83,26 +91,44 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       width: '25%',
       render: (text, record, ridx) => {
         const isNewRow = testIsNewRow(record)
+        const isEmpty = !text && !isNewRow
+        const isDuplicate = value?.some((it, i) => it.name === text && i < ridx)
+        const isValidateError = isEmpty || isDuplicate
 
         return (
-          <ParamsEditableCell>
+          <ParamsEditableCell validateError={isValidateError}>
             <Tooltip
               open={isPathParamsTable ? undefined : false}
               title="自动提取接口路径里的 {param} 形式参数，请在接口路径中修改。"
             >
-              <div className="flex h-full items-center">
+              <div className="flex size-full items-center">
                 <Input
                   className="h-full"
                   placeholder="添加参数"
                   readOnly={isPathParamsTable}
                   value={typeof text === 'string' ? text : ''}
                   variant="borderless"
+                  onBlur={() => {
+                    if (isDuplicate) {
+                      onChange?.(
+                        value
+                          ?.filter((_, i) => i !== ridx)
+                          .map((it) => {
+                            if (it.name === text && it.type !== ParamType.Array) {
+                              return { ...it, type: ParamType.Array, example: [it.example || ''] }
+                            }
+
+                            return it
+                          })
+                      )
+                    }
+                  }}
                   onChange={(ev) => {
                     handleChange(ridx, { name: ev.target.value })
                   }}
                 />
-                {!text && !isNewRow && (
-                  <Tooltip title="参数名不能为空">
+                {(isEmpty || isDuplicate) && (
+                  <Tooltip title={isEmpty ? '参数名不能为空' : isDuplicate ? '此列不能重复' : ''}>
                     <span className="pr-1">
                       <CloseCircleFilled style={{ color: token.colorErrorText }} />
                     </span>
@@ -145,10 +171,10 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
               onChange={(paramType) => {
                 handleChange(ridx, {
                   type: paramType,
-                  example:
-                    paramType === ParamType.Array && !Array.isArray(record.example)
-                      ? [record.example]
-                      : record.example,
+                  example: transformExampleValue({
+                    type: paramType as ParamType,
+                    example: record.example,
+                  }),
                 })
               }}
             />
@@ -188,7 +214,8 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                         className="cursor-pointer"
                         size={15}
                         onClick={() => {
-                          handleChange(ridx, { example: [...example, ''] })
+                          const newExample = example.toSpliced(vIdx + 1, 0, '')
+                          handleChange(ridx, { example: newExample })
                         }}
                       />
                     </div>

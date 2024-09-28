@@ -1,6 +1,7 @@
 import { theme } from 'antd'
 
 import { ParamsEditableCell } from '@/components/tab-content/api/components/ParamsEditableCell'
+import { isFirefox } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
 
 import { css } from '@emotion/css'
@@ -33,7 +34,7 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
     })
 
     const td = css({
-      height: '0',
+      height: isFirefox() ? '100%' : '0', // HACK: 处理 td 高度，让子 div 的高度能占满 td。
       color: token.colorTextSecondary,
       textAlign: 'left',
       borderBottom: `1px solid ${token.colorBorderSecondary}`,
@@ -96,7 +97,7 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
         {internalDataSource.map((record, ridx) => (
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
-          <tr key={`${ridx}_${String(record[rowKey])}`}>
+          <tr key={`${ridx}_${String(record[rowKey])}`} className="h-fit">
             {columns?.map((col, cidx) => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-expect-error
