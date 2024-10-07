@@ -144,7 +144,7 @@
           &::before {
             content: '';
             position: absolute;
-            right: 0;
+            right: -4px;
             width: 1px;
             height: 24px;
           }

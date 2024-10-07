@@ -118,36 +118,27 @@ export function Doc() {
         </div>
       </div>
     )
-  } else {
-    return (
-      <div className="mx-auto flex h-full max-w-[1232px] flex-col overflow-hidden">
-        <div
-          className="flex items-center"
-          style={{
-            padding: `${token.paddingXS}px ${token.paddingSM}px`,
-            borderBottom: `1px solid ${token.colorBorderSecondary}`,
+  }
+
+  return (
+    <div className="flex h-full flex-col overflow-hidden">
+      <div className="flex items-center px-tabContent py-2">
+        <div className="flex-1 text-lg font-bold">{docValue?.name}</div>
+
+        <Button
+          onClick={() => {
+            setEditing(true)
           }}
         >
-          <div className="flex-1 text-lg font-bold">{docValue?.name}</div>
+          编辑
+        </Button>
+      </div>
 
-          <Button
-            onClick={() => {
-              setEditing(true)
-            }}
-          >
-            编辑
-          </Button>
-        </div>
-
-        <div
-          className="flex-1 overflow-auto"
-          style={{
-            padding: `${token.paddingSM}px`,
-          }}
-        >
+      <div className="flex-1 overflow-auto">
+        <div className="mx-auto" style={{ maxWidth: '1512px', padding: `${token.padding}px` }}>
           <Viewer value={docValue?.content || ''} />
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
