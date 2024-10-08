@@ -32,7 +32,7 @@ import { TabContentProvider } from './TabContentContext'
 
 import { css } from '@emotion/css'
 
-// Block DnD event propagation if element have "data-no-dnd" attribute.
+// 如果元素有 "data-no-dnd" 属性，则阻止 DnD 事件传播。
 const handler = ({ nativeEvent: event }: PointerEvent) => {
   let cur = event.target as HTMLElement
 
@@ -133,12 +133,11 @@ export function ApiTab(props: TabsProps) {
             }}
           >
             <span
-              className={`main-tabs-tab-close-icon flex size-full items-center justify-center text-[15px] opacity-0 ${
-                tabItem.data?.editStatus === 'changed'
+              className={`main-tabs-tab-close-icon flex size-full items-center justify-center text-[15px] opacity-0 ${tabItem.data?.editStatus === 'changed'
                   ? 'changed after:bg-primary-500 group relative overflow-hidden rounded-full after:absolute after:size-2 after:rounded-full after:content-[""] hover:overflow-auto hover:bg-transparent hover:after:hidden'
                   : ''
-              }`}
-              data-no-dnd="true"
+                }`}
+              data-no-dnd="true" // 「关闭」按钮不允许触发拖拽。
             >
               <XIcon
                 className={

@@ -56,21 +56,53 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
     return { exampleRow }
   })
 
+  const handleDuplicate = (rowIdx: number, v: Partial<Parameter>) => {
+    onChange?.(
+      value
+        ?.filter((_, i) => i !== rowIdx) // 首先排除当前行，避免重复。
+        .map((it) => {
+          if (it.name === v.name) {
+            if (it.type === ParamType.Array) {
+              return {
+                ...it,
+                example:
+                  typeof v.example === 'string' ? [...(it.example || []), v.example] : it.example,
+              }
+            } else {
+              return {
+                ...it,
+                type: ParamType.Array,
+                example: [it.example || '', typeof v.example === 'string' ? v.example : ''],
+              }
+            }
+          }
+
+          return it
+        })
+    )
+  }
+
   const handleChange = (rowIdx: number, v: Partial<Record<keyof Parameter, any>>) => {
     const target = value?.at(rowIdx)
 
     const isNewRow = testIsNewRow(target)
 
     if (isNewRow) {
-      onChange?.([
-        ...(value || []),
-        {
-          id: newRowRecordId,
-          ...target,
-          ...v,
-          type: ParamType.String,
-        },
-      ])
+      const isDuplicate = value?.some((it, i) => it.name === v.name && i < rowIdx)
+
+      if (isDuplicate) {
+        handleDuplicate(rowIdx, v)
+      } else {
+        onChange?.([
+          ...(value || []),
+          {
+            id: newRowRecordId,
+            ...target,
+            ...v,
+            type: ParamType.String,
+          },
+        ])
+      }
     } else {
       onChange?.(
         value?.map((it, i) => {
@@ -91,9 +123,18 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       width: '25%',
       render: (text, record, ridx) => {
         const isNewRow = testIsNewRow(record)
-        const isEmpty = !text && !isNewRow
-        const isDuplicate = value?.some((it, i) => it.name === text && i < ridx)
-        const isValidateError = isEmpty || isDuplicate
+
+        const isNameEmpty = !text && !isNewRow
+
+        const isDuplicate =
+          value?.some((it, i) => {
+            const isPrevRow = i < ridx
+            const isSameName = it.name === text
+
+            return isPrevRow && isSameName
+          }) && !isNewRow
+
+        const isValidateError = isNameEmpty || isDuplicate
 
         return (
           <ParamsEditableCell validateError={isValidateError}>
@@ -110,25 +151,17 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
                   variant="borderless"
                   onBlur={() => {
                     if (isDuplicate) {
-                      onChange?.(
-                        value
-                          ?.filter((_, i) => i !== ridx)
-                          .map((it) => {
-                            if (it.name === text && it.type !== ParamType.Array) {
-                              return { ...it, type: ParamType.Array, example: [it.example || ''] }
-                            }
-
-                            return it
-                          })
-                      )
+                      handleDuplicate(ridx, { name: text })
                     }
                   }}
                   onChange={(ev) => {
                     handleChange(ridx, { name: ev.target.value })
                   }}
                 />
-                {(isEmpty || isDuplicate) && (
-                  <Tooltip title={isEmpty ? '参数名不能为空' : isDuplicate ? '此列不能重复' : ''}>
+                {(isNameEmpty || isDuplicate) && (
+                  <Tooltip
+                    title={isNameEmpty ? '参数名不能为空' : isDuplicate ? '此列不能重复' : ''}
+                  >
                     <span className="pr-1">
                       <CloseCircleFilled style={{ color: token.colorErrorText }} />
                     </span>
