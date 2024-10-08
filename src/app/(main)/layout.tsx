@@ -5,12 +5,15 @@ import { theme } from 'antd'
 import { SideNav } from '@/app/(main)/components/SideNav'
 import { HeaderNav } from '@/components/HeaderNav'
 import { LayoutProvider } from '@/contexts/layout-settings'
+import { useCssVariable } from '@/hooks/useCssVariable'
 
 export default function MainLayout(props: React.PropsWithChildren) {
   const { token } = theme.useToken()
 
+  const cssVar = useCssVariable()
+
   return (
-    <div className="flex h-full" style={{ backgroundColor: token.colorFillTertiary }}>
+    <div className="flex h-full" style={{ backgroundColor: token.colorFillTertiary, ...cssVar }}>
       <SideNav />
 
       <div className="flex h-full flex-1 flex-col overflow-hidden pb-main pr-main">

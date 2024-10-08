@@ -106,30 +106,6 @@
   }
 }
 
-.ant-tabs.ant-tabs-card {
-  > .ant-tabs-nav .ant-tabs-tab {
-    &:hover,
-    &.ant-tabs-tab-active {
-      color: currentcolor;
-
-      .ant-tabs-tab-btn {
-        color: currentcolor;
-      }
-    }
-  }
-
-  > .ui-tabs-nav.ant-tabs-nav .ant-tabs-tab {
-    &:hover,
-    &.ant-tabs-tab-active {
-      color: currentcolor;
-
-      .ant-tabs-tab-btn {
-        color: currentcolor;
-      }
-    }
-  }
-}
-
 .ui-tabs {
   &.ant-tabs {
     @apply h-full;
@@ -198,6 +174,60 @@
 
         .ant-tabs-tabpane {
           @apply h-full;
+        }
+      }
+    }
+  }
+}
+
+/* 自定义 Tabs 样式。 */
+.ant-tabs:not(.ant-tabs-card) {
+  > .ant-tabs-nav {
+    .ant-tabs-tab {
+      .ant-tabs-tab-btn {
+        padding: 5px 8px;
+        border-radius: 8px;
+      }
+
+      &:hover {
+        .ant-tabs-tab-btn {
+          background-color: var(--ui-tabs-hover-bg);
+        }
+      }
+
+      &:not(.ant-tabs-tab-active) {
+        &:hover {
+          .ant-tabs-tab-btn {
+            color: var(--ui-tabs-hover-color);
+          }
+        }
+      }
+    }
+  }
+
+  .ant-tabs.ant-tabs-card {
+    > .ant-tabs-nav {
+      .ant-tabs-tab {
+        &:hover,
+        &.ant-tabs-tab-active {
+          color: currentcolor;
+
+          .ant-tabs-tab-btn {
+            color: currentcolor;
+          }
+        }
+      }
+    }
+
+    > .ui-tabs-nav.ant-tabs-nav {
+      .ant-tabs-tab {
+        &:hover,
+        &.ant-tabs-tab-active {
+          color: currentcolor;
+
+          .ant-tabs-tab-btn {
+            color: currentcolor;
+          }
         }
       }
     }

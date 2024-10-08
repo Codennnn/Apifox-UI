@@ -51,6 +51,11 @@ export function Api() {
               labelColor: token.colorTextSecondary,
               verticalLabelPadding: 0,
             },
+            Tabs: {
+              itemColor: token.colorTextSecondary,
+              horizontalItemPadding: `8px 0`,
+              horizontalItemGutter: 6,
+            },
           },
         }}
       >
