@@ -33,17 +33,25 @@ const groupMenuByType = (menuData: CatalogDataNode[]) => {
 
       switch (catalog.type) {
         case MenuItemType.ApiDetail:
+          // fall through
+
         case MenuItemType.ApiDetailFolder:
+          // fall through
+
         case MenuItemType.Doc:
           res[CatalogType.Http].push(catalogDataNode)
           break
 
         case MenuItemType.ApiSchema:
+          // fall through
+
         case MenuItemType.ApiSchemaFolder:
           res[CatalogType.Schema].push(catalogDataNode)
           break
 
         case MenuItemType.HttpRequest:
+          // fall through
+
         case MenuItemType.RequestFolder:
           res[CatalogType.Request].push(catalogDataNode)
           break
@@ -58,7 +66,7 @@ const groupMenuByType = (menuData: CatalogDataNode[]) => {
       [CatalogType.Request]: [],
       [CatalogType.Recycle]: [],
       [CatalogType.Markdown]: [],
-    }
+    },
   )
 }
 
@@ -85,8 +93,8 @@ export function useMenuData(): MenuState {
   const menus: CatalogDataNode[] | undefined = useMemo(() => {
     const menuList = menuSearchWord
       ? menuRawList?.filter(({ name }) => {
-          return name.includes(menuSearchWord)
-        })
+        return name.includes(menuSearchWord)
+      })
       : menuRawList
 
     return menuList?.map<CatalogDataNode>((item) => {
@@ -109,8 +117,8 @@ export function useMenuData(): MenuState {
     () =>
       menus?.map<CatalogDataNode>((item) => {
         const catalog = item.customData.catalog
-        const isHttp =
-          catalog.type === MenuItemType.ApiDetail || catalog.type === MenuItemType.HttpRequest
+        const isHttp
+          = catalog.type === MenuItemType.ApiDetail || catalog.type === MenuItemType.HttpRequest
 
         return {
           ...item,
@@ -154,7 +162,7 @@ export function useMenuData(): MenuState {
                 catalog.type === MenuItemType.ApiDetail
                   ? apiDetailDisplay === 'name'
                     ? catalog.name
-                    : catalog.data?.path || catalog.name
+                    : catalog.data?.path ?? catalog.name
                   : catalog.name
               }
               node={node as CatalogDataNode}
@@ -163,7 +171,7 @@ export function useMenuData(): MenuState {
           className: item.isLeaf ? 'leaf-node' : undefined,
         }
       }),
-    [menus, apiDetailDisplay]
+    [menus, apiDetailDisplay],
   )
 
   const groupedMenus: GroupedMenu | undefined = useMemo(() => {

@@ -26,15 +26,15 @@ export function PathInput(props: PathInputProps) {
     onValueChange?.(val)
 
     if (val.endsWith('?')) {
-      if (!msgKey.current) {
-        msgKey.current = '_'
-      }
+      msgKey.current ??= '_'
 
       messageApi.info({
         key: msgKey.current, // 用户可能会重复键入 “?”，因此需要避免重复显示提示。
         content: (
           <span>
-            Query&nbsp;参数请在下方<strong>请求参数</strong>中填写
+            Query&nbsp;参数请在下方
+            <strong>请求参数</strong>
+            中填写
           </span>
         ),
         duration: 3,
@@ -45,10 +45,9 @@ export function PathInput(props: PathInputProps) {
 
       // 移除掉末尾的 “?”。
       onChange?.(val.slice(0, val.length - 1))
-    } else if (val.endsWith('#')) {
-      if (!msgKey.current) {
-        msgKey.current = '_'
-      }
+    }
+    else if (val.endsWith('#')) {
+      msgKey.current ??= '_'
 
       messageApi.info({
         key: msgKey.current,
@@ -60,7 +59,8 @@ export function PathInput(props: PathInputProps) {
       })
 
       onChange?.(val.slice(0, val.length - 1))
-    } else {
+    }
+    else {
       let finalVal = val
 
       const queryParams: Parameter[] = []
@@ -77,13 +77,15 @@ export function PathInput(props: PathInputProps) {
 
             if (Array.isArray(duplicatedParam.example)) {
               duplicatedParam.example.push(value)
-            } else {
-              duplicatedParam.example =
-                typeof duplicatedParam.example === 'string'
+            }
+            else {
+              duplicatedParam.example
+                = typeof duplicatedParam.example === 'string'
                   ? [duplicatedParam.example, value]
                   : [value]
             }
-          } else {
+          }
+          else {
             queryParams.push({
               id: nanoid(4),
               name: key,
@@ -98,7 +100,8 @@ export function PathInput(props: PathInputProps) {
         }
 
         finalVal = val.replace(Url.search, '').replace(Url.hash, '')
-      } catch {
+      }
+      catch {
         //
       }
 

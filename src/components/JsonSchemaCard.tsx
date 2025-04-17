@@ -65,7 +65,9 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
                 }}
               >
                 <span className="inline-flex items-center gap-1">
-                  <BracesIcon size={12} /> JSON Schema
+                  <BracesIcon size={12} />
+                  {' '}
+                  JSON Schema
                 </span>
               </UIButton>
             </Space>
@@ -81,7 +83,8 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
         afterOpenChange={(opened) => {
           if (opened) {
             setJsonStr(JSON.stringify(value, null, 2))
-          } else {
+          }
+          else {
             setJsonStr(undefined)
           }
         }}
@@ -97,7 +100,8 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
           if (jsonSchemeStr) {
             try {
               setJsonModalOpen(false)
-            } catch (err) {
+            }
+            catch (err) {
               if (err instanceof SyntaxError) {
                 messageApi.error('JSON Schema 格式校验不通过，请检查！')
               }
@@ -127,7 +131,8 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
             onChange={(val) => {
               if (typeof val === 'string') {
                 setJsonStr(val)
-              } else {
+              }
+              else {
                 setJsonStr(JSON.stringify(val, null, 2))
               }
             }}
@@ -139,7 +144,8 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
         afterOpenChange={(opened) => {
           if (opened) {
             setJsonSchemeStr(JSON.stringify(value, null, 2))
-          } else {
+          }
+          else {
             setJsonSchemeStr(undefined)
           }
         }}
@@ -156,7 +162,8 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
             try {
               onChange?.(JSON.parse(jsonSchemeStr) as JsonSchema)
               setSchemaModalOpen(false)
-            } catch (err) {
+            }
+            catch (err) {
               if (err instanceof SyntaxError) {
                 messageApi.error('JSON Schema 格式校验不通过，请检查！')
               }
@@ -179,7 +186,7 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
           >
             <UIButton
               onClick={() => {
-                navigator.clipboard.writeText(JSON.stringify(value, null, 2)).then(() => {
+                void navigator.clipboard.writeText(JSON.stringify(value, null, 2)).then(() => {
                   messageApi.success('已复制')
                 })
               }}
@@ -198,7 +205,8 @@ export function JsonSchemaCard(props: JsonSchemaCardProps) {
             onChange={(val) => {
               if (typeof val === 'string') {
                 setJsonSchemeStr(val)
-              } else {
+              }
+              else {
                 setJsonSchemeStr(JSON.stringify(val, null, 2))
               }
             }}

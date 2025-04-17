@@ -32,15 +32,17 @@ function RecycleTable(props: RecycleTableProps) {
 
             return (
               <div className="inline-flex items-center gap-x-1">
-                {isHttp ? (
-                  <HttpMethodText className="text-xs font-bold" method={x.data?.method} />
-                ) : (
-                  <FileIcon
-                    size={15}
-                    style={{ color: hasAccentColor(x.type) ? accentColor : undefined }}
-                    type={x.type}
-                  />
-                )}
+                {isHttp
+                  ? (
+                      <HttpMethodText className="text-xs font-bold" method={x.data?.method} />
+                    )
+                  : (
+                      <FileIcon
+                        size={15}
+                        style={{ color: hasAccentColor(x.type) ? accentColor : undefined }}
+                        type={x.type}
+                      />
+                    )}
                 <span>{x.name}</span>
               </div>
             )
@@ -104,7 +106,7 @@ export function Recycle() {
     >
       <Tabs
         hideAdd
-        className={`[&_>_.ant-tabs-nav]:px-tabContent`}
+        className="[&_>_.ant-tabs-nav]:px-tabContent"
         hidden={false}
         items={[
           {

@@ -3,12 +3,11 @@ import { Editor, type EditorProps } from '@bytemd/react'
 
 import { useStyles } from '@/hooks/useStyle'
 
-// eslint-disable-next-line import/no-unresolved
 import 'bytemd/dist/index.css'
 import { css } from '@emotion/css'
 
 export function MarkdownEditor(
-  props: EditorProps & { className?: string; style?: React.CSSProperties }
+  props: EditorProps & { className?: string, style?: React.CSSProperties },
 ) {
   const { className, style, ...rest } = props
 

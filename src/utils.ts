@@ -1,3 +1,5 @@
+import { AnyType, UnsafeAny } from '@/types'
+
 export function getPageTitle(title?: string): string {
   const mainTitle = 'Apifox UI'
 
@@ -8,13 +10,13 @@ export function getPageTitle(title?: string): string {
 export { default as serialize } from 'serialize-javascript'
 
 /** 反序列化，对应 serialize 方法。 */
-export function deserialize<ReturnType = unknown>(data: any): ReturnType {
+export function deserialize(data: AnyType): unknown {
   // eslint-disable-next-line @typescript-eslint/no-implied-eval, @typescript-eslint/restrict-plus-operands
-  return Function('"use strict";return (' + data + ')')() as ReturnType
+  return Function('"use strict";return (' + data + ')')()
 }
 
 /** 检查传入的值是否为简单的 JS 对象。 */
-export function isPureObject(value: any): value is Record<string, any> {
+export function isPureObject(value: AnyType): value is Record<string, UnsafeAny> {
   return Object.prototype.toString.call(value) === '[object Object]'
 }
 

@@ -120,11 +120,13 @@ export function ResponseTab(props: ResponseTabProps) {
                   {!onlyOneRes && (
                     <div className="ml-auto pt-1">
                       <Popconfirm
-                        title={
+                        title={(
                           <span>
-                            确定删除？确定后点击右上角<strong>保存</strong>按钮生效
+                            确定删除？确定后点击右上角
+                            <strong>保存</strong>
+                            按钮生效
                           </span>
-                        }
+                        )}
                         onConfirm={() => {
                           const newResponses = value.filter((_, i) => i !== idx)
 
@@ -153,11 +155,9 @@ export function ResponseTab(props: ResponseTabProps) {
 
                 <Form.Item noStyle dependencies={['responseExamples']}>
                   {({ getFieldValue: getFieldValue2 }) => {
-                    const examples: ApiDetails['responseExamples'] = getFieldValue2([
-                      'responseExamples',
-                    ])
+                    const examples: ApiDetails['responseExamples'] = getFieldValue2(['responseExamples'])
                     const targetExamples = examples?.filter(
-                      ({ responseId }) => responseId === resp.id
+                      ({ responseId }) => responseId === resp.id,
                     )
 
                     if (Array.isArray(targetExamples) && targetExamples.length > 0) {
@@ -171,16 +171,18 @@ export function ResponseTab(props: ResponseTabProps) {
                               key: it.id,
                               label: it.name,
                               children:
-                                typeof targetIdx === 'number' && targetIdx !== -1 ? (
-                                  <div className="p-tabContent">
-                                    <Form.Item
-                                      noStyle
-                                      name={['responseExamples', targetIdx, 'data']}
-                                    >
-                                      <JsonViewer />
-                                    </Form.Item>
-                                  </div>
-                                ) : null,
+                                typeof targetIdx === 'number' && targetIdx !== -1
+                                  ? (
+                                      <div className="p-tabContent">
+                                        <Form.Item
+                                          noStyle
+                                          name={['responseExamples', targetIdx, 'data']}
+                                        >
+                                          <JsonViewer />
+                                        </Form.Item>
+                                      </div>
+                                    )
+                                  : null,
                             }
                           })}
                           type="card"
@@ -195,7 +197,7 @@ export function ResponseTab(props: ResponseTabProps) {
             ),
           }
         })}
-        tabBarExtraContent={
+        tabBarExtraContent={(
           <>
             <Button
               icon={<PlusIcon size={16} />}
@@ -207,7 +209,7 @@ export function ResponseTab(props: ResponseTabProps) {
               添加
             </Button>
           </>
-        }
+        )}
         type="card"
         onTabClick={(tabKey) => {
           setActiveResTabKey(tabKey)
@@ -224,7 +226,7 @@ export function ResponseTab(props: ResponseTabProps) {
 
           const newResId = nanoid(6)
 
-          onChange?.([...(value || []), { ...values, id: newResId }])
+          onChange?.([...(value ?? []), { ...values, id: newResId }])
 
           setActiveResTabKey(newResId)
         }}

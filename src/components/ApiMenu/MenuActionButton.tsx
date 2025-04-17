@@ -3,6 +3,7 @@ import { forwardRef } from 'react'
 import { theme } from 'antd'
 
 import { useStyles } from '@/hooks/useStyle'
+import { UnsafeAny } from '@/types'
 
 import { css } from '@emotion/css'
 
@@ -10,7 +11,7 @@ interface MenuActionButtonProps extends React.ComponentProps<'span'> {
   icon?: React.ReactNode
 }
 
-export const MenuActionButton = forwardRef<any, MenuActionButtonProps>(
+export const MenuActionButton = forwardRef<UnsafeAny, MenuActionButtonProps>(
   function MenuActionButton(props, ref) {
     const { token } = theme.useToken()
 
@@ -34,5 +35,5 @@ export const MenuActionButton = forwardRef<any, MenuActionButtonProps>(
         {icon}
       </span>
     )
-  }
+  },
 )

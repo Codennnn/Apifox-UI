@@ -22,11 +22,11 @@ export function FolderApiList() {
       return findChildrenById(menuRawList, tabData.key)
         .filter((it) => it.type === MenuItemType.ApiDetail)
         .map((item) => {
-          const groupPath =
-            item.parentId &&
-            findFolders(menuRawList, [], item.parentId)
-              .map((it) => it.name)
-              .join(' / ')
+          const groupPath
+            = item.parentId
+              && findFolders(menuRawList, [], item.parentId)
+                .map((it) => it.name)
+                .join(' / ')
 
           if (item.data) {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion

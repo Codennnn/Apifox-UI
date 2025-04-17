@@ -9,7 +9,7 @@ interface TabContentContextData {
 const TabContentContext = createContext({} as TabContentContextData)
 
 export function TabContentProvider(
-  props: React.PropsWithChildren<Pick<TabContentContextData, 'tabData'>>
+  props: React.PropsWithChildren<Pick<TabContentContextData, 'tabData'>>,
 ) {
   const { children, tabData } = props
 

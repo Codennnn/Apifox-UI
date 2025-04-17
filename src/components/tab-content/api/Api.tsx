@@ -53,51 +53,53 @@ export function Api() {
             },
             Tabs: {
               itemColor: token.colorTextSecondary,
-              horizontalItemPadding: `8px 0`,
+              horizontalItemPadding: '8px 0',
               horizontalItemGutter: 6,
             },
           },
         }}
       >
-        {tabData.data?.tabStatus === PageTabStatus.Create ? (
-          <ApiTabContentWrapper>
-            <ApiDocEditing />
-          </ApiTabContentWrapper>
-        ) : (
-          <div className="flex h-full overflow-hidden">
-            <Tabs
-              animated={false}
-              className="api-details-tabs flex-1"
-              defaultActiveKey="docEdit"
-              items={apiTabItems}
-              tabBarExtraContent={
-                <>
-                  <Tooltip placement="topLeft" title="历史记录、SEO 设置">
-                    <Button
-                      size="small"
-                      style={{
-                        backgroundColor: panelOpen ? token.colorFillSecondary : undefined,
-                      }}
-                      type="text"
-                      onClick={() => {
-                        setPanelOpen(!panelOpen)
-                      }}
-                    >
-                      <IconText icon={<PanelRightIcon size={18} />} />
-                    </Button>
-                  </Tooltip>
-                </>
-              }
-            />
+        {tabData.data?.tabStatus === PageTabStatus.Create
+          ? (
+              <ApiTabContentWrapper>
+                <ApiDocEditing />
+              </ApiTabContentWrapper>
+            )
+          : (
+              <div className="flex h-full overflow-hidden">
+                <Tabs
+                  animated={false}
+                  className="api-details-tabs flex-1"
+                  defaultActiveKey="docEdit"
+                  items={apiTabItems}
+                  tabBarExtraContent={(
+                    <>
+                      <Tooltip placement="topLeft" title="历史记录、SEO 设置">
+                        <Button
+                          size="small"
+                          style={{
+                            backgroundColor: panelOpen ? token.colorFillSecondary : undefined,
+                          }}
+                          type="text"
+                          onClick={() => {
+                            setPanelOpen(!panelOpen)
+                          }}
+                        >
+                          <IconText icon={<PanelRightIcon size={18} />} />
+                        </Button>
+                      </Tooltip>
+                    </>
+                  )}
+                />
 
-            <ApiSidePanel
-              open={panelOpen}
-              onClose={() => {
-                setPanelOpen(false)
-              }}
-            />
-          </div>
-        )}
+                <ApiSidePanel
+                  open={panelOpen}
+                  onClose={() => {
+                    setPanelOpen(false)
+                  }}
+                />
+              </div>
+            )}
       </ConfigProvider>
     </div>
   )

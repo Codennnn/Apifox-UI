@@ -52,7 +52,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
           color: token.colorPrimary,
           backgroundColor: token.colorPrimaryBg,
         },
-        { label: 'tag' }
+        { label: 'tag' },
       ),
 
       row: {
@@ -68,7 +68,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               },
             },
           },
-          { label: 'row' }
+          { label: 'row' },
         ),
 
         col: css(
@@ -99,7 +99,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               },
             },
           },
-          { label: 'col' }
+          { label: 'col' },
         ),
 
         colHover: css(
@@ -108,7 +108,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               borderColor: disabled ? undefined : token.colorPrimary,
             },
           },
-          { label: 'col-hover' }
+          { label: 'col-hover' },
         ),
 
         expandIcon: css(
@@ -125,14 +125,14 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               opacity: 0.8,
             },
           },
-          { label: 'expand-icon' }
+          { label: 'expand-icon' },
         ),
 
         expanded: css(
           {
             transform: 'scale(0.75) rotate(0.25turn)',
           },
-          { label: 'expanded' }
+          { label: 'expanded' },
         ),
 
         name: css(
@@ -143,7 +143,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             flexDirection: 'row',
             alignItems: 'center',
           },
-          { label: 'name' }
+          { label: 'name' },
         ),
 
         nameInner: css(
@@ -153,7 +153,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             display: 'flex',
             alignItems: 'center',
           },
-          { label: 'name-inner' }
+          { label: 'name-inner' },
         ),
 
         nameContent: css(
@@ -161,7 +161,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             width: '100%',
             height: '100%',
           },
-          { label: 'name-content' }
+          { label: 'name-content' },
         ),
 
         type: css(
@@ -176,7 +176,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               borderColor: token.colorBorderSecondary,
             },
           },
-          { label: 'name-type' }
+          { label: 'name-type' },
         ),
 
         title: css(
@@ -187,7 +187,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             alignItems: 'center',
             color: 'inherit',
           },
-          { label: 'title' }
+          { label: 'title' },
         ),
 
         description: css(
@@ -199,7 +199,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             paddingLeft: '4px',
             color: 'inherit',
           },
-          { label: 'desc' }
+          { label: 'desc' },
         ),
 
         actions: css(
@@ -208,7 +208,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
             display: 'flex',
             alignItems: 'center',
           },
-          { label: 'actions' }
+          { label: 'actions' },
         ),
 
         action: css(
@@ -225,7 +225,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               backgroundColor: token.colorFillAlter,
             },
           },
-          { label: 'action' }
+          { label: 'action' },
         ),
 
         actionAdd: css({
@@ -261,12 +261,12 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
   const isItems = fieldPath.at(-1) === KEY_ITEMS
   const isCustom = !isRoot || !isItems
 
-  const showExpandIcon =
-    type === SchemaType.Object || type === SchemaType.Array || type === SchemaType.Refer
+  const showExpandIcon
+    = type === SchemaType.Object || type === SchemaType.Array || type === SchemaType.Refer
 
   const pathString = fieldPath.join(SEPARATOR)
 
-  const shouldExpand = expandedKeys?.includes(pathString) || false
+  const shouldExpand = expandedKeys?.includes(pathString) ?? false
   const canAddField = isRoot ? type === SchemaType.Object : !isItems
   const removable = !isRoot && !isItems
 
@@ -275,46 +275,52 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
       <div className={`${styles.row.col} ${styles.row.name}`}>
         <span style={{ width: indentWidth + (fromRef ? INDENT : 0) }} />
 
-        {showExpandIcon ? (
-          <span
-            className={`${styles.row.expandIcon} ${shouldExpand ? styles.row.expanded : ''}`}
-            style={{ width: INDENT }}
-            onClick={() => {
-              const newExpandedKeys = shouldExpand
-                ? expandedKeys?.filter((key) => key !== pathString)
-                : [...(expandedKeys || []), pathString]
+        {showExpandIcon
+          ? (
+              <span
+                className={`${styles.row.expandIcon} ${shouldExpand ? styles.row.expanded : ''}`}
+                style={{ width: INDENT }}
+                onClick={() => {
+                  const newExpandedKeys = shouldExpand
+                    ? expandedKeys?.filter((key) => key !== pathString)
+                    : [...(expandedKeys ?? []), pathString]
 
-              // 当点击展开按钮时，会触发 onExpand 方法。
-              onExpand?.(newExpandedKeys)
-            }}
-          >
-            <CaretRightOutlined />
-          </span>
-        ) : (
-          <span style={{ width: INDENT }} />
-        )}
+                  // 当点击展开按钮时，会触发 onExpand 方法。
+                  onExpand?.(newExpandedKeys)
+                }}
+              >
+                <CaretRightOutlined />
+              </span>
+            )
+          : (
+              <span style={{ width: INDENT }} />
+            )}
 
         <span
           className={`${styles.row.nameInner} ${styles.row.col} ${!isRoot && !isItems && isCustom ? styles.row.colHover : ''}`}
         >
-          {isRoot || isItems ? (
-            <span className={styles.tag}>{isItems ? 'ITEMS' : '根节点'}</span>
-          ) : (
-            <span className={styles.row.nameContent}>
-              {readOnly ? (
-                name
-              ) : (
-                <Input
-                  disabled={disabled}
-                  placeholder="字段名"
-                  value={name}
-                  onChange={(ev) => {
-                    triggerChange?.({ ...value, name: ev.target.value })
-                  }}
-                />
+          {isRoot || isItems
+            ? (
+                <span className={styles.tag}>{isItems ? 'ITEMS' : '根节点'}</span>
+              )
+            : (
+                <span className={styles.row.nameContent}>
+                  {readOnly
+                    ? (
+                        name
+                      )
+                    : (
+                        <Input
+                          disabled={disabled}
+                          placeholder="字段名"
+                          value={name}
+                          onChange={(ev) => {
+                            triggerChange?.({ ...value, name: ev.target.value })
+                          }}
+                        />
+                      )}
+                </span>
               )}
-            </span>
-          )}
         </span>
       </div>
 
@@ -337,6 +343,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
                 if (newType !== SchemaType.Object) {
                   triggerChange?.(omit(newValue, KEY_PROPERTIES) as JsonSchema)
                 }
+
                 break
               }
 
@@ -344,6 +351,7 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
                 if (newType !== SchemaType.Array) {
                   triggerChange?.(omit(newValue, KEY_ITEMS) as JsonSchema)
                 }
+
                 break
               }
 
@@ -405,7 +413,8 @@ export function JsonSchemaNodeRow(props: JsonSchemaNodeRowProps) {
               onClick={() => {
                 if (isRoot) {
                   onAddField?.([...fieldPath, KEY_PROPERTIES, '0'])
-                } else {
+                }
+                else {
                   onAddField?.(fieldPath) // 添加相邻节点。
                 }
               }}

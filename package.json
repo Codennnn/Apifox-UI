@@ -45,19 +45,22 @@
     "use-resize-observer": "^9.1.0"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.25.7",
+    "@babel/preset-react": "^7.26.3",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "22.7.4",
     "@types/react": "18.3.11",
     "@types/react-resizable": "^3.0.8",
     "@types/serialize-javascript": "^5.0.4",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "^10.4.21",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.47",
-    "prefer-code-style": "2.1.7",
-    "stylelint": "^16.9.0",
-    "tailwindcss": "^3.4.13",
-    "typescript": "5.5.4"
+    "postcss": "^8.5.3",
+    "prefer-code-style": "3.6.0",
+    "stylelint": "^16.18.0",
+    "stylelint-config-clean-order": "^7.0.0",
+    "stylelint-config-standard": "^38.0.0",
+    "stylelint-config-tailwindcss": "^1.0.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "5.8.3"
   },
   "packageManager": "pnpm@9.15.3",
   "engines": {

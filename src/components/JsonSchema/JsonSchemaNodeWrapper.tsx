@@ -2,7 +2,7 @@ export function JsonSchemaNodeWrapper(
   props: React.PropsWithChildren<{
     className?: string
     shouldExpand?: boolean
-  }>
+  }>,
 ) {
   const { children, className = '', shouldExpand } = props
 

@@ -1,5 +1,5 @@
 import { cloneElement, type PointerEvent, useMemo, useState } from 'react'
-import useEvent from 'react-use-event-hook'
+import { useEvent } from 'react-use-event-hook'
 
 import {
   DndContext,
@@ -41,6 +41,7 @@ const handler = ({ nativeEvent: event }: PointerEvent) => {
     if (cur.dataset.noDnd) {
       return false
     }
+
     cur = cur.parentElement!
   }
 
@@ -48,9 +49,7 @@ const handler = ({ nativeEvent: event }: PointerEvent) => {
 }
 
 class PointerSensor extends LibPointerSensor {
-  static activators = [
-    { eventName: 'onPointerDown', handler },
-  ] as (typeof LibPointerSensor)['activators']
+  static activators = [{ eventName: 'onPointerDown', handler }] as (typeof LibPointerSensor)['activators']
 }
 
 interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -102,7 +101,8 @@ export function ApiTab(props: TabsProps) {
 
     if (forceClose !== true && item?.data?.editStatus === 'changed') {
       setConfirmKey(key)
-    } else {
+    }
+    else {
       setConfirmKey(undefined)
       removeTabItem({ key })
     }
@@ -134,9 +134,9 @@ export function ApiTab(props: TabsProps) {
           >
             <span
               className={`main-tabs-tab-close-icon flex size-full items-center justify-center text-[15px] opacity-0 ${tabItem.data?.editStatus === 'changed'
-                  ? 'changed after:bg-primary-500 group relative overflow-hidden rounded-full after:absolute after:size-2 after:rounded-full after:content-[""] hover:overflow-auto hover:bg-transparent hover:after:hidden'
-                  : ''
-                }`}
+                ? 'group relative overflow-hidden rounded-full after:absolute after:size-2 after:rounded-full after:content-[""] hover:overflow-auto hover:bg-transparent hover:after:hidden'
+                : ''
+              }`}
               data-no-dnd="true" // 「关闭」按钮不允许触发拖拽。
             >
               <XIcon
@@ -164,6 +164,7 @@ export function ApiTab(props: TabsProps) {
       setTabItems((prev) => {
         const activeIndex = prev.findIndex((i) => i.key === active.id)
         const overIndex = prev.findIndex((i) => i.key === over?.id)
+
         return arrayMove(prev, activeIndex, overIndex)
       })
     }
@@ -216,7 +217,8 @@ export function ApiTab(props: TabsProps) {
         label: '新建...',
         contentType: 'blank',
       })
-    } else if (
+    }
+    else if (
       /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
       action === 'remove'
     ) {

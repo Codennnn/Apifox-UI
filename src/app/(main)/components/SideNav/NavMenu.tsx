@@ -51,7 +51,7 @@ export function NavMenu() {
       <Link href={NavPath.Home}>
         <NavItem
           active={pathname === NavPath.Home}
-          icon={
+          icon={(
             <svg
               aria-hidden="true"
               className="size-6"
@@ -66,7 +66,7 @@ export function NavMenu() {
               />
               <path d="M2 6c0-1.1.9-2 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z" />
             </svg>
-          }
+          )}
           name="接口管理"
         />
       </Link>
@@ -74,7 +74,7 @@ export function NavMenu() {
       <Link href={NavPath.Settings}>
         <NavItem
           active={pathname === NavPath.Settings}
-          icon={
+          icon={(
             <svg
               aria-hidden="true"
               className="size-6"
@@ -88,14 +88,14 @@ export function NavMenu() {
                 fillRule="evenodd"
               />
             </svg>
-          }
+          )}
           name="项目配置"
         />
       </Link>
 
       <Link href="https://github.com/Codennnn/Apifox-UI" target="_blank">
         <NavItem
-          icon={
+          icon={(
             <svg
               aria-hidden="true"
               className="size-6"
@@ -109,7 +109,7 @@ export function NavMenu() {
                 fillRule="evenodd"
               />
             </svg>
-          }
+          )}
           name="源码仓库"
         />
       </Link>

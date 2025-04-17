@@ -27,6 +27,7 @@ export function SelectorCatalog(props: SelectorCatalogProps) {
   const internalValue = useMemo(() => {
     if (menuRawList && value) {
       const group = findFolders(menuRawList, [], value).map(({ id }) => id)
+
       return group.length > 0 ? group : [ROOT_CATALOG]
     }
   }, [value, menuRawList])

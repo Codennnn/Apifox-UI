@@ -26,28 +26,22 @@ export function FileIcon(props: FileIconProps) {
     style,
   }
 
-  switch (type) {
-    case CatalogType.Http:
-    case MenuItemType.ApiDetail:
-      return <UnplugIcon {...iconProps} />
-
-    case CatalogType.Schema:
-    case MenuItemType.ApiSchema:
-      return <PackageIcon {...iconProps} />
-
-    case CatalogType.Request:
-    case MenuItemType.HttpRequest:
-      return <ZapIcon {...iconProps} />
-
-    case CatalogType.Markdown:
-    case MenuItemType.Doc:
-      return <FileMinusIcon {...iconProps} />
-
-    case MenuItemType.ApiDetailFolder:
-    case MenuItemType.ApiSchemaFolder:
-      return <FolderClosedIcon {...iconProps} />
-
-    default:
-      return null
+  if (type === CatalogType.Http || type === MenuItemType.ApiDetail) {
+    return <UnplugIcon {...iconProps} />
+  }
+  else if (type === CatalogType.Schema || type === MenuItemType.ApiSchema) {
+    return <PackageIcon {...iconProps} />
+  }
+  else if (type === CatalogType.Request || type === MenuItemType.HttpRequest) {
+    return <ZapIcon {...iconProps} />
+  }
+  else if (type === CatalogType.Markdown || type === MenuItemType.Doc) {
+    return <FileMinusIcon {...iconProps} />
+  }
+  else if (type === MenuItemType.ApiDetailFolder || type === MenuItemType.ApiSchemaFolder) {
+    return <FolderClosedIcon {...iconProps} />
+  }
+  else {
+    return null
   }
 }

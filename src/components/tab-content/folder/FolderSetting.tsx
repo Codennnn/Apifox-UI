@@ -26,8 +26,8 @@ export function FolderSetting() {
     if (apiFolder && apiFolder.type === MenuItemType.ApiDetailFolder) {
       form.setFieldsValue({
         name: apiFolder.name,
-        parentId: apiFolder.parentId || ROOT_CATALOG,
-        serverId: apiFolder.data?.serverId || SERVER_INHERIT,
+        parentId: apiFolder.parentId ?? ROOT_CATALOG,
+        serverId: apiFolder.data?.serverId ?? SERVER_INHERIT,
         description: apiFolder.data?.description,
       })
     }

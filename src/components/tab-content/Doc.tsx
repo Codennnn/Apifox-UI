@@ -38,7 +38,7 @@ export function Doc() {
   useEffect(() => {
     if (docValue) {
       setName(docValue.name)
-      setContent(docValue.content || '')
+      setContent(docValue.content ?? '')
     }
   }, [docValue])
 
@@ -72,14 +72,14 @@ export function Doc() {
             <Button
               type="primary"
               onClick={() => {
-                const values: ApiDoc = { id: nanoid(6), name: name || DEFAULT_DOC_NAME, content }
+                const values: ApiDoc = { id: nanoid(6), name: name ?? DEFAULT_DOC_NAME, content }
 
                 if (isCreating) {
                   const menuItemId = nanoid(6)
 
                   addMenuItem({
                     id: menuItemId,
-                    name: name || DEFAULT_DOC_NAME,
+                    name: name ?? DEFAULT_DOC_NAME,
                     type: MenuItemType.Doc,
                     data: values,
                   })
@@ -90,9 +90,10 @@ export function Doc() {
                       label: name,
                       contentType: MenuItemType.Doc,
                     },
-                    { replaceTab: tabData.key }
+                    { replaceTab: tabData.key },
                   )
-                } else {
+                }
+                else {
                   updateMenuItem({
                     id: tabData.key,
                     name: name,
@@ -136,7 +137,7 @@ export function Doc() {
 
       <div className="flex-1 overflow-auto">
         <div className="mx-auto" style={{ maxWidth: '1512px', padding: `${token.padding}px` }}>
-          <Viewer value={docValue?.content || ''} />
+          <Viewer value={docValue?.content ?? ''} />
         </div>
       </div>
     </div>

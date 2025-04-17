@@ -52,6 +52,7 @@ export function ThemeProvider(props: React.PropsWithChildren<ThemeProviderProps>
   const themePresetTokens = useMemo(() => {
     const isDefaultTheme = themeMode === 'lightDefault' || themeMode === 'darkDefault'
     const token = presetThemes[themeMode].token
+
     return { ...token, ...(isDefaultTheme ? { colorPrimary, borderRadius } : {}) }
   }, [themeMode, colorPrimary, borderRadius])
 
@@ -92,7 +93,7 @@ export function ThemeProvider(props: React.PropsWithChildren<ThemeProviderProps>
 }
 
 export function ThemeProviderClient(
-  props: React.PropsWithChildren<Pick<ThemeProviderProps, 'autoSaveId'>>
+  props: React.PropsWithChildren<Pick<ThemeProviderProps, 'autoSaveId'>>,
 ) {
   const { children, autoSaveId } = props
 

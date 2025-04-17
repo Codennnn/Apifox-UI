@@ -70,16 +70,22 @@ export function JsonSchemaEditor(props: JsonSchemaEditorProps) {
               properties.splice(propertyIdx + 1, 0, defaultFieldData)
             }
           }
-        } else {
+        }
+        else {
           // 如果目标字段不存在，则直接创建出一个字段。
           set(draft, targetPath, defaultFieldData)
         }
-      } else if (shouldAddToItems) {
+      }
+      else if (shouldAddToItems) {
         const targetItems: ArraySchema['items'] | undefined = get(draft, targetPath)
+
         if (targetItems && targetItems.type === SchemaType.Object) {
-          targetItems.properties
-            ? targetItems.properties.push(defaultFieldData)
-            : (targetItems.properties = [defaultFieldData])
+          if (targetItems.properties) {
+            targetItems.properties.push(defaultFieldData)
+          }
+          else {
+            targetItems.properties = [defaultFieldData]
+          }
         }
       }
     })

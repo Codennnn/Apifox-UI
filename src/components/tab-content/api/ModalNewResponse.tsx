@@ -13,7 +13,7 @@ export const httpCodeOptions: SelectProps['options'] = Object.entries(HTTP_CODE_
       text,
       desc,
     }
-  }
+  },
 )
 
 export const contentTypeOptions: SelectProps['options'] = [
@@ -40,7 +40,7 @@ export function ModalNewResponse(props: ModalNewResponseProps) {
       {...rest}
       title="添加响应"
       onOk={() => {
-        form.validateFields().then((values) => {
+        void form.validateFields().then((values) => {
           onFinish?.(values)
         })
       }}

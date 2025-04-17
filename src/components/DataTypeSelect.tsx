@@ -64,7 +64,8 @@ export function DataTypeSelect(props: DataTypeSelectProps) {
     if (type) {
       if ($ref) {
         return apiDirectoryData.find((it) => it.id === $ref)?.name
-      } else {
+      }
+      else {
         return defaultSchemaTypeConfig[type].text
       }
     }
@@ -74,7 +75,7 @@ export function DataTypeSelect(props: DataTypeSelectProps) {
     return (
       <div className="flex w-full items-center gap-2">
         <Popover
-          content={
+          content={(
             <ConfigProvider
               theme={{
                 components: {
@@ -98,7 +99,7 @@ export function DataTypeSelect(props: DataTypeSelectProps) {
                 />
               </div>
             </ConfigProvider>
-          }
+          )}
           open={disabled ? false : undefined}
           placement="right"
           rootClassName="[&_.ant-popover-inner]:!p-0"
@@ -113,7 +114,7 @@ export function DataTypeSelect(props: DataTypeSelectProps) {
         </Popover>
 
         <Popover
-          content={
+          content={(
             <div className="w-[345px]">
               <div className="flex pb-2">
                 <span
@@ -137,7 +138,7 @@ export function DataTypeSelect(props: DataTypeSelectProps) {
                 }}
               />
             </div>
-          }
+          )}
           placement="right"
           trigger="click"
         >

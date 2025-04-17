@@ -9,13 +9,13 @@ import { ParamsEditableCell } from '@/components/tab-content/api/components/Para
 import { PARAMS_CONFIG } from '@/configs/static'
 import { ParamType } from '@/enums'
 import { useStyles } from '@/hooks/useStyle'
-import type { Parameter } from '@/types'
+import type { Parameter, UnsafeAny } from '@/types'
 
 import { css } from '@emotion/css'
 
 const transformExampleValue = ({ type, example }: Pick<Parameter, 'type' | 'example'>) => {
   return type === ParamType.Array && !Array.isArray(example)
-    ? [example || '']
+    ? [example ?? '']
     : Array.isArray(example)
       ? example.join(',')
       : example
@@ -66,23 +66,24 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
               return {
                 ...it,
                 example:
-                  typeof v.example === 'string' ? [...(it.example || []), v.example] : it.example,
+                  typeof v.example === 'string' ? [...(it.example ?? []), v.example] : it.example,
               }
-            } else {
+            }
+            else {
               return {
                 ...it,
                 type: ParamType.Array,
-                example: [it.example || '', typeof v.example === 'string' ? v.example : ''],
+                example: [it.example ?? '', typeof v.example === 'string' ? v.example : ''],
               }
             }
           }
 
           return it
-        })
+        }),
     )
   }
 
-  const handleChange = (rowIdx: number, v: Partial<Record<keyof Parameter, any>>) => {
+  const handleChange = (rowIdx: number, v: Partial<Record<keyof Parameter, UnsafeAny>>) => {
     const target = value?.at(rowIdx)
 
     const isNewRow = testIsNewRow(target)
@@ -92,9 +93,10 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
 
       if (isDuplicate) {
         handleDuplicate(rowIdx, v)
-      } else {
+      }
+      else {
         onChange?.([
-          ...(value || []),
+          ...(value ?? []),
           {
             id: newRowRecordId,
             ...target,
@@ -103,7 +105,8 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
           },
         ])
       }
-    } else {
+    }
+    else {
       onChange?.(
         value?.map((it, i) => {
           if (i === rowIdx) {
@@ -111,7 +114,7 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
           }
 
           return it
-        })
+        }),
       )
     }
   }
@@ -126,8 +129,8 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
 
         const isNameEmpty = !text && !isNewRow
 
-        const isDuplicate =
-          value?.some((it, i) => {
+        const isDuplicate
+          = value?.some((it, i) => {
             const isPrevRow = i < ridx
             const isSameName = it.name === text
 
@@ -221,8 +224,8 @@ export function ParamsEditableTable(props: ParamsEditableTableProps) {
       width: '25%',
       render: (exampleVal, record, ridx) => {
         if (record.type === ParamType.Array) {
-          const example: string[] =
-            Array.isArray(exampleVal) && exampleVal.length > 0 ? exampleVal : ['']
+          const example: string[]
+            = Array.isArray(exampleVal) && exampleVal.length > 0 ? exampleVal : ['']
 
           return (
             <div>

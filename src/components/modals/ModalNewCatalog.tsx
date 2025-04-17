@@ -55,7 +55,7 @@ export const ModalNewCatalog = create(({ formData, ...props }: ModalNewCatalogPr
         handleHide()
       }}
       onOk={() => {
-        form.validateFields().then((values) => {
+        void form.validateFields().then((values) => {
           addMenuItem({
             ...values,
             id: nanoid(6),

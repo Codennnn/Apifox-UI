@@ -3,6 +3,7 @@ import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { Editor, type EditorProps } from '@monaco-editor/react'
 import { merge } from 'lodash-es'
 
+import { UnsafeAny } from '@/types'
 import { deserialize, isPureObject, serialize } from '@/utils'
 
 type EditorMountParams = Parameters<NonNullable<EditorProps['onMount']>>
@@ -34,7 +35,7 @@ export interface MonacoEditorRef<ValueType = unknown> {
 
 function EditorX<ValueType = unknown>(
   props: MonacoEditorProps<ValueType>,
-  ref: React.Ref<MonacoEditorRef<ValueType>>
+  ref: React.Ref<MonacoEditorRef<ValueType>>,
 ) {
   const {
     defaultValue,
@@ -60,11 +61,11 @@ function EditorX<ValueType = unknown>(
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [editorMounted]
+    [editorMounted],
   )
 
   // 转换 value 为字符串，以便编辑器能正确显示。
-  const getEditorValue = (value: any): string | undefined => {
+  const getEditorValue = (value: UnsafeAny): string | undefined => {
     if (isPureObject(value)) {
       return serialize(value, { space: 2, unsafe: true })
     }
@@ -86,12 +87,15 @@ function EditorX<ValueType = unknown>(
         {...valueObj}
         options={merge(defaultEditorOptions, editorProps.options)}
         onChange={(val) => {
-          let changedValue: any
+          let changedValue: UnsafeAny
+
           try {
             changedValue = deserializeOnChange ? deserialize(val) : val
-          } catch {
+          }
+          catch {
             changedValue = val
           }
+
           onChange?.(changedValue)
         }}
         onMount={(editor, monaco) => {

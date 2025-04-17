@@ -41,7 +41,7 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
       {
         position: 'relative',
       },
-      { label: 'ref-object' }
+      { label: 'ref-object' },
     )
 
     const node = css(
@@ -59,7 +59,7 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
           },
         },
       },
-      { label: 'node' }
+      { label: 'node' },
     )
 
     return { unbind, node, ref }
@@ -79,7 +79,11 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
 
   switch (value.type) {
     case SchemaType.Object:
+      // fall through
+
     case SchemaType.Array:
+      // fall through
+
     case SchemaType.Refer: {
       const renderProps: JsonSchemaNodeProps = {
         onAddField,
@@ -95,56 +99,59 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
           <>
             {!restProps.fromRef && <JsonSchemaNodeRow {...rowProps} />}
 
-            {Array.isArray(value.properties) && value.properties.length > 0 ? (
-              <JsonSchemaNodeWrapper shouldExpand={!!restProps.fromRef || shouldExpand}>
-                {value.properties.map((propSchema, i) => {
-                  const key = `${propSchema.type}_${i}_${fieldPathKey}`
+            {Array.isArray(value.properties) && value.properties.length > 0
+              ? (
+                  <JsonSchemaNodeWrapper shouldExpand={!!restProps.fromRef || shouldExpand}>
+                    {value.properties.map((propSchema, i) => {
+                      const key = `${propSchema.type}_${i}_${fieldPathKey}`
 
-                  return (
-                    <JsonSchemaNode
-                      {...renderProps}
-                      key={key}
-                      fieldPath={[...fieldPath, KEY_PROPERTIES, `${i}`]}
-                      value={propSchema}
-                      onChange={(changValue) => {
-                        const newProperties = value.properties!.map((prop, idx) => {
-                          if (idx === i && changValue) {
-                            return changValue
-                          }
-                          return prop
-                        })
+                      return (
+                        <JsonSchemaNode
+                          {...renderProps}
+                          key={key}
+                          fieldPath={[...fieldPath, KEY_PROPERTIES, `${i}`]}
+                          value={propSchema}
+                          onChange={(changValue) => {
+                            const newProperties = value.properties!.map((prop, idx) => {
+                              if (idx === i && changValue) {
+                                return changValue
+                              }
 
-                        onChange?.({ ...value, properties: newProperties })
-                      }}
-                    />
-                  )
-                })}
-              </JsonSchemaNodeWrapper>
-            ) : (
-              <div
-                className={css({
-                  height: columnHeight,
-                  display: shouldExpand ? 'flex' : 'none',
-                  alignItems: 'center',
-                })}
-                style={{
-                  paddingLeft:
+                              return prop
+                            })
+
+                            onChange?.({ ...value, properties: newProperties })
+                          }}
+                        />
+                      )
+                    })}
+                  </JsonSchemaNodeWrapper>
+                )
+              : (
+                  <div
+                    className={css({
+                      height: columnHeight,
+                      display: shouldExpand ? 'flex' : 'none',
+                      alignItems: 'center',
+                    })}
+                    style={{
+                      paddingLeft:
                     getNodeLevelInfo([...fieldPath, KEY_PROPERTIES, '0']).indentWidth + INDENT,
-                }}
-              >
-                <span style={{ color: token.colorTextTertiary }}>
-                  没有字段，
-                  <span
-                    className={css({ color: token.colorPrimary, cursor: 'pointer' })}
-                    onClick={() => {
-                      onAddField?.([...fieldPath, KEY_PROPERTIES, '0'])
                     }}
                   >
-                    添加
-                  </span>
-                </span>
-              </div>
-            )}
+                    <span style={{ color: token.colorTextTertiary }}>
+                      没有字段，
+                      <span
+                        className={css({ color: token.colorPrimary, cursor: 'pointer' })}
+                        onClick={() => {
+                          onAddField?.([...fieldPath, KEY_PROPERTIES, '0'])
+                        }}
+                      >
+                        添加
+                      </span>
+                    </span>
+                  </div>
+                )}
           </>
         )
       }
@@ -220,9 +227,17 @@ export function JsonSchemaNode(props: JsonSchemaNodeProps) {
     }
 
     case SchemaType.Null:
+      // fall through
+
     case SchemaType.Boolean:
+      // fall through
+
     case SchemaType.Number:
+      // fall through
+
     case SchemaType.Integer:
+      // fall through
+
     case SchemaType.String: {
       return <JsonSchemaNodeRow {...rowProps} />
     }

@@ -56,7 +56,7 @@ export function PanelLayout(props: PanelLayoutProps) {
       expandTrigger: css({
         color: token.colorPrimary,
         backgroundColor: token.colorFillAlter,
-        boxShadow: `1px 0 4px rgba(16 24 40 / 0.08)`,
+        boxShadow: '1px 0 4px rgba(16 24 40 / 0.08)',
         '&:hover': {
           backgroundColor: token.colorFillSecondary,
         },
@@ -89,7 +89,7 @@ export function PanelLayout(props: PanelLayoutProps) {
       {
         leading: false,
         trailing: true,
-      }
+      },
     )
   }, [])
 

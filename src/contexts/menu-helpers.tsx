@@ -60,8 +60,8 @@ export function MenuHelpersContextProvider(props: React.PropsWithChildren) {
   }, [])
 
   const [menuSearchWord, setMenuSearchWord] = useState<string>()
-  const [apiDetailDisplay, setApiDetailDisplay] =
-    useState<MenuHelpersContextData['apiDetailDisplay']>('name')
+  const [apiDetailDisplay, setApiDetailDisplay]
+    = useState<MenuHelpersContextData['apiDetailDisplay']>('name')
 
   const menuHelpers = useMemo<MenuHelpers>(() => {
     return {
@@ -84,19 +84,19 @@ export function MenuHelpersContextProvider(props: React.PropsWithChildren) {
                     }
 
                     if (
-                      catalogType === CatalogType.Http ||
-                      catalogType === CatalogType.Schema ||
-                      catalogType === CatalogType.Request
+                      catalogType === CatalogType.Http
+                      || catalogType === CatalogType.Schema
+                      || catalogType === CatalogType.Request
                     ) {
                       const list = draft[catalogType].list
 
                       draft[catalogType].list = [
                         { id: nanoid(6), expiredAt: '30天', creator, deletedItem: item },
-                        ...(list || []),
+                        ...(list ?? []),
                       ]
                     }
                   })
-                : d
+                : d,
             )
           }
 
@@ -113,12 +113,12 @@ export function MenuHelpersContextProvider(props: React.PropsWithChildren) {
               return {
                 ...item,
                 ...rest,
-                data: { ...item.data, ...rest.data, name: rest.name || item.name },
+                data: { ...item.data, ...rest.data, name: rest.name ?? item.name },
               } as ApiMenuData
             }
 
             return item
-          })
+          }),
         )
       },
 
@@ -158,31 +158,34 @@ export function MenuHelpersContextProvider(props: React.PropsWithChildren) {
               if (item.id === dragKey) {
                 acc.dragMenu = item
                 acc.dragMenuIdx = idx
-              } else if (item.id === dropKey) {
+              }
+              else if (item.id === dropKey) {
                 acc.dropMenu = item
                 acc.dropMenuIdx = idx
               }
 
               return acc
             },
-            { dragMenu: null, dropMenu: null, dragMenuIdx: null, dropMenuIdx: null }
+            { dragMenu: null, dropMenu: null, dragMenuIdx: null, dropMenuIdx: null },
           )
 
           if (
-            dragMenu &&
-            dropMenu &&
-            typeof dragMenuIdx === 'number' &&
-            typeof dropMenuIdx === 'number'
+            dragMenu
+            && dropMenu
+            && typeof dragMenuIdx === 'number'
+            && typeof dropMenuIdx === 'number'
           ) {
             return produce(list, (draft) => {
               if (isMenuFolder(dropMenu.type) && dropPosition === 0) {
                 draft[dragMenuIdx].parentId = dropMenu.id
                 moveArrayItem(draft, dragMenuIdx, dropMenuIdx + 1)
-              } else if (dropPosition === 1) {
+              }
+              else if (dropPosition === 1) {
                 if (dragMenu.parentId !== dropMenu.parentId) {
                   draft[dragMenuIdx].parentId = dropMenu.parentId
                   moveArrayItem(draft, dragMenuIdx, dropMenuIdx + 1)
-                } else {
+                }
+                else {
                   moveArrayItem(draft, dragMenuIdx, dropMenuIdx + 1)
                 }
               }

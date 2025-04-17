@@ -33,7 +33,7 @@ const methodOptions: SelectProps['options'] = Object.entries(HTTP_METHOD_CONFIG)
         </span>
       ),
     }
-  }
+  },
 )
 
 /**
@@ -54,13 +54,17 @@ export function ApiDocEditing() {
   useEffect(() => {
     if (isCreating) {
       form.setFieldsValue(initialCreateApiDetailsData)
-    } else {
+    }
+    else {
       if (menuRawList) {
         const menuData = menuRawList.find(({ id }) => id === tabData.key)
 
         if (
-          menuData &&
-          (menuData.type === MenuItemType.ApiDetail || menuData.type === MenuItemType.HttpRequest)
+          menuData
+          && (
+            menuData.type === MenuItemType.ApiDetail
+            || menuData.type === MenuItemType.HttpRequest
+          )
         ) {
           const apiDetails = menuData.data
 
@@ -73,7 +77,7 @@ export function ApiDocEditing() {
   }, [form, menuRawList, isCreating, tabData.key])
 
   const handleFinish: FormProps<ApiDetails>['onFinish'] = (values) => {
-    const menuName = values.name || DEFAULT_NAME
+    const menuName = values.name ?? DEFAULT_NAME
 
     if (isCreating) {
       const menuItemId = nanoid(6)
@@ -91,9 +95,10 @@ export function ApiDocEditing() {
           label: menuName,
           contentType: MenuItemType.ApiDetail,
         },
-        { replaceTab: tabData.key }
+        { replaceTab: tabData.key },
       )
-    } else {
+    }
+    else {
       updateMenuItem({
         id: tabData.key,
         name: menuName,
@@ -124,15 +129,16 @@ export function ApiDocEditing() {
       const oldParameters = form.getFieldValue('parameters') as ApiDetails['parameters']
       const oldPath = oldParameters?.path
 
-      const newPath =
-        pathParams.length >= (oldPath?.length || 0)
+      const newPath
+        = pathParams.length >= (oldPath?.length ?? 0)
           ? pathParams.reduce(
               (acc, cur, curIdx) => {
                 const target = oldPath?.at(curIdx)
 
                 if (target) {
                   acc.splice(curIdx, 1, { ...target, name: cur })
-                } else {
+                }
+                else {
                   acc.push({
                     id: nanoid(4),
                     name: cur,
@@ -143,7 +149,7 @@ export function ApiDocEditing() {
 
                 return acc
               },
-              [...(oldPath || [])]
+              [...(oldPath ?? [])],
             )
           : oldPath?.slice(0, pathParams.length)
 
@@ -175,16 +181,17 @@ export function ApiDocEditing() {
 
       form.setFieldValue(['parameters', 'query'], newQueryParmas)
 
-      if (!msgKey.current) {
-        msgKey.current = '__'
-      }
+      msgKey.current ??= '__'
 
       messageApi.info({
         key: msgKey.current,
         content: (
           <span>
-            路径中&nbsp;Query&nbsp;参数已自动提取，并填充到下方<strong>请求参数</strong>的&nbsp;
-            <strong>Param</strong>&nbsp;中
+            路径中&nbsp;Query&nbsp;参数已自动提取，并填充到下方
+            <strong>请求参数</strong>
+            的&nbsp;
+            <strong>Param</strong>
+&nbsp;中
           </span>
         ),
         duration: 3,

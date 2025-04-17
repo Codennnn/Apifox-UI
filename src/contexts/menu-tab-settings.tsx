@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import useEvent from 'react-use-event-hook'
+import { useEvent } from 'react-use-event-hook'
 
 import type { ApiTabItem, EditStatus } from '@/components/ApiTab'
 import { initialActiveTabKey, initialTabItems } from '@/data/remote'
@@ -58,7 +58,7 @@ interface MenuTabHelpers {
   /** 添加新的页签。 */
   addTabItem: (
     payload: ApiTabItem,
-    config?: { autoActive?: boolean; replaceTab?: ApiTabItem['key'] }
+    config?: { autoActive?: boolean, replaceTab?: ApiTabItem['key'] }
   ) => void
   /** 移除页签。 */
   removeTabItem: (payload: Pick<ApiTabItem, 'key'>) => void
@@ -97,10 +97,12 @@ export function useMenuTabHelpers(): MenuTabHelpers {
 
       if (isSameTabPresent) {
         throw new Error('已存在相同的页签。')
-      } else {
+      }
+      else {
         if (replaceTab) {
           setTabItems((items) => items.map((it) => (it.key === replaceTab ? payload : it)))
-        } else {
+        }
+        else {
           setTabItems((items) => [...items, payload])
         }
 
@@ -108,7 +110,7 @@ export function useMenuTabHelpers(): MenuTabHelpers {
           activeTabItem({ key: payload.key })
         }
       }
-    }
+    },
   )
 
   const removeTabItem = useEvent<MenuTabHelpers['removeTabItem']>((payload) => {
@@ -118,12 +120,13 @@ export function useMenuTabHelpers(): MenuTabHelpers {
       if (activeTabKey === payload.key) {
         setActiveTabKey(() => undefined)
 
-        const valideTabKey =
-          lastActiveTabKey && newItems.findIndex((item) => item.key === lastActiveTabKey) !== -1
+        const valideTabKey
+          = lastActiveTabKey && newItems.findIndex((item) => item.key === lastActiveTabKey) !== -1
 
         if (valideTabKey) {
           activeTabItem({ key: lastActiveTabKey })
-        } else {
+        }
+        else {
           setLastActiveTabKey(() => undefined)
 
           const lastTabKey = newItems.at(-1)?.key
@@ -156,10 +159,11 @@ export function useMenuTabHelpers(): MenuTabHelpers {
           if (item.key === payload.key) {
             return { ...item, data: { ...item.data, editStatus } }
           }
+
           return item
         })
       })
-    }
+    },
   )
 
   return {

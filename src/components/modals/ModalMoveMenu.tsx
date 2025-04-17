@@ -43,7 +43,7 @@ export const ModalMoveMenu = create(({ menuItemType, formData, ...props }: Modal
         handleHide()
       }}
       onOk={() => {
-        form.validateFields().then((values) => {
+        void form.validateFields().then((values) => {
           updateMenuItem(values)
           handleHide()
         })

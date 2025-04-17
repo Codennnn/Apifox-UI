@@ -17,8 +17,8 @@ export function InputSearch() {
       (value) => {
         setMenuSearchWord?.(value)
       },
-      [setMenuSearchWord]
-    )
+      [setMenuSearchWord],
+    ),
   )
 
   const { styles } = useStyles(({ token }) => {

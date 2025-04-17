@@ -28,7 +28,7 @@ export function useApiTabActions() {
         },
       },
     ],
-    [removeAllTabItems, removeOtherTabItems]
+    [removeAllTabItems, removeOtherTabItems],
   )
 
   return {

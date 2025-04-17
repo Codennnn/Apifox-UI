@@ -15,14 +15,16 @@ function BadgeLabel(props: React.PropsWithChildren<{ count?: number }>) {
     <span>
       {children}
 
-      {typeof count === 'number' && count > 0 ? (
-        <span
-          className="ml-1 inline-flex size-4 items-center justify-center rounded-full text-xs"
-          style={{ backgroundColor: token.colorFillContent, color: token.colorSuccessActive }}
-        >
-          {count}
-        </span>
-      ) : null}
+      {typeof count === 'number' && count > 0
+        ? (
+            <span
+              className="ml-1 inline-flex size-4 items-center justify-center rounded-full text-xs"
+              style={{ backgroundColor: token.colorFillContent, color: token.colorSuccessActive }}
+            >
+              {count}
+            </span>
+          )
+        : null}
     </span>
   )
 }
@@ -45,7 +47,7 @@ export function ParamsTab(props: ParamsTabProps) {
         {
           key: 'params',
           label: (
-            <BadgeLabel count={(value?.query?.length || 0) + (value?.path?.length || 0)}>
+            <BadgeLabel count={(value?.query?.length ?? 0) + (value?.path?.length ?? 0)}>
               Params
             </BadgeLabel>
           ),
@@ -61,22 +63,24 @@ export function ParamsTab(props: ParamsTabProps) {
                 }}
               />
 
-              {value?.path && value.path.length > 0 ? (
-                <>
-                  <div className="py-2">
-                    <Typography.Text type="secondary">Path 参数</Typography.Text>
-                  </div>
-                  <ParamsEditableTable
-                    isPathParamsTable
-                    autoNewRow={false}
-                    removable={false}
-                    value={value.path}
-                    onChange={(path) => {
-                      onChange?.({ ...value, path })
-                    }}
-                  />
-                </>
-              ) : null}
+              {value?.path && value.path.length > 0
+                ? (
+                    <>
+                      <div className="py-2">
+                        <Typography.Text type="secondary">Path 参数</Typography.Text>
+                      </div>
+                      <ParamsEditableTable
+                        isPathParamsTable
+                        autoNewRow={false}
+                        removable={false}
+                        value={value.path}
+                        onChange={(path) => {
+                          onChange?.({ ...value, path })
+                        }}
+                      />
+                    </>
+                  )
+                : null}
             </div>
           ),
         },

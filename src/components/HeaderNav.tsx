@@ -40,7 +40,7 @@ export function HeaderNav() {
                 },
               ],
               onClick: ({ key }) => {
-                switch (key) {
+                switch (key as MenuKey) {
                   case MenuKey.About:
                     void show(ModalSettings, { selectedKey: SettingsMenuKey.About })
                     break
@@ -53,11 +53,11 @@ export function HeaderNav() {
             }}
           >
             <Button
-              icon={
+              icon={(
                 <div className="inline-flex size-4 items-center justify-center">
                   <IconLogo />
                 </div>
-              }
+              )}
               size="small"
               type="text"
             />

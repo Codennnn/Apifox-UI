@@ -34,7 +34,8 @@ export function Schema() {
   const fieldsValue = useMemo<ApiSchemaForm | undefined>(() => {
     if (isCreating) {
       return initialCreateApiSchemaData
-    } else {
+    }
+    else {
       if (menuRawList) {
         const menuData = menuRawList.find(({ id }) => id === tabData.key)
 
@@ -61,7 +62,7 @@ export function Schema() {
       <Form
         form={form}
         onFinish={(values) => {
-          const menuName = values.name || '未命名数据模型'
+          const menuName = values.name ?? '未命名数据模型'
 
           if (isCreating) {
             const menuItemId = nanoid(6)
@@ -79,9 +80,10 @@ export function Schema() {
                 label: menuName,
                 contentType: MenuItemType.ApiSchema,
               },
-              { replaceTab: tabData.key }
+              { replaceTab: tabData.key },
             )
-          } else {
+          }
+          else {
             updateMenuItem({
               id: tabData.key,
               name: menuName,
@@ -110,7 +112,7 @@ export function Schema() {
             {!isCreating && (
               <Popconfirm
                 placement="bottom"
-                title={`确定删除数据模型“${schemaName || ''}”？`}
+                title={`确定删除数据模型“${schemaName ?? ''}”？`}
                 onConfirm={() => {
                   removeTabItem({ key: tabData.key })
                   removeMenuItem({ id: tabData.key })

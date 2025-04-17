@@ -51,7 +51,7 @@ export default function SettingsPage() {
   return (
     <PanelLayout
       layoutName="项目设置"
-      left={
+      left={(
         <div>
           <ConfigProvider
             theme={{
@@ -69,14 +69,14 @@ export default function SettingsPage() {
             <Menu items={items} mode="inline" />
           </ConfigProvider>
         </div>
-      }
-      right={
+      )}
+      right={(
         <div className="p-5">
           待实现的设置页
           <Skeleton />
           <Skeleton />
         </div>
-      }
+      )}
     />
   )
 }

@@ -3,7 +3,7 @@ import { HistoryIcon, Settings2Icon, XIcon } from 'lucide-react'
 
 import { IconText } from '@/components/IconText'
 
-export function ApiSidePanel(props: { open?: boolean; onClose?: () => void }) {
+export function ApiSidePanel(props: { open?: boolean, onClose?: () => void }) {
   const { token } = theme.useToken()
 
   const { open, onClose } = props

@@ -13,7 +13,7 @@ export function ApiTabContentWrapper(props: React.PropsWithChildren<{ className?
         },
       }}
     >
-      <div className={`h-full ${props.className || ''}`}>{props.children}</div>
+      <div className={`h-full ${props.className ?? ''}`}>{props.children}</div>
     </ConfigProvider>
   )
 }

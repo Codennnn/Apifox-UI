@@ -53,9 +53,9 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
 
   const menuFolderKeys = useMemo(() => {
     const folders = groupedMenus?.[topMenuType].filter((it) =>
-      isMenuFolder(it.customData.catalog.type)
+      isMenuFolder(it.customData.catalog.type),
     )
-    const menuKeys = folders?.map((it) => it.key) || []
+    const menuKeys = folders?.map((it) => it.key) ?? []
 
     return [topMenuType, ...menuKeys]
   }, [groupedMenus, topMenuType])
@@ -147,7 +147,8 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
 
                 if (allExpanded) {
                   removeExpandedMenuKeys(keys)
-                } else {
+                }
+                else {
                   addExpandedMenuKeys(keys)
                 }
               }}
@@ -196,14 +197,14 @@ export function ApiMenuTitleTop(props: ApiMenuTopTitleProps) {
               }}
             >
               <MenuActionButton
-                icon={
+                icon={(
                   <MoreHorizontalIcon
                     size={14}
                     onClick={(ev) => {
                       ev.stopPropagation()
                     }}
                   />
-                }
+                )}
               />
             </Dropdown>
           )}

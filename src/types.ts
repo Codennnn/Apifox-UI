@@ -145,3 +145,9 @@ export interface RecycleDataItem {
 export type RecycleCatalogType = CatalogType.Http | CatalogType.Schema | CatalogType.Request
 
 export type RecycleData = Record<RecycleCatalogType, { list?: RecycleDataItem[] }>
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyType = any
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type UnsafeAny = any

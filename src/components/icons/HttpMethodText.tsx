@@ -11,12 +11,14 @@ export function HttpMethodText({ method, className = '', text }: HttpIconProps) 
   if (method) {
     try {
       const httpMethod = HTTP_METHOD_CONFIG[method]
+
       return (
         <span className={className} style={{ color: `var(${httpMethod.color})` }}>
-          {text || httpMethod.text}
+          {text ?? httpMethod.text}
         </span>
       )
-    } catch {
+    }
+    catch {
       return null
     }
   }

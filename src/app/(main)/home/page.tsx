@@ -25,7 +25,7 @@ function HomeContent() {
   return (
     <PanelLayout
       layoutName="接口管理"
-      left={
+      left={(
         <>
           <Flex gap={token.paddingXXS} style={{ padding: token.paddingXS }}>
             <InputSearch />
@@ -82,7 +82,7 @@ function HomeContent() {
             </ApiMenuContextProvider>
           </div>
         </>
-      }
+      )}
       right={<ApiTab />}
     />
   )

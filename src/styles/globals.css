@@ -55,8 +55,8 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-scrollbar-thumb);
   border-radius: 4px;
+  background: var(--color-scrollbar-thumb);
 }
 
 ::-webkit-scrollbar-track {

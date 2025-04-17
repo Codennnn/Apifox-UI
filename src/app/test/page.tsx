@@ -102,8 +102,9 @@ export default function TestPage() {
                             extra: ev.target.value,
                           })
                         }
+
                         return draft
-                      })
+                      }),
                     )
                   }}
                 />

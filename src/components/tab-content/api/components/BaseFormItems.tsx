@@ -23,7 +23,7 @@ const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).
         </span>
       ),
     }
-  }
+  },
 )
 
 export function BaseFormItems() {
@@ -36,23 +36,26 @@ export function BaseFormItems() {
           if (containerSize !== 'lg') {
             setContainerSize('lg')
           }
-        } else if (width >= 700) {
+        }
+        else if (width >= 700) {
           if (containerSize !== 'md') {
             setContainerSize('md')
           }
-        } else if (width >= 500) {
+        }
+        else if (width >= 500) {
           if (containerSize !== 'sm') {
             setContainerSize('sm')
           }
-        } else {
+        }
+        else {
           setContainerSize('xs')
         }
       }
     },
   })
 
-  const colSpan =
-    containerSize === 'lg' || containerSize === 'md' ? 6 : containerSize === 'sm' ? 12 : 24
+  const colSpan
+    = containerSize === 'lg' || containerSize === 'md' ? 6 : containerSize === 'sm' ? 12 : 24
 
   return (
     <div ref={ref}>
@@ -87,12 +90,15 @@ export function BaseFormItems() {
             label="服务（前置 URL）"
             labelCol={{ span: 24 }}
             name="serverId"
-            tooltip={
+            tooltip={(
               <span>
-                指定服务后，该接口运行时会使用该服务对应的<b>前置 URL</b>（在
-                <Link href="/">环境</Link>里设置）。
+                指定服务后，该接口运行时会使用该服务对应的
+                <b>前置 URL</b>
+                （在
+                <Link href="/">环境</Link>
+                里设置）。
               </span>
-            }
+            )}
           >
             <SelectorService />
           </Form.Item>

@@ -13,7 +13,8 @@ const countLeaf = (node: CatalogDataNode) => {
   node.children?.forEach((child) => {
     if (child.isLeaf) {
       count += 1
-    } else {
+    }
+    else {
       count += countLeaf(child as CatalogDataNode)
     }
   })

@@ -35,38 +35,39 @@ function BodyComp(props: BodyCompProps) {
     }
   })
 
-  if (value) {
-    switch (value.type) {
-      case BodyType.None:
-        return (
-          <div className={`flex h-24 items-center justify-center rounded ${styles.bodyNone}`}>
-            该请求没有 Body 体
-          </div>
-        )
+  if (!value) {
+    return '-'
+  }
 
-      case BodyType.FormData:
-      case BodyType.UrlEncoded:
-        return (
-          <ParamsEditableTable
-            value={value.parameters}
-            onChange={(values) => {
-              onChange?.({ ...value, parameters: values })
-            }}
-          />
-        )
+  if (value.type === BodyType.None) {
+    return (
+      <div className={`flex h-24 items-center justify-center rounded ${styles.bodyNone}`}>
+        该请求没有 Body 体
+      </div>
+    )
+  }
 
-      case BodyType.Json:
-      case BodyType.Xml:
-        return (
-          <JsonSchemaCard
-            defaultValue={{ type: SchemaType.Object, properties: [] }}
-            value={value.jsonSchema}
-            onChange={(values) => {
-              onChange?.({ ...value, jsonSchema: values })
-            }}
-          />
-        )
-    }
+  if (value.type === BodyType.FormData || value.type === BodyType.UrlEncoded) {
+    return (
+      <ParamsEditableTable
+        value={value.parameters}
+        onChange={(values) => {
+          onChange?.({ ...value, parameters: values })
+        }}
+      />
+    )
+  }
+
+  if (value.type === BodyType.Json || value.type === BodyType.Xml) {
+    return (
+      <JsonSchemaCard
+        defaultValue={{ type: SchemaType.Object, properties: [] }}
+        value={value.jsonSchema}
+        onChange={(values) => {
+          onChange?.({ ...value, jsonSchema: values })
+        }}
+      />
+    )
   }
 
   return '-'
@@ -80,7 +81,7 @@ interface ParamsBodyProps {
 export function ParamsBody(props: ParamsBodyProps) {
   const { value, onChange } = props
 
-  const selectedType = value?.type || BodyType.None
+  const selectedType = value?.type ?? BodyType.None
 
   return (
     <div>
@@ -103,7 +104,7 @@ export function ParamsBody(props: ParamsBodyProps) {
       </Flex>
 
       <div>
-        <BodyComp value={value || { type: BodyType.None }} onChange={onChange} />
+        <BodyComp value={value ?? { type: BodyType.None }} onChange={onChange} />
       </div>
     </div>
   )

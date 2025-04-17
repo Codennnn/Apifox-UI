@@ -49,7 +49,7 @@ const renderMenuContent = (props: { menuKey: SettingsMenuKey }) => {
     case SettingsMenuKey.About:
       return (
         <Viewer
-          value={`## 介绍\n\n这是一个精心仿制 Apifox 界面的纯前端项目，使用 Next + Antd + TypeScript + TailwindCSS 开发，源码融入了很多好的编码实践，能让你学习到如何组织和建设一个复杂的 React 项目，非常适合 React 新手学习！\n\n## 动机\n\n在日常工作中，我经常会使用 Antd 来构建页面，但大多数页面的结构和交互都是比较简单的。为了精进对 Next + Antd 的使用技巧，我选择了 Apifox 这个相对复杂的界面进行模仿，希望在实践中能够掌握使用 Antd 打造出高级的页面效果。\n\n可能有很多小伙伴也抱有类似的学习动机，所以我将代码开源出来，希望能帮助各位，感兴趣的话不妨到点个 star⭐ 收藏一下噢~`}
+          value={'## 介绍\n\n这是一个精心仿制 Apifox 界面的纯前端项目，使用 Next + Antd + TypeScript + TailwindCSS 开发，源码融入了很多好的编码实践，能让你学习到如何组织和建设一个复杂的 React 项目，非常适合 React 新手学习！\n\n## 动机\n\n在日常工作中，我经常会使用 Antd 来构建页面，但大多数页面的结构和交互都是比较简单的。为了精进对 Next + Antd 的使用技巧，我选择了 Apifox 这个相对复杂的界面进行模仿，希望在实践中能够掌握使用 Antd 打造出高级的页面效果。\n\n可能有很多小伙伴也抱有类似的学习动机，所以我将代码开源出来，希望能帮助各位，感兴趣的话不妨到点个 star⭐ 收藏一下噢~'}
         />
       )
   }
@@ -72,8 +72,9 @@ export const ModalSettings = create((props: ModalSettingsProps) => {
   useEffect(() => {
     if (selectedKey) {
       setSelectedKeys([selectedKey])
-    } else {
-      setSelectedKeys([defaultSelectedKey || SettingsMenuKey.Appearance])
+    }
+    else {
+      setSelectedKeys([defaultSelectedKey ?? SettingsMenuKey.Appearance])
     }
   }, [selectedKey, defaultSelectedKey])
 

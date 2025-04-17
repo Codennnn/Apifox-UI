@@ -1,19 +1,49 @@
+import { cloneElement } from 'react'
+
+import { DndContext, PointerSensor, useSensor } from '@dnd-kit/core'
+import { SortableContext, useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { theme } from 'antd'
 
 import { ParamsEditableCell } from '@/components/tab-content/api/components/ParamsEditableCell'
 import { isFirefox } from '@/helpers'
 import { useStyles } from '@/hooks/useStyle'
+import type { AnyType } from '@/types'
 
 import { css } from '@emotion/css'
+
+interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
+  'data-node-key': string
+}
+
+const DraggableTabNode = (props: DraggableTabPaneProps) => {
+  const { isDragging, attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: props['data-node-key'],
+  })
+
+  const style: React.CSSProperties = {
+    ...props.style,
+    transform: CSS.Translate.toString(transform),
+    transition,
+    zIndex: isDragging ? 99 : undefined,
+  }
+
+  return cloneElement(props.children as React.ReactElement, {
+    ref: setNodeRef,
+    style,
+    ...attributes,
+    ...listeners,
+  })
+}
 
 interface ColumnType<RecordType> {
   title?: string
   dataIndex?: string
   width?: number | string
-  render?: (text: any, record: RecordType, index: number) => React.ReactNode
+  render?: (text: AnyType, record: RecordType, index: number) => React.ReactNode
 }
 
-export interface EditableTableProps<RecordType = any> {
+export interface EditableTableProps<RecordType = AnyType> {
   rowKey?: string
   columns?: ColumnType<RecordType>[]
   dataSource?: RecordType[]
@@ -22,7 +52,7 @@ export interface EditableTableProps<RecordType = any> {
   newRowRecord?: Partial<RecordType>
 }
 
-export function EditableTable<RecordType = any>(props: EditableTableProps<RecordType>) {
+export function EditableTable<RecordType = AnyType>(props: EditableTableProps<RecordType>) {
   const { token } = theme.useToken()
 
   const { rowKey = 'id', columns, dataSource = [], autoNewRow, newRowRecord } = props
@@ -63,6 +93,8 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
 
   const internalDataSource = autoNewRow ? [...dataSource, { ...newRowRecord }] : dataSource
 
+  const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
+
   return (
     <table
       className="w-full border-spacing-0"
@@ -73,7 +105,7 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
     >
       <colgroup>
         {columns?.map((col, idx) => {
-          return <col key={col.dataIndex || `${idx}`} width={col.width} />
+          return <col key={col.dataIndex ?? `${idx}`} width={col.width} />
         })}
       </colgroup>
 
@@ -82,7 +114,7 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
           {columns?.map((col, idx) => {
             return (
               <th
-                key={col.dataIndex || `${idx}`}
+                key={col.dataIndex ?? `${idx}`}
                 className={`p-1 text-left font-normal ${styles.th}`}
                 scope="col"
               >
@@ -94,31 +126,45 @@ export function EditableTable<RecordType = any>(props: EditableTableProps<Record
       </thead>
 
       <tbody>
-        {internalDataSource.map((record, ridx) => (
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          <tr key={`${ridx}_${String(record[rowKey])}`} className="h-fit">
-            {columns?.map((col, cidx) => {
+        <DndContext sensors={[sensor]}>
+          <SortableContext
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            items={internalDataSource.map((r, ridx) => `${ridx}_${String(r[rowKey])}`)}
+          >
+            {internalDataSource.map((record, ridx) => (
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-expect-error
-              const tdValue = col.dataIndex ? record[col.dataIndex] : null
+              <DraggableTabNode key={`${ridx}_${String(record[rowKey])}`} className="h-fit">
+                <tr className="h-fit">
+                  {columns?.map((col, cidx) => {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
+                    const tdValue = col.dataIndex ? record[col.dataIndex] : null
 
-              return (
-                <td
-                  key={`${cidx}_${String(col.dataIndex)}`}
-                  className={styles.td}
-                  style={{ border: internalDataSource.length === ridx + 1 ? 'none' : undefined }}
-                >
-                  {typeof col.render === 'function' ? (
-                    col.render(tdValue, record as RecordType, ridx)
-                  ) : (
-                    <ParamsEditableCell>{String(tdValue)}</ParamsEditableCell>
-                  )}
-                </td>
-              )
-            })}
-          </tr>
-        ))}
+                    return (
+                      <td
+                        key={`${cidx}_${String(col.dataIndex)}`}
+                        className={styles.td}
+                        style={{
+                          border: internalDataSource.length === ridx + 1 ? 'none' : undefined,
+                        }}
+                      >
+                        {typeof col.render === 'function'
+                          ? (
+                              col.render(tdValue, record as RecordType, ridx)
+                            )
+                          : (
+                              <ParamsEditableCell>{String(tdValue)}</ParamsEditableCell>
+                            )}
+                      </td>
+                    )
+                  })}
+                </tr>
+              </DraggableTabNode>
+            ))}
+          </SortableContext>
+        </DndContext>
       </tbody>
     </table>
   )

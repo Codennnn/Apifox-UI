@@ -31,7 +31,7 @@ const statusOptions: SelectProps['options'] = Object.entries(API_STATUS_CONFIG).
         </span>
       ),
     }
-  }
+  },
 )
 
 function GroupTitle(props: React.PropsWithChildren<{ className?: string }>) {
@@ -42,14 +42,14 @@ function GroupTitle(props: React.PropsWithChildren<{ className?: string }>) {
   )
 }
 
-function BaseInfoItem({ label, value }: { label: string; value?: string }) {
+function BaseInfoItem({ label, value }: { label: string, value?: string }) {
   const { token } = theme.useToken()
 
   return (
     <div>
       <span style={{ color: token.colorTextTertiary }}>{label}</span>
       <span className="ml-2" style={{ color: token.colorTextSecondary }}>
-        {value || '-'}
+        {value ?? '-'}
       </span>
     </div>
   )
@@ -103,7 +103,7 @@ function ApiParameter({ param }: { param: Parameter }) {
             color: token.colorTextDescription,
           }}
         >
-          <Viewer value={param.description || ''} />
+          <Viewer value={param.description ?? ''} />
         </div>
       )}
 
@@ -179,10 +179,10 @@ export function ApiDoc() {
     return null
   }
 
-  const hasPathParams =
-    Array.isArray(docValue.parameters?.path) && docValue.parameters.path.length > 0
-  const hasQueryParams =
-    Array.isArray(docValue.parameters?.query) && docValue.parameters.query.length > 0
+  const hasPathParams
+    = Array.isArray(docValue.parameters?.path) && docValue.parameters.path.length > 0
+  const hasQueryParams
+    = Array.isArray(docValue.parameters?.query) && docValue.parameters.query.length > 0
   const hasParams = hasPathParams || hasQueryParams
 
   const pathParams = docValue.parameters?.path
@@ -200,7 +200,7 @@ export function ApiDoc() {
                 size="small"
                 type="link"
                 onClick={() => {
-                  navigator.clipboard.writeText(docValue.id).then(() => {
+                  void navigator.clipboard.writeText(docValue.id).then(() => {
                     messageApi.success('已复制')
                   })
                 }}
@@ -268,36 +268,40 @@ export function ApiDoc() {
         </Space>
       </div>
 
-      {docValue.description ? (
-        <div>
-          <GroupTitle>接口说明</GroupTitle>
-          <Viewer value={docValue.description} />
-        </div>
-      ) : null}
+      {docValue.description
+        ? (
+            <div>
+              <GroupTitle>接口说明</GroupTitle>
+              <Viewer value={docValue.description} />
+            </div>
+          )
+        : null}
 
       <div>
         <GroupTitle>请求参数</GroupTitle>
-        {hasParams ? (
-          <div className="flex flex-col gap-y-4">
-            {hasPathParams && (
-              <Card className={styles.card} title="Path 参数">
-                <div className="flex flex-col gap-3">
-                  {pathParams?.map((param) => <ApiParameter key={param.id} param={param} />)}
-                </div>
-              </Card>
-            )}
+        {hasParams
+          ? (
+              <div className="flex flex-col gap-y-4">
+                {hasPathParams && (
+                  <Card className={styles.card} title="Path 参数">
+                    <div className="flex flex-col gap-3">
+                      {pathParams?.map((param) => <ApiParameter key={param.id} param={param} />)}
+                    </div>
+                  </Card>
+                )}
 
-            {hasQueryParams && (
-              <Card className={styles.card} title="Query 参数">
-                <div className="flex flex-col gap-3">
-                  {queryParams?.map((param) => <ApiParameter key={param.id} param={param} />)}
-                </div>
-              </Card>
+                {hasQueryParams && (
+                  <Card className={styles.card} title="Query 参数">
+                    <div className="flex flex-col gap-3">
+                      {queryParams?.map((param) => <ApiParameter key={param.id} param={param} />)}
+                    </div>
+                  </Card>
+                )}
+              </div>
+            )
+          : (
+              '无'
             )}
-          </div>
-        ) : (
-          '无'
-        )}
       </div>
 
       {!!docValue.responses && (

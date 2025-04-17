@@ -18,28 +18,32 @@ export function ApiTabLabel(props: ApiTabLabelProps) {
 
   return (
     <span className="ui-tabs-tab-label flex items-center gap-1">
-      {menuData?.type === MenuItemType.ApiDetail || menuData?.type === MenuItemType.HttpRequest ? (
-        <span className="mr-1 font-semibold">
-          <HttpMethodText method={menuData.data?.method} />
-        </span>
-      ) : tabItem.contentType === MenuItemType.ApiDetail &&
-        tabItem.data?.tabStatus === PageTabStatus.Create ? (
-        <span className="mr-1 font-semibold">
-          <HttpMethodText method={initialCreateApiDetailsData.method} />
-        </span>
-      ) : (
-        <FolderIcon
-          size={16}
-          style={{
-            color:
+      {menuData?.type === MenuItemType.ApiDetail || menuData?.type === MenuItemType.HttpRequest
+        ? (
+            <span className="mr-1 font-semibold">
+              <HttpMethodText method={menuData.data?.method} />
+            </span>
+          )
+        : tabItem.contentType === MenuItemType.ApiDetail
+          && tabItem.data?.tabStatus === PageTabStatus.Create
+          ? (
+              <span className="mr-1 font-semibold">
+                <HttpMethodText method={initialCreateApiDetailsData.method} />
+              </span>
+            )
+          : (
+              <FolderIcon
+                size={16}
+                style={{
+                  color:
               isCreateType(tabItem.contentType) && hasAccentColor(tabItem.contentType)
                 ? API_MENU_CONFIG[getCatalogType(getCreateType(tabItem.contentType))].accentColor
                 : undefined,
-          }}
-          type={tabItem.contentType}
-        />
-      )}
-      <span>{menuData?.name || tabItem.label}</span>
+                }}
+                type={tabItem.contentType}
+              />
+            )}
+      <span>{menuData?.name ?? tabItem.label}</span>
     </span>
   )
 }

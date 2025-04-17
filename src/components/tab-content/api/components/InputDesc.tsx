@@ -50,7 +50,8 @@ export function InputDesc({
             if (value) {
               setEditorValue(value)
             }
-          } else {
+          }
+          else {
             setEditorValue('')
           }
         }}

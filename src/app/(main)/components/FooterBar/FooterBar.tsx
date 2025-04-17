@@ -20,23 +20,25 @@ export function FooterBar() {
 
   return (
     <div className="flex h-full items-center pl-3 pr-6">
-      {isSideMenuCollapsed ? (
-        <SmallButton
-          onClick={() => {
-            panelRef.current?.expand()
-          }}
-        >
-          <IconText icon={<ArrowRightToLine size={14} />} />
-        </SmallButton>
-      ) : (
-        <SmallButton
-          onClick={() => {
-            panelRef.current?.collapse()
-          }}
-        >
-          <IconText icon={<ArrowLeftToLine size={14} />} />
-        </SmallButton>
-      )}
+      {isSideMenuCollapsed
+        ? (
+            <SmallButton
+              onClick={() => {
+                panelRef.current?.expand()
+              }}
+            >
+              <IconText icon={<ArrowRightToLine size={14} />} />
+            </SmallButton>
+          )
+        : (
+            <SmallButton
+              onClick={() => {
+                panelRef.current?.collapse()
+              }}
+            >
+              <IconText icon={<ArrowLeftToLine size={14} />} />
+            </SmallButton>
+          )}
 
       <Space className="ml-auto flex items-center" size={0}>
         <SmallButton

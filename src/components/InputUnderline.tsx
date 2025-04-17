@@ -35,7 +35,7 @@ export function InputUnderline(props: InputProps) {
     >
       <Input
         {...props}
-        className={`font-semibold ${styles.nameInput} ${props.className || ''}`}
+        className={`font-semibold ${styles.nameInput} ${props.className ?? ''}`}
         size="large"
         variant="borderless"
       />

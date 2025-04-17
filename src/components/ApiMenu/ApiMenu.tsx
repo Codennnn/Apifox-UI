@@ -1,4 +1,4 @@
-import useEvent from 'react-use-event-hook'
+import { useEvent } from 'react-use-event-hook'
 
 import { ConfigProvider, Tree, type TreeProps } from 'antd'
 
@@ -28,8 +28,8 @@ type TreeOnSelect = NonNullable<TreeProps['onSelect']>
  */
 export function ApiMenu() {
   const { moveMenuItem } = useMenuHelpersContext()
-  const { expandedMenuKeys, addExpandedMenuKeys, removeExpandedMenuKeys, menuTree } =
-    useApiMenuContext()
+  const { expandedMenuKeys, addExpandedMenuKeys, removeExpandedMenuKeys, menuTree }
+    = useApiMenuContext()
 
   const { tabItems, activeTabKey } = useMenuTabContext()
   const { activeTabItem, addTabItem } = useMenuTabHelpers()
@@ -39,7 +39,8 @@ export function ApiMenu() {
   const switchExpandedKeys = useEvent((menuId: string) => {
     if (expandedMenuKeys.includes(menuId)) {
       removeExpandedMenuKeys([menuId])
-    } else {
+    }
+    else {
       addExpandedMenuKeys([menuId])
     }
   })
@@ -56,7 +57,8 @@ export function ApiMenu() {
 
       if (isTabPresent) {
         activeTabItem({ key: menuId })
-      } else {
+      }
+      else {
         if (menuId === CatalogType.Overview || menuId === CatalogType.Recycle) {
           const { title } = API_MENU_CONFIG[menuId]
 
@@ -65,14 +67,15 @@ export function ApiMenu() {
             label: title,
             contentType: menuId,
           })
-        } else {
+        }
+        else {
           if ('customData' in node) {
             const dataNode = node as CatalogDataNode
             const catalog = dataNode.customData.catalog
 
             if (
-              catalog.type !== MenuItemType.ApiSchemaFolder &&
-              catalog.type !== MenuItemType.RequestFolder
+              catalog.type !== MenuItemType.ApiSchemaFolder
+              && catalog.type !== MenuItemType.RequestFolder
             ) {
               addTabItem({
                 key: menuId,
@@ -118,9 +121,9 @@ export function ApiMenu() {
     const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1])
 
     if (
-      typeof dragKey === 'string' &&
-      typeof dropKey === 'string' &&
-      (dropPosition === 0 || dropPosition === 1 || dropPosition === -1)
+      typeof dragKey === 'string'
+      && typeof dropKey === 'string'
+      && (dropPosition === 0 || dropPosition === 1 || dropPosition === -1)
     ) {
       moveMenuItem({ dragKey, dropKey, dropPosition })
     }
@@ -151,7 +154,7 @@ export function ApiMenu() {
 
             return isMenuSameGroup(
               (dragNode as CatalogDataNode).customData.catalog,
-              (dropNode as CatalogDataNode).customData.catalog
+              (dropNode as CatalogDataNode).customData.catalog,
             )
           }}
           draggable={{

@@ -50,31 +50,33 @@ export function DoubleCheckRemoveBtn(props: DoubleCheckRemoveBtnProps) {
 
   return (
     <span {...restSpanProps}>
-      {isRemoveActive ? (
-        <CircleXIcon
-          className={`${styles.remove} ${styles.removeActive}`}
-          size={13}
-          onClick={() => {
-            onRemove?.()
-          }}
-          onMouseLeave={() => {
-            isRemoveHover.current = false
-            handleReset()
-          }}
-          onMouseOver={() => {
-            isRemoveHover.current = true
-          }}
-        />
-      ) : (
-        <CircleMinusIcon
-          className={styles.remove}
-          size={13}
-          onClick={() => {
-            setIsRemoveActive(true)
-            handleReset()
-          }}
-        />
-      )}
+      {isRemoveActive
+        ? (
+            <CircleXIcon
+              className={`${styles.remove} ${styles.removeActive}`}
+              size={13}
+              onClick={() => {
+                onRemove?.()
+              }}
+              onMouseLeave={() => {
+                isRemoveHover.current = false
+                handleReset()
+              }}
+              onMouseOver={() => {
+                isRemoveHover.current = true
+              }}
+            />
+          )
+        : (
+            <CircleMinusIcon
+              className={styles.remove}
+              size={13}
+              onClick={() => {
+                setIsRemoveActive(true)
+                handleReset()
+              }}
+            />
+          )}
     </span>
   )
 }

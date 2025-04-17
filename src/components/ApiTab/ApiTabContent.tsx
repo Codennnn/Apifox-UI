@@ -34,6 +34,8 @@ export function ApiTabContent() {
       return <Schema />
 
     case MenuItemType.ApiDetailFolder:
+      // fall through
+
     case MenuItemType.ApiSchemaFolder:
       return <Folder />
 
